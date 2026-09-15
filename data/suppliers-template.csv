@@ -1,0 +1,2 @@
+slug,name,supplier_type,country,regions,website_url,source_url,company_verified,product_data_verified,document_verified,verification_status
+tck,TCK,MANUFACTURER,KR,KR|JP|US|EU,REPLACE_WITH_OFFICIAL_WEBSITE,REPLACE_WITH_OFFICIAL_SOURCE,false,false,false,DRAFT

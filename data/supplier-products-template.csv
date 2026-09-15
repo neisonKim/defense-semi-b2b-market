@@ -1,0 +1,2 @@
+product_slug,supplier_slug,sku,region,lead_time_days,moq,authorized_status,price_type,currency,availability,sample_available,customization
+cvd-sic-focus-ring,tck,DEMO-SKU,KR,28,1,Manufacturer,CONTACT_FOR_QUOTE,KRW,Contact Supplier,true,true

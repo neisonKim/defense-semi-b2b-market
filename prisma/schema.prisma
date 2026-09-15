@@ -1,0 +1,375 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum VerificationStatus {
+  DRAFT
+  REVIEW
+  TECHNICAL_REVIEW
+  VERIFIED
+  PUBLISHED
+  NEEDS_UPDATE
+  REJECTED
+}
+enum SupplierType {
+  MANUFACTURER
+  AUTHORIZED_DISTRIBUTOR
+  DISTRIBUTOR
+  REPRESENTATIVE
+  SERVICE_PROVIDER
+  SOFTWARE_VENDOR
+  SYSTEM_INTEGRATOR
+}
+enum RFQStatus {
+  DRAFT
+  SUBMITTED
+  MATCHING
+  SENT
+  QUOTED
+  CLOSED
+  CANCELLED
+}
+enum MatchStatus {
+  CANDIDATE
+  SENT
+  VIEWED
+  RESPONDED
+  DECLINED
+  SELECTED
+}
+enum DocumentType {
+  DATASHEET
+  CATALOG
+  CERTIFICATE
+  DRAWING
+  WHITEPAPER
+  MANUAL
+  OTHER
+}
+enum PriceType {
+  FIXED
+  RANGE
+  CONTACT_FOR_QUOTE
+}
+
+model Process {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  description String?
+  technologies ProcessTechnology[]
+  products    ProductProcess[]
+  articles    ArticleProcess[]
+  documents   DocumentProcess[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Technology {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  description String?
+  processes   ProcessTechnology[]
+  materials   TechnologyMaterial[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ProcessTechnology {
+  processId    String
+  technologyId String
+  process      Process    @relation(fields:[processId], references:[id], onDelete:Cascade)
+  technology   Technology @relation(fields:[technologyId], references:[id], onDelete:Cascade)
+  @@id([processId, technologyId])
+}
+
+model Material {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  description String?
+  purity      String?
+  technologies TechnologyMaterial[]
+  products    ProductMaterial[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model TechnologyMaterial {
+  technologyId String
+  materialId   String
+  technology   Technology @relation(fields:[technologyId], references:[id], onDelete:Cascade)
+  material     Material   @relation(fields:[materialId], references:[id], onDelete:Cascade)
+  @@id([technologyId, materialId])
+}
+
+model ProductCategory {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  description String?
+  parentId    String?
+  parent      ProductCategory? @relation("CategoryTree", fields:[parentId], references:[id])
+  children    ProductCategory[] @relation("CategoryTree")
+  products    Product[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Product {
+  id                  String   @id @default(cuid())
+  slug                String   @unique
+  name                String
+  subtitle            String?
+  description         String?
+  categoryId          String
+  category            ProductCategory @relation(fields:[categoryId], references:[id])
+  manufacturingMethod String?
+  equipment           String?
+  applicationLocation String?
+  functionSummary     String?
+  waferSize           String?
+  purity              String?
+  lifecycle           String?
+  status              VerificationStatus @default(DRAFT)
+  sourceUrl           String?
+  lastVerifiedAt      DateTime?
+  verifiedBy          String?
+  processes           ProductProcess[]
+  materials           ProductMaterial[]
+  supplierProducts    SupplierProduct[]
+  articles            ArticleProduct[]
+  documents           DocumentProduct[]
+  tags                 ProductTag[]
+  rfqItems             RfqItem[]
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  @@index([categoryId, status])
+  @@index([name])
+}
+
+model ProductProcess {
+  productId String
+  processId String
+  product   Product @relation(fields:[productId], references:[id], onDelete:Cascade)
+  process   Process @relation(fields:[processId], references:[id], onDelete:Cascade)
+  @@id([productId, processId])
+}
+
+model ProductMaterial {
+  productId  String
+  materialId String
+  product    Product @relation(fields:[productId], references:[id], onDelete:Cascade)
+  material   Material @relation(fields:[materialId], references:[id], onDelete:Cascade)
+  @@id([productId, materialId])
+}
+
+model Supplier {
+  id                 String   @id @default(cuid())
+  slug               String   @unique
+  name               String
+  legalName          String?
+  type               SupplierType
+  websiteUrl         String?
+  country            String?
+  regions            String[]
+  description        String?
+  companyVerified    Boolean  @default(false)
+  productDataVerified Boolean @default(false)
+  documentVerified   Boolean  @default(false)
+  sourceUrl          String?
+  lastVerifiedAt     DateTime?
+  status             VerificationStatus @default(DRAFT)
+  supplierProducts   SupplierProduct[]
+  articles           ArticleSupplier[]
+  documents          DocumentSupplier[]
+  rfqMatches         RfqSupplierMatch[]
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  @@index([type, status])
+}
+
+model SupplierProduct {
+  id               String   @id @default(cuid())
+  supplierId       String
+  productId        String
+  sku              String?
+  region           String?
+  leadTimeDays     Int?
+  moq              Int?
+  authorizedStatus String?
+  priceType        PriceType @default(CONTACT_FOR_QUOTE)
+  priceMin         Decimal?  @db.Decimal(14,2)
+  priceMax         Decimal?  @db.Decimal(14,2)
+  currency         String?   @default("KRW")
+  availability     String?
+  sampleAvailable  Boolean   @default(false)
+  customization    Boolean   @default(false)
+  supplier         Supplier  @relation(fields:[supplierId], references:[id], onDelete:Cascade)
+  product          Product   @relation(fields:[productId], references:[id], onDelete:Cascade)
+  @@unique([supplierId, productId, sku])
+  @@index([productId, region])
+  @@index([supplierId, availability])
+}
+
+model KnowledgeArticle {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  category    String?
+  summary     String?
+  content     String?
+  readingTime String?
+  keyPoints   Json?
+  publishedAt DateTime?
+  status      VerificationStatus @default(DRAFT)
+  sourceUrl   String?
+  lastVerifiedAt DateTime?
+  products    ArticleProduct[]
+  suppliers   ArticleSupplier[]
+  processes   ArticleProcess[]
+  tags        ArticleTag[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ArticleProduct {
+  articleId String
+  productId String
+  article KnowledgeArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  @@id([articleId, productId])
+}
+model ArticleSupplier {
+  articleId String
+  supplierId String
+  article KnowledgeArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  supplier Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  @@id([articleId, supplierId])
+}
+model ArticleProcess {
+  articleId String
+  processId String
+  article KnowledgeArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  process Process @relation(fields: [processId], references: [id], onDelete: Cascade)
+  @@id([articleId, processId])
+}
+
+model Document {
+  id           String   @id @default(cuid())
+  title        String
+  type         DocumentType
+  fileUrl      String
+  version      String?
+  sourceUrl    String?
+  lastVerifiedAt DateTime?
+  status       VerificationStatus @default(DRAFT)
+  products     DocumentProduct[]
+  suppliers    DocumentSupplier[]
+  processes    DocumentProcess[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+model DocumentProduct {
+  documentId String
+  productId String
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  @@id([documentId, productId])
+}
+model DocumentSupplier {
+  documentId String
+  supplierId String
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  supplier Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  @@id([documentId, supplierId])
+}
+model DocumentProcess {
+  documentId String
+  processId String
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  process Process @relation(fields: [processId], references: [id], onDelete: Cascade)
+  @@id([documentId, processId])
+}
+
+model Tag {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  name      String
+  type      String?
+  products  ProductTag[]
+  articles  ArticleTag[]
+}
+model ProductTag {
+  productId String
+  tagId String
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  tag Tag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  @@id([productId, tagId])
+}
+model ArticleTag {
+  articleId String
+  tagId String
+  article KnowledgeArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  tag Tag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  @@id([articleId, tagId])
+}
+
+model Rfq {
+  id             String   @id @default(cuid())
+  referenceNo    String   @unique
+  status         RFQStatus @default(DRAFT)
+  companyName    String
+  contactName    String
+  email          String
+  phone          String?
+  targetDate     DateTime?
+  targetPrice    Decimal? @db.Decimal(14,2)
+  currency       String?  @default("KRW")
+  application    String?
+  requirements   String?
+  certification  String?
+  shippingCountry String?
+  ndaRequired    Boolean  @default(false)
+  items          RfqItem[]
+  matches        RfqSupplierMatch[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  @@index([status, createdAt])
+}
+
+model RfqItem {
+  id        String  @id @default(cuid())
+  rfqId     String
+  productId String?
+  productName String
+  quantity  Int
+  unit      String @default("EA")
+  specs     Json?
+  rfq       Rfq @relation(fields:[rfqId], references:[id], onDelete:Cascade)
+  product   Product? @relation(fields:[productId], references:[id])
+}
+
+model RfqSupplierMatch {
+  id          String @id @default(cuid())
+  rfqId       String
+  supplierId  String
+  score       Float?
+  status      MatchStatus @default(CANDIDATE)
+  matchedReason Json?
+  quotedPrice Decimal? @db.Decimal(14,2)
+  quotedCurrency String?
+  quotedLeadTimeDays Int?
+  rfq         Rfq @relation(fields:[rfqId], references:[id], onDelete:Cascade)
+  supplier    Supplier @relation(fields:[supplierId], references:[id], onDelete:Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  @@unique([rfqId, supplierId])
+  @@index([supplierId, status])
+}

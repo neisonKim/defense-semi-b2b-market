@@ -1,0 +1,2 @@
+slug,name,category_slug,manufacturing_method,application_process_slug,material_slug,equipment,application_location,function_summary,wafer_size,purity,source_url,verification_status
+cvd-sic-focus-ring,CVD-SiC Focus Ring,chamber-parts,CVD,etching,sic,Plasma Etcher / Etch Chamber,Wafer Edge / Chamber,Plasma Control / Wafer Edge Protection,200 mm / 300 mm,>99.999%,REPLACE_WITH_OFFICIAL_SOURCE,DRAFT

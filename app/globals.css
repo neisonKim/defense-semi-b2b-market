@@ -1,0 +1,2195 @@
+:root{--bg:#f5f8fc;--panel:#fff;--line:#dbe6f3;--navy:#0b2b59;--blue:#1265f5;--cyan:#19c5ff;--text:#14263e;--muted:#607997;--shadow:0 12px 30px rgba(17,47,91,.08)}
+*{box-sizing:border-box}html,body{margin:0;background:linear-gradient(#f8fbff,#f3f7fb);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI","Noto Sans KR",sans-serif}a{text-decoration:none;color:inherit}button,input,select,textarea{font:inherit}.container{max-width:1440px;margin:auto;padding:0 24px}.section{padding:28px 0}.siteHeader{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}.headerInner{height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{display:flex;align-items:center;gap:10px}.brandMark{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#0e3a8a,#1dc6ff);color:#fff;display:grid;place-items:center;font-weight:900}.brand span:last-child{display:grid}.brand small{font-size:10px;color:#7890ae}.desktopNav{display:flex;gap:18px;color:#395572;font-weight:700;font-size:14px}.btn{border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px 15px;font-weight:800;cursor:pointer}.btn.primary{background:linear-gradient(135deg,#1265f5,#0a57df);color:#fff;border:none}.btn.dark{background:#0c2855;color:#fff;border:none}.btn.ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.28)}.btn.full{width:100%;display:inline-flex;justify-content:center}.card{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:18px}.heroWrap{padding-top:26px}.hero{border-radius:28px;padding:34px;background:linear-gradient(135deg,#081f45,#0e3978 60%,#145bb5);display:grid;grid-template-columns:1.12fr .88fr;gap:24px;color:#fff}.hero h1{font-size:44px;line-height:1.1;margin:10px 0}.hero h1 em{font-style:normal;color:#29d3ff}.lead{color:#d8e8ff;line-height:1.6}.kicker{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#aac8ee}.searchBar{display:flex;gap:8px;margin:18px 0}.searchBar input{flex:1;padding:14px 16px;border-radius:12px;border:none}.searchBar button{border:none;border-radius:12px;background:#fff;color:#0f4fc4;font-weight:900;padding:0 18px}.chipRow{display:flex;flex-wrap:wrap;gap:8px}.chipRow span{padding:8px 11px;border-radius:999px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);font-size:12px}.chipRow.light span{background:#f3f7fd;border-color:#dfebf9;color:#355271}.ctaRow{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}.waferVisual{min-height:290px;border-radius:22px;position:relative;background:radial-gradient(circle at 58% 45%,rgba(28,206,255,.8),transparent 7%),radial-gradient(circle at 58% 52%,rgba(132,203,255,.18),transparent 32%),linear-gradient(160deg,#0a244e,#081830);overflow:hidden}.waferVisual:after{content:"";position:absolute;inset:auto 8% 10% 8%;height:58%;border-radius:50%;border:1px solid rgba(187,231,255,.28);box-shadow:inset 0 0 0 14px rgba(156,214,255,.06),inset 0 0 0 28px rgba(156,214,255,.03)}.waferVisual span{position:absolute;right:18px;bottom:18px;font-size:12px;letter-spacing:.1em;color:#d8ecff}.statGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding-top:18px}.stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px}.stat span{display:block;color:var(--muted);font-size:13px}.stat strong{display:block;font-size:28px;color:var(--navy);margin:4px 0}.stat small{color:#0b9a56;font-weight:800}.sectionTitle h2{font-size:28px;color:var(--navy);margin:0}.sectionTitle p{color:var(--muted);margin:6px 0 16px}.threeGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.twoGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.threeGrid h3,.card h2,.card h3{color:var(--navy)}.problemGrid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.problem{background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px;color:#22456e;font-weight:800}.supplierGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.supplierCard{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.supplierCard p{color:var(--muted)}.badge{display:inline-flex;padding:7px 9px;border-radius:999px;font-size:12px;font-weight:800;background:#edf4ff;color:#1355cc;border:1px solid #dbe7fb}.badge.green{background:#eafff1;border-color:#c7f4da;color:#0a8a4c}.badge.amber{background:#fff8e9;border-color:#ffe1a0;color:#9a6a00}.knowledge .thumb{height:120px;border-radius:12px;background:linear-gradient(135deg,#0a2e63,#1c6fce);margin-bottom:12px}.crumb{color:#6d86a6;font-size:13px}.productTop{display:grid;grid-template-columns:1.05fr 1.1fr .8fr;gap:16px}.productMedia{display:grid;place-items:center;min-height:420px}.ring{width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,transparent 38%,#737d8d 39%,#323b49 55%,#222a35 63%,#738093 69%,transparent 70%);filter:drop-shadow(0 18px 24px rgba(24,41,70,.24))}.productInfo h1{font-size:34px;color:var(--navy)}dl{margin:16px 0 0}dl div{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid #eef3f9}dt{color:#6a82a0;font-size:13px}dd{margin:0;font-weight:700;text-align:right}.rowBetween{display:flex;justify-content:space-between;gap:10px;align-items:center}.miniStats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}.miniStats div{background:#f6f9ff;padding:12px;border-radius:12px}.miniStats strong,.miniStats span{display:block}.miniStats span{font-size:12px;color:var(--muted)}.desktopDetailGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.mobileAccordions{display:none}.mobileAccordions details{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px}.mobileAccordions summary{font-weight:800;color:var(--navy)}.mobileSticky,.supplierMobileBar,.rfqMobileBar,.mobileNav{display:none}.supplierHero{display:grid;grid-template-columns:120px 1.1fr .9fr;gap:18px;align-items:start}.supplierLogo{width:110px;height:110px;display:grid;place-items:center;border-radius:18px;background:#edf4ff;color:#0b53c9;font-size:30px;font-weight:900}.supplierVisual{min-height:190px;border-radius:18px;background:linear-gradient(135deg,#092650,#155fb5);position:relative}.supplierVisual:after{content:"";position:absolute;inset:auto 10% 12% 10%;height:58%;border-radius:50%;border:1px solid rgba(255,255,255,.28);box-shadow:inset 0 0 0 14px rgba(255,255,255,.06)}.badgeRow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.capGrid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}.capGrid .card span,.capGrid .card strong{display:block}.capGrid .card span{font-size:12px;color:var(--muted)}.productTiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.miniCard{background:#f8fbff;border:1px solid #e2ecf8;border-radius:14px;padding:12px}.miniVisual{height:90px;border-radius:10px;background:linear-gradient(135deg,#eef3f9,#cad6e6);margin-bottom:8px}.pageHeader h1{color:var(--navy);font-size:34px;margin-bottom:6px}.pageHeader p{color:var(--muted)}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}.stepCard{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;align-items:center;gap:10px}.stepCard span{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#eaf2ff;color:#0d57d3;font-weight:900}.rfqGrid{display:grid;grid-template-columns:1.35fr .7fr;gap:16px}.formCard{margin-bottom:14px}.formCard input,.formCard textarea,.formCard select{width:100%;border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:7px}.formCard textarea{min-height:100px}.formCard label{display:block;color:#385572;font-weight:800;margin-top:12px}.formTwo{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.selectedProduct{display:flex;gap:12px;align-items:center;background:#f8fbff;border:1px solid #e2ecf8;border-radius:14px;padding:12px;margin-top:10px}.selectedProduct span,.selectedProduct strong{display:block}.selectedProduct span{font-size:12px;color:var(--muted)}.chipIcon{width:48px;height:48px;border-radius:12px;background:#edf3fb;display:grid;place-items:center}.upload{margin-top:12px;border:1px dashed #b9cce7;background:#f8fbff;border-radius:14px;padding:20px;text-align:center;color:#607997}.rfqSummary{position:sticky;top:100px;height:max-content}.bigNum{font-size:40px;color:var(--navy)}.adminGrid{display:grid;grid-template-columns:250px 1fr;gap:16px}.adminSide{background:linear-gradient(#09234b,#0b2b59);padding:16px;border-radius:20px;color:#fff;position:sticky;top:96px;height:calc(100vh - 116px);overflow:auto}.adminSide strong{display:block;margin:8px 0 16px}.adminSide a{display:block;padding:11px 12px;border-radius:10px;color:#d8e9ff}.adminSide a.active{background:rgba(255,255,255,.1)}.adminHero{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;background:linear-gradient(135deg,#08234c,#125aaf);border-radius:20px;padding:22px;color:#fff}.adminHero h1{font-size:34px}.adminKpi{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:14px 0}.dataModel h2{color:var(--navy)}.entityGrid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.entityGrid div{background:#f8fbff;border:1px solid #e1ebf7;border-radius:12px;padding:12px}.entityGrid strong,.entityGrid span{display:block}.entityGrid span{font-size:12px;color:var(--muted);margin-top:5px}.bridge{margin-top:12px;padding:14px;border-radius:14px;background:#edf4ff;color:#204b87;font-weight:700}.adminTables{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}.adminTables ul{padding-left:18px;color:#607997}.mobileNav{position:fixed;left:0;right:0;bottom:0;z-index:50;background:rgba(255,255,255,.98);border-top:1px solid var(--line);padding:9px 10px;justify-content:space-around}.mobileNav a{font-size:12px;font-weight:800;color:#607997;padding:8px}.mobileNav a.primary{background:#eaf2ff;color:#0e54cc;border-radius:10px}
+@media(max-width:1199px){.desktopNav{display:none}.hero{grid-template-columns:1fr}.productTop{grid-template-columns:1fr 1fr}.supplierSummary{grid-column:1/-1}.problemGrid{grid-template-columns:repeat(3,1fr)}.supplierGrid{grid-template-columns:repeat(2,1fr)}.adminGrid{grid-template-columns:1fr}.adminSide{display:none}.adminKpi,.entityGrid{grid-template-columns:repeat(3,1fr)}.adminTables{grid-template-columns:repeat(2,1fr)}.supplierHero{grid-template-columns:110px 1fr}.supplierVisual{grid-column:1/-1}.capGrid{grid-template-columns:repeat(3,1fr)}.rfqGrid{grid-template-columns:1fr}.rfqSummary{position:static}}
+@media(max-width:767px){body{padding-bottom:72px}.container{padding:0 14px}.headerInner{height:68px}.headerCta{display:none}.brand strong{font-size:14px}.hero{padding:22px}.hero h1{font-size:31px}.searchBar{flex-direction:column}.statGrid,.threeGrid,.twoGrid,.supplierGrid,.desktopDetailGrid,.productTop,.formTwo,.steps,.adminTables{grid-template-columns:1fr}.problemGrid{grid-template-columns:repeat(2,1fr)}.statGrid{grid-template-columns:1fr 1fr}.desktopDetailGrid{display:none}.mobileAccordions{display:block}.mobileSticky{display:grid;grid-template-columns:46px 1fr 1.3fr;gap:8px;position:fixed;left:0;right:0;bottom:55px;z-index:45;background:#fff;border-top:1px solid var(--line);padding:10px}.mobileSticky button,.mobileSticky a{border:none;border-radius:10px;padding:11px;text-align:center;font-weight:800}.mobileSticky a{background:#1265f5;color:#fff}.supplierMobileBar{display:grid;grid-template-columns:1fr 1.2fr;gap:8px;position:fixed;left:0;right:0;bottom:55px;z-index:45;background:#fff;border-top:1px solid var(--line);padding:10px}.supplierMobileBar button,.supplierMobileBar a{border:none;border-radius:10px;padding:11px;text-align:center;font-weight:800}.supplierMobileBar a{background:#1265f5;color:#fff}.capGrid{grid-template-columns:repeat(2,1fr)}.productTiles{grid-template-columns:repeat(2,1fr)}.supplierHero{grid-template-columns:1fr}.supplierLogo{width:88px;height:88px}.rfqMobileBar{display:grid;grid-template-columns:1fr 1.1fr;gap:8px;position:fixed;left:0;right:0;bottom:55px;background:#fff;border-top:1px solid var(--line);padding:10px;z-index:45}.rfqMobileBar span{font-size:12px;color:#607997}.rfqMobileBar button{background:#1265f5;color:#fff;border:none;border-radius:10px;font-weight:800}.mobileNav{display:flex}.adminKpi{grid-template-columns:1fr 1fr}.entityGrid{grid-template-columns:1fr}.hero .waferVisual{min-height:200px}.ring{width:210px;height:210px}.productMedia{min-height:330px}}
+
+/* Content connection stage */
+.processGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.processCard{display:flex;gap:14px;align-items:flex-start}.processCard h3{margin:0 0 2px}.processCard strong{font-size:13px;color:#1265f5}.processCard p{font-size:13px;color:var(--muted);line-height:1.5;margin:7px 0 0}.processIndex{width:32px;height:32px;border-radius:10px;background:#edf4ff;color:#1258d7;display:grid;place-items:center;font-weight:900;flex:0 0 auto}.productGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.marketProductCard{display:block;transition:.18s transform ease,.18s box-shadow ease}.marketProductCard:hover{transform:translateY(-3px);box-shadow:0 18px 40px rgba(17,47,91,.14)}.productVisualCompact{height:130px;border-radius:14px;background:linear-gradient(135deg,#081f45,#1157aa 62%,#18b8ee);margin-bottom:14px;position:relative;overflow:hidden}.productVisualCompact:after{content:"";position:absolute;right:10%;bottom:-28%;width:150px;height:150px;border-radius:50%;border:1px solid rgba(255,255,255,.3);box-shadow:inset 0 0 0 12px rgba(255,255,255,.05),inset 0 0 0 26px rgba(255,255,255,.03)}.productVisualCompact span{position:absolute;left:14px;bottom:12px;color:#fff;font-size:12px;font-weight:800;z-index:1}.marketProductCard h3{margin:12px 0 7px}.marketProductCard p{color:var(--muted);font-size:14px;line-height:1.55;min-height:44px}.productMetaLine{display:flex;justify-content:space-between;gap:12px;border-top:1px solid #edf2f8;padding-top:11px;margin-top:10px;font-size:11px;color:#647f9f}.cardLink{display:block;color:#0d58d8;margin-top:12px;font-size:13px}.sectionAction{display:flex;justify-content:center;margin-top:18px}.supplierCard small{color:#7087a5}.knowledge p{color:var(--muted);font-size:14px;line-height:1.55}.relatedRow{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:12px;border-top:1px solid #edf2f8;padding-top:11px;font-size:12px}.relatedRow span{color:#617b9c}.relatedRow a{color:#0f58d5;font-weight:800}.conversionCard{display:flex;justify-content:space-between;gap:22px;align-items:center;background:linear-gradient(135deg,#fff,#edf5ff)}.conversionCard h2{margin:10px 0 5px}.conversionCard p{color:var(--muted);margin:0}.catalogFilter{display:grid;gap:12px;margin-top:20px}.supplierDirectoryGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.supplierDirectoryCard h3{margin:14px 0 4px}.supplierDirectoryCard p{color:var(--muted);min-height:42px}.supplierLogo.compact{width:54px;height:54px;font-size:16px}.detailSectionTitle{color:var(--navy);font-size:26px;margin:0 0 14px}.emptyState{text-align:center;color:var(--muted);padding:34px}
+@media(max-width:1199px){.processGrid{grid-template-columns:repeat(2,1fr)}.productGrid{grid-template-columns:repeat(2,1fr)}.supplierDirectoryGrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:767px){.processGrid,.productGrid,.supplierDirectoryGrid{grid-template-columns:1fr}.conversionCard{display:grid}.productMetaLine{flex-direction:column;gap:4px}.marketProductCard p{min-height:auto}}
+
+/* Interactive search / filter + RFQ demo stage */
+.liveCatalogFilter{display:grid;gap:14px;margin-bottom:14px}.catalogSearchRow{display:grid;grid-template-columns:minmax(280px,1.6fr) repeat(3,minmax(150px,.7fr));gap:12px;align-items:end}.catalogSearchRow.supplierSearchRow{grid-template-columns:minmax(300px,1.6fr) repeat(2,minmax(170px,.8fr))}.catalogField{display:grid;gap:6px}.catalogField span{font-size:12px;font-weight:800;color:#49637f}.catalogField input,.catalogField select{width:100%;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px 13px;color:var(--text);outline:none}.catalogField input:focus,.catalogField select:focus{border-color:#84aff7;box-shadow:0 0 0 3px rgba(18,101,245,.08)}.catalogFilterFooter{display:flex;justify-content:space-between;align-items:center;gap:14px;padding-top:12px;border-top:1px solid #edf2f8}.checkFilter{display:flex;align-items:center;gap:9px;color:#385572;font-size:13px;font-weight:700}.checkFilter input{width:16px;height:16px}.filterResultActions{display:flex;align-items:center;gap:12px}.filterResultActions strong{color:var(--navy)}.processQuickFilter{display:flex;gap:8px;overflow:auto;padding:2px 0 16px;scrollbar-width:thin}.processQuickFilter button{flex:0 0 auto;border:1px solid var(--line);background:#fff;color:#3c5878;border-radius:12px;padding:10px 12px;font-weight:800;cursor:pointer}.processQuickFilter button small{display:block;font-size:10px;font-weight:600;color:#8195ae;margin-top:2px}.processQuickFilter button.active{background:#0f5cdf;color:#fff;border-color:#0f5cdf}.processQuickFilter button.active small{color:#dce9ff}.productCardMain,.supplierCardMain{display:block}.productMetaStack{display:grid;gap:6px;border-top:1px solid #edf2f8;padding-top:11px;margin-top:12px}.productMetaStack span{display:grid;grid-template-columns:75px 1fr;gap:8px;font-size:11px;color:#647f9f}.productMetaStack b{color:#304e72}.productCardActions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px;border-top:1px solid #edf2f8;padding-top:12px}.productCardActions a{border:1px solid var(--line);border-radius:10px;text-align:center;padding:9px 6px;font-size:12px;font-weight:800;color:#335779}.productCardActions a.primaryAction{background:#1265f5;border-color:#1265f5;color:#fff}.supplierActions{grid-template-columns:1fr 1.2fr}.rfqSummaryList{margin-top:12px}.rfqCandidates{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0 14px}.rfqCandidates span{padding:7px 9px;border-radius:999px;background:#edf4ff;border:1px solid #d9e7fb;color:#28558d;font-size:11px;font-weight:800}.rfqSuccess{max-width:820px;margin:26px auto;text-align:center;padding:34px}.successIcon{width:68px;height:68px;border-radius:50%;display:grid;place-items:center;background:#eafff1;color:#0a9150;font-size:34px;font-weight:900;margin:0 auto 14px}.rfqSuccess h1{color:var(--navy);margin:8px 0}.rfqSuccess p{color:var(--muted);line-height:1.6}.rfqSuccessId{display:inline-flex;margin:14px 0 18px;padding:11px 15px;border-radius:12px;background:#edf4ff;color:#0e55ce;font-weight:900;letter-spacing:.04em}.rfqSuccessMeta{margin-top:10px;text-align:left}.rfqSuccessMeta>div{background:#f8fbff;border:1px solid #e2ecf8;border-radius:14px;padding:14px}.rfqSuccessMeta span,.rfqSuccessMeta strong{display:block}.rfqSuccessMeta span{font-size:11px;color:var(--muted);margin-bottom:4px}
+@media(max-width:1199px){.catalogSearchRow,.catalogSearchRow.supplierSearchRow{grid-template-columns:repeat(2,1fr)}.catalogField.grow{grid-column:1/-1}}
+@media(max-width:767px){.catalogSearchRow,.catalogSearchRow.supplierSearchRow{grid-template-columns:1fr}.catalogField.grow{grid-column:auto}.catalogFilterFooter{align-items:flex-start;flex-direction:column}.filterResultActions{width:100%;justify-content:space-between}.productCardActions{grid-template-columns:1fr 1fr 1fr}.rfqSuccess{padding:22px}.rfqSuccessMeta{grid-template-columns:1fr}}
+
+/* Knowledge Hub connection stage */
+.knowledgeHero{padding:28px;background:linear-gradient(135deg,#ffffff,#eef5ff);display:grid;grid-template-columns:1.1fr .9fr;gap:20px;align-items:center}.knowledgeHero h1{font-size:36px;line-height:1.15;color:var(--navy);margin:12px 0}.knowledgeHero p{color:var(--muted);line-height:1.65;max-width:760px}.knowledgeFlow{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;padding:20px;border-radius:18px;background:linear-gradient(135deg,#0b2b59,#1265f5);color:#fff}.knowledgeFlow span{padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.11);font-size:12px;font-weight:900}.knowledgeFlow b{color:#6fe1ff}.knowledgeFilter{display:grid;grid-template-columns:1.5fr .75fr .75fr auto;gap:12px;align-items:end;margin-bottom:16px}.knowledgeResultCount{display:grid;justify-items:end;padding:8px 4px}.knowledgeResultCount strong{font-size:28px;color:var(--navy)}.knowledgeResultCount span{font-size:11px;color:var(--muted)}.knowledgeListGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.knowledgeListCard{display:block;transition:.18s transform ease,.18s box-shadow ease}.knowledgeListCard:hover{transform:translateY(-3px);box-shadow:0 18px 40px rgba(17,47,91,.14)}.knowledgeCover{height:150px;border-radius:14px;background:linear-gradient(135deg,#081f45,#104f9c 60%,#19c5ff);position:relative;overflow:hidden;margin-bottom:14px}.knowledgeCover:before{content:"";position:absolute;right:-25px;bottom:-65px;width:190px;height:190px;border-radius:50%;border:1px solid rgba(255,255,255,.35);box-shadow:inset 0 0 0 14px rgba(255,255,255,.05),inset 0 0 0 30px rgba(255,255,255,.03)}.knowledgeCover span{position:absolute;left:14px;bottom:13px;color:#fff;font-size:12px;font-weight:900}.knowledgeCardMeta{display:flex;justify-content:space-between;gap:10px;align-items:center}.knowledgeCardMeta>span{font-size:11px;color:var(--muted)}.knowledgeListCard h2{font-size:20px;line-height:1.35;color:var(--navy);margin:12px 0 8px}.knowledgeListCard p{font-size:14px;line-height:1.55;color:var(--muted)}.knowledgeTags{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.knowledgeTags span{font-size:11px;color:#31609a;background:#eef5ff;border:1px solid #dce9fb;border-radius:999px;padding:6px 8px}.knowledgeArticleHero{padding:30px;background:linear-gradient(135deg,#fff,#f0f6ff)}.knowledgeArticleMeta{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.knowledgeArticleMeta>span{font-size:12px;color:var(--muted)}.knowledgeArticleHero h1{font-size:40px;line-height:1.18;color:var(--navy);margin:14px 0 10px;max-width:1000px}.knowledgeArticleHero>p{font-size:17px;line-height:1.7;color:var(--muted);max-width:950px}.knowledgeDetailLayout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;align-items:start}.articleBody{padding:26px}.articleBody h2{font-size:24px;color:var(--navy);margin:30px 0 12px}.articleBody h2:first-child{margin-top:0}.articleBody>p{color:#4f6b8c;line-height:1.8}.articleKeyPoints{display:grid;gap:10px;margin:20px 0}.articleKeyPoints>div{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:start;padding:15px;border-radius:14px;background:#f6f9ff;border:1px solid #e0ebf8}.articleKeyPoints span{width:34px;height:34px;border-radius:10px;background:#e7f0ff;color:#0f59d8;display:grid;place-items:center;font-weight:900;font-size:12px}.articleKeyPoints p{margin:5px 0;color:#365373;line-height:1.55}.processConnectionCard{padding:17px;border-radius:15px;background:linear-gradient(135deg,#0b2b59,#1159b0);color:#fff;display:grid;gap:5px}.processConnectionCard strong{font-size:18px}.processConnectionCard span{font-size:12px;color:#dce9ff}.articleProductGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.articleProductCard{padding:16px;border:1px solid var(--line);border-radius:15px;background:#fff;display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.articleProductCard span{font-size:11px;color:#0f59d8;font-weight:800}.articleProductCard h3{margin:5px 0;color:var(--navy)}.articleProductCard p{font-size:12px;line-height:1.5;color:var(--muted);margin:0}.articleProductCard>strong{font-size:12px;color:#0f58d5;white-space:nowrap}.knowledgeNotice{margin-top:18px;padding:16px;border-radius:14px;background:#fff8e8;border:1px solid #ffe1a3;color:#7d5b14;font-size:13px;line-height:1.55}.knowledgeSide{display:grid;gap:14px;position:sticky;top:96px}.knowledgeRelationCard h2,.knowledgeRfqCard h2{color:var(--navy);margin:0 0 14px}.relationStep{display:grid;grid-template-columns:36px 1fr;gap:10px;padding:11px 0;border-bottom:1px solid #edf2f8}.relationStep:last-child{border-bottom:0}.relationStep>span{width:30px;height:30px;border-radius:9px;background:#edf4ff;color:#0e58d8;display:grid;place-items:center;font-size:11px;font-weight:900}.relationStep div{display:grid;gap:2px}.relationStep small{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}.relationStep strong{font-size:13px;color:var(--navy)}.knowledgeSupplierRow{display:grid;grid-template-columns:54px 1fr;gap:10px;align-items:center;padding:11px 0;border-bottom:1px solid #edf2f8}.knowledgeSupplierRow:last-child{border-bottom:0}.knowledgeSupplierRow div:last-child{display:grid;gap:3px}.knowledgeSupplierRow span{font-size:11px;color:var(--muted)}.knowledgeRfqCard p{font-size:13px;line-height:1.55;color:var(--muted)}.knowledgeBottomCta{display:flex;justify-content:space-between;align-items:center;gap:20px;background:linear-gradient(135deg,#fff,#eef5ff)}.knowledgeBottomCta h2{color:var(--navy);margin:10px 0 5px}.knowledgeBottomCta p{margin:0;color:var(--muted)}.relatedKnowledgeCard{display:block}.relatedKnowledgeCard p{color:var(--muted);line-height:1.55}.relatedKnowledgeCard small{color:#0e58d8;font-weight:800}
+@media(max-width:1199px){.knowledgeHero{grid-template-columns:1fr}.knowledgeFilter{grid-template-columns:repeat(2,1fr)}.knowledgeFilter .grow{grid-column:1/-1}.knowledgeResultCount{justify-items:start}.knowledgeListGrid{grid-template-columns:repeat(2,1fr)}.knowledgeDetailLayout{grid-template-columns:1fr}.knowledgeSide{position:static;grid-template-columns:repeat(3,1fr)}}
+@media(max-width:767px){.knowledgeHero{padding:20px}.knowledgeHero h1{font-size:29px}.knowledgeFlow{justify-content:flex-start}.knowledgeFilter{grid-template-columns:1fr}.knowledgeFilter .grow{grid-column:auto}.knowledgeListGrid{grid-template-columns:1fr}.knowledgeArticleHero{padding:22px}.knowledgeArticleHero h1{font-size:30px}.articleBody{padding:20px}.articleProductGrid{grid-template-columns:1fr}.knowledgeSide{grid-template-columns:1fr}.knowledgeBottomCta{display:grid}.knowledgeBottomCta .ctaRow{display:grid;grid-template-columns:1fr 1fr}.knowledgeCardMeta{align-items:flex-start;flex-direction:column}.knowledgeCover{height:130px}}
+
+/* Stage 05 - My Desk */
+.savedDeskBtn{background:#fff8df!important;border-color:#f3d676!important;color:#7c5a00!important}
+.myDeskHero{padding:28px;background:linear-gradient(135deg,#fff,#eef5ff);display:grid;grid-template-columns:1.05fr .95fr;gap:20px;align-items:center}.myDeskHero h1{font-size:40px;color:var(--navy);margin:10px 0}.myDeskHero p{color:var(--muted);line-height:1.65}.myDeskFlow{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;padding:20px;border-radius:18px;background:linear-gradient(135deg,#0b2b59,#1265f5);color:#fff}.myDeskFlow span{padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.12);font-size:12px;font-weight:900}.myDeskFlow b{color:#78e6ff}.myDeskStats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.deskStat{padding:18px}.deskStat strong{display:block;font-size:30px;color:var(--navy)}.deskStat span{font-size:12px;color:var(--muted);font-weight:700}.myDeskWorkspace{padding:0;overflow:hidden}.myDeskTabs{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-bottom:1px solid var(--line);background:#f8fbff}.myDeskTabs button{border:0;background:transparent;padding:16px 12px;color:#607997;font-weight:900;cursor:pointer}.myDeskTabs button.active{background:#fff;color:#0e58d8;box-shadow:inset 0 -3px #1265f5}.deskPanel{padding:22px}.deskPanel h2{color:var(--navy);margin:0 0 6px}.deskPanel>.rowBetween p{color:var(--muted);margin:0;line-height:1.5}.deskRfqList{display:grid;gap:12px;margin-top:18px}.deskRfqCard{display:flex;justify-content:space-between;gap:16px;align-items:center;padding:16px;border:1px solid var(--line);border-radius:16px;background:#fff}.deskRfqCard h3{color:var(--navy);margin:7px 0 5px}.deskRfqCard p,.deskRfqCard small{color:var(--muted);margin:0;line-height:1.5}.deskStatus{display:inline-flex;padding:6px 8px;border-radius:999px;background:#eafff1;color:#0b8c4f;font-size:10px;font-weight:900}.deskRfqActions,.deskSavedActions{display:flex;gap:8px;flex-wrap:wrap}.deskSavedGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}.deskSavedCard{padding:18px;border:1px solid var(--line);border-radius:16px;background:#fff;display:grid;align-content:start}.deskSavedCard>span{font-size:11px;color:#0f5bd8;font-weight:900}.deskSavedCard h3{color:var(--navy);margin:8px 0}.deskSavedCard p{color:var(--muted);line-height:1.55;margin:0 0 10px}.deskSavedCard small{color:#66809d;margin-bottom:14px}.deskEmpty{text-align:center;padding:42px 20px;border:1px dashed #cbd9eb;border-radius:16px;background:#f9fbff;margin-top:18px}.deskEmpty h3{color:var(--navy);margin:0 0 8px}.deskEmpty p{color:var(--muted);margin:0 0 16px}.supplierMobileBar .savedDeskBtn{min-width:48px;padding:10px}
+@media(max-width:1199px){.myDeskHero{grid-template-columns:1fr}.deskSavedGrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:767px){.myDeskHero{padding:20px}.myDeskHero h1{font-size:31px}.myDeskStats{grid-template-columns:repeat(2,1fr)}.myDeskTabs{grid-template-columns:repeat(2,1fr)}.deskPanel{padding:16px}.deskRfqCard{align-items:flex-start;flex-direction:column}.deskRfqActions{width:100%}.deskRfqActions .btn{flex:1}.deskSavedGrid{grid-template-columns:1fr}.knowledgeArticleMeta .savedDeskBtn{width:100%;margin-top:4px}}
+
+/* Stage 06 - Admin CMS Mock CRUD */
+.adminCmsV2{position:relative}.adminToast{position:fixed;right:24px;top:94px;z-index:90;padding:13px 16px;border-radius:12px;background:#0b2b59;color:#fff;box-shadow:0 14px 34px rgba(10,43,89,.24);font-size:13px;font-weight:800}.adminTopbar{padding:22px 24px;display:flex;justify-content:space-between;gap:18px;align-items:center;margin-bottom:18px}.adminTopbar h1{margin:4px 0 6px;color:var(--navy);font-size:32px}.adminTopbar p{margin:0;color:var(--muted);line-height:1.55}.adminEyebrow{font-size:11px!important;font-weight:900;letter-spacing:.12em;color:#0e5ad9!important}.adminTopActions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.adminStorageState{padding:9px 11px;border-radius:999px;background:#eafff2;color:#0b8750;font-size:11px;font-weight:900}.adminCmsShell{display:grid;grid-template-columns:245px minmax(0,1fr);gap:18px;align-items:start}.adminCmsNav{padding:14px;position:sticky;top:92px;display:grid;gap:7px;background:linear-gradient(180deg,#0a244e,#0b2d5e);border-color:#163d73}.adminCmsNav>strong{color:#fff;line-height:1.35;padding:10px 10px 16px}.adminCmsNav button{border:0;background:transparent;color:#cfe0fa;text-align:left;padding:12px 13px;border-radius:10px;display:flex;justify-content:space-between;gap:10px;font-weight:800;cursor:pointer}.adminCmsNav button span{font-size:10px;padding:3px 6px;border-radius:999px;background:rgba(255,255,255,.12)}.adminCmsNav button:hover,.adminCmsNav button.active{background:rgba(255,255,255,.11);color:#fff}.adminCmsNavNote{margin-top:8px;padding:12px;border-radius:11px;background:rgba(255,255,255,.07);font-size:10px;color:#bad2f7;line-height:1.55}.adminCmsMain{display:grid;gap:16px}.adminHeroV2{min-height:220px;border-radius:20px;padding:28px;background:linear-gradient(135deg,#09244d,#0d3b7b 58%,#126ee2);color:#fff;display:grid;grid-template-columns:1fr 280px;gap:20px;align-items:center;overflow:hidden}.adminHeroV2>div:first-child>span{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#b8d7ff;font-weight:900}.adminHeroV2 h2{font-size:30px;line-height:1.2;margin:10px 0}.adminHeroV2 p{margin:0;color:#d8e7fb;line-height:1.6}.adminHeroGraph{height:150px;display:flex;align-items:end;gap:12px;padding:18px;border-radius:16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}.adminHeroGraph i{display:block;flex:1;border-radius:7px 7px 2px 2px;background:linear-gradient(180deg,#74e6ff,#1b83ff);box-shadow:0 0 22px rgba(78,200,255,.22)}.adminHeroGraph i:nth-child(1){height:35%}.adminHeroGraph i:nth-child(2){height:52%}.adminHeroGraph i:nth-child(3){height:48%}.adminHeroGraph i:nth-child(4){height:72%}.adminHeroGraph i:nth-child(5){height:94%}.adminKpiV2 .stat{min-width:0}.adminDashboardPanels{padding:0}.adminOpsCard{padding:20px}.adminOpsCard h2,.adminDataModelV2 h2{margin:0 0 5px;color:var(--navy)}.adminOpsCard p,.adminDataModelV2 p{margin:0;color:var(--muted)}.adminQuickGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.adminQuickGrid button{border:1px solid var(--line);background:#f8fbff;padding:15px;border-radius:13px;text-align:left;cursor:pointer}.adminQuickGrid button strong,.adminQuickGrid button span{display:block}.adminQuickGrid button strong{color:var(--navy);margin-bottom:4px}.adminQuickGrid button span{font-size:11px;color:var(--muted)}.adminWorkflowV2{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:18px}.adminWorkflowV2 div{padding:11px;border:1px solid var(--line);border-radius:12px;background:#f8fbff}.adminWorkflowV2 span{display:block;font-size:10px;color:#0e5bd8;font-weight:900}.adminWorkflowV2 strong{font-size:11px;color:var(--navy)}.adminDataModelV2{padding:20px}.adminEntityFlow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}.adminEntityFlow div{padding:13px 10px;text-align:center;border:1px solid #d9e7fa;background:#f4f8ff;border-radius:12px;color:#163c72;font-size:12px;font-weight:900}.adminCrudSection{display:grid;gap:14px}.adminSectionHead{display:flex;align-items:end;justify-content:space-between;gap:18px}.adminSectionHead h2{margin:0 0 5px;color:var(--navy);font-size:27px}.adminSectionHead p{margin:0;color:var(--muted)}.adminSearch{display:flex;gap:8px;align-items:center}.adminSearch input{width:240px;padding:11px 12px;border-radius:10px;border:1px solid var(--line);outline:none}.adminSearch strong{font-size:12px;padding:9px 10px;background:#edf4ff;border-radius:999px;color:#0c56d3;white-space:nowrap}.adminCrudForm{padding:20px}.adminFormHeader{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:16px}.adminFormHeader>div{display:grid;gap:3px}.adminFormHeader strong{font-size:18px;color:var(--navy)}.adminFormHeader span{font-size:11px;color:var(--muted)}.adminFormGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}.adminField{display:grid;gap:6px}.adminField.wide{grid-column:1/-1}.adminField>span{font-size:11px;color:#466485;font-weight:900}.adminField input,.adminField select,.adminField textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;outline:none;color:var(--text)}.adminVerifyCheck{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;background:#f5f9ff;border:1px solid var(--line);font-size:12px;color:#345577;font-weight:800;align-self:end}.adminTableWrap{overflow:auto}.adminCrudTable{width:100%;border-collapse:collapse;min-width:760px}.adminCrudTable th{padding:12px 13px;text-align:left;font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:#7289a7;background:#f6f9fd;border-bottom:1px solid var(--line)}.adminCrudTable td{padding:13px;border-bottom:1px solid #edf2f8;vertical-align:middle;color:#375572;font-size:12px}.adminCrudTable tr:last-child td{border-bottom:0}.adminCrudTable td strong,.adminCrudTable td small{display:block}.adminCrudTable td strong{color:var(--navy);font-size:12px;margin-bottom:3px}.adminCrudTable td small{color:#8296ae;font-size:10px;margin-top:3px}.adminRowActions{display:flex;gap:6px;flex-wrap:wrap}.adminRowActions button{border:1px solid #d6e3f4;background:#fff;padding:7px 9px;border-radius:8px;color:#245187;font-size:10px;font-weight:900;cursor:pointer}.adminRowActions button.danger{border-color:#ffd3d3;background:#fff7f7;color:#c63d3d}.adminRowActions button.publish{border-color:#bdd8ff;background:#edf5ff;color:#0c58d6}.adminEmptyQueue{padding:38px;text-align:center;display:grid;gap:6px}.adminEmptyQueue strong{color:var(--navy)}.adminEmptyQueue span{font-size:12px;color:var(--muted)}
+@media(max-width:1199px){.adminCmsShell{grid-template-columns:1fr}.adminCmsNav{position:static;grid-template-columns:repeat(3,1fr)}.adminCmsNav>strong,.adminCmsNavNote{grid-column:1/-1}.adminHeroV2{grid-template-columns:1fr 220px}.adminFormGrid{grid-template-columns:repeat(2,1fr)}.adminEntityFlow{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:767px){.adminTopbar{align-items:flex-start;flex-direction:column}.adminTopActions{width:100%}.adminCmsNav{grid-template-columns:1fr 1fr}.adminHeroV2{grid-template-columns:1fr;padding:20px}.adminHeroV2 h2{font-size:25px}.adminHeroGraph{display:none}.adminKpiV2{grid-template-columns:1fr 1fr}.adminDashboardPanels{grid-template-columns:1fr}.adminWorkflowV2{grid-template-columns:1fr 1fr}.adminEntityFlow{grid-template-columns:1fr 1fr}.adminSectionHead{align-items:flex-start;flex-direction:column}.adminSearch{width:100%}.adminSearch input{width:100%}.adminFormGrid{grid-template-columns:1fr}.adminField.wide{grid-column:auto}.adminCrudForm{padding:16px}.adminToast{left:14px;right:14px;top:80px}.adminCmsNavNote{display:none}}
+
+/* Stage 07: Admin CMS -> Public Page publishing sync */
+.searchBar a{border:none;border-radius:12px;background:#fff;color:#0f4fc4;font-weight:900;padding:13px 18px;display:inline-flex;align-items:center;justify-content:center}
+.publicSyncBanner{display:grid;grid-template-columns:auto auto 1fr;gap:8px 10px;align-items:center;margin:0 0 14px;padding:12px 14px;border:1px solid #d9e7fb;border-radius:14px;background:linear-gradient(135deg,#f8fbff,#eef5ff);color:#355271}
+.publicSyncBanner span{font-size:12px}.publicSyncBanner span.live{color:#0a9a55}.publicSyncBanner span.demo{color:#d18a00}.publicSyncBanner strong{font-size:13px;color:#173f73}.publicSyncBanner small{font-size:12px;color:#68809e}.publicSyncBanner.compactSync{margin-bottom:16px}.homeSyncBanner{margin-top:16px}
+@media(max-width:767px){.publicSyncBanner{grid-template-columns:auto 1fr}.publicSyncBanner small{grid-column:1/-1;padding-left:20px}.searchBar a{width:100%}}
+
+
+/* Stage 08 - Final QA / responsive fixes */
+.disabledLink{opacity:.55;cursor:not-allowed;pointer-events:none}.qaLoading{min-height:180px;display:grid;place-items:center}.rfqCandidates{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0 14px}.rfqCandidates span{padding:7px 9px;border-radius:999px;background:#f1f6ff;border:1px solid #dce8fb;color:#31587f;font-size:11px;font-weight:800}
+@media(max-width:767px){.productDetailPage,.supplierDetailPage,.rfqPage{padding-bottom:132px}.mobileSticky .savedDeskBtn,.supplierMobileBar .savedDeskBtn{padding:10px;min-width:46px}.rfqMobileBar{align-items:center}.rfqMobileBar button{min-height:42px}.mobileNav{min-height:55px}}
+.headerActions{display:flex;align-items:center;gap:9px}.navToggle{display:none;width:42px;height:42px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--navy);font-size:20px;font-weight:900;cursor:pointer}.tabletNavOverlay{display:none;position:fixed;inset:0;z-index:80;background:rgba(7,24,52,.42);backdrop-filter:blur(4px)}.tabletNavOverlay.open{display:block}.tabletNavPanel{position:absolute;right:0;top:0;width:min(360px,88vw);height:100%;background:#fff;padding:20px;box-shadow:-18px 0 48px rgba(8,31,69,.18);display:grid;align-content:start;gap:8px}.tabletNavPanel>.rowBetween{padding-bottom:10px;border-bottom:1px solid var(--line);margin-bottom:6px}.tabletNavPanel>a:not(.btn){padding:12px 13px;border-radius:10px;color:#355473;font-weight:800}.tabletNavPanel>a:not(.btn):hover{background:#f1f6ff;color:#0e55ce}.navClose{width:38px;height:38px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--navy);font-size:24px;cursor:pointer}
+@media(max-width:1199px){.navToggle{display:inline-grid;place-items:center}}
+
+.rfqError{margin:10px 0;color:#b42318;background:#fff1f0;border:1px solid #fecdca;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:700}
+
+/* Stage 11 DB QA */
+.adminQuickGrid .adminQaLink {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4px;
+  min-height: 76px;
+  padding: 14px;
+  border: 1px solid #dce6f5;
+  border-radius: 14px;
+  background: #f8fbff;
+  color: #12345f;
+  text-decoration: none;
+}
+.adminQuickGrid .adminQaLink:hover {
+  border-color: #aac5ef;
+  background: #eef5ff;
+}
+.adminQuickGrid .adminQaLink span {
+  font-size: 12px;
+  color: #6b83a3;
+}
+
+/* =========================================================
+   Stage 12 - Layout / Spacing System
+   Goal: unify page width, vertical rhythm and card spacing
+   without changing existing functionality.
+   ========================================================= */
+:root{
+  --layout-max:1280px;
+  --gutter-desktop:24px;
+  --gutter-tablet:20px;
+  --gutter-mobile:16px;
+  --space-8:8px;
+  --space-12:12px;
+  --space-16:16px;
+  --space-20:20px;
+  --space-24:24px;
+  --space-32:32px;
+  --space-40:40px;
+  --space-48:48px;
+  --space-56:56px;
+  --space-64:64px;
+}
+
+/* 1. One horizontal alignment line across Header / Hero / Sections */
+.container{
+  width:100%;
+  max-width:var(--layout-max);
+  margin-left:auto;
+  margin-right:auto;
+  padding-left:var(--gutter-desktop);
+  padding-right:var(--gutter-desktop);
+}
+
+/* 2. Global vertical rhythm */
+.section{
+  padding-top:32px;
+  padding-bottom:32px;
+}
+
+.sectionTitle{
+  margin-bottom:24px;
+}
+.sectionTitle h2{
+  margin:0;
+}
+.sectionTitle p{
+  margin:8px 0 0;
+}
+
+/* 3. Home hero spacing */
+.heroWrap{
+  padding-top:32px;
+}
+.hero{
+  padding:40px 36px;
+  gap:32px;
+}
+.hero h1{
+  margin:12px 0 16px;
+}
+.searchBar{
+  margin:22px 0 16px;
+}
+.ctaRow{
+  margin-top:20px;
+}
+
+/* 4. Hero -> sync notice -> KPI rhythm */
+.homeSyncBanner{
+  margin-top:24px;
+  margin-bottom:0;
+}
+.publicSyncBanner{
+  padding:14px 16px;
+}
+.statGrid{
+  gap:20px;
+  padding-top:24px;
+}
+.stat{
+  padding:20px;
+}
+
+/* 5. Main discovery / catalog grids */
+.processGrid,
+.productGrid,
+.supplierDirectoryGrid,
+.knowledgeListGrid{
+  gap:20px;
+}
+.processCard,
+.marketProductCard,
+.supplierDirectoryCard,
+.knowledgeListCard{
+  padding:20px;
+}
+
+/* 6. Reusable section action / conversion spacing */
+.sectionAction{
+  margin-top:24px;
+}
+.conversionCard,
+.knowledgeBottomCta{
+  padding:24px;
+}
+
+/* 7. Detail and CMS blocks keep the same spacing language */
+.productTop,
+.desktopDetailGrid,
+.supplierHero,
+.rfqGrid,
+.adminCmsShell,
+.adminCmsMain{
+  gap:20px;
+}
+
+/* Tablet */
+@media(max-width:1199px){
+  .container{
+    padding-left:var(--gutter-tablet);
+    padding-right:var(--gutter-tablet);
+  }
+  .hero{
+    padding:34px 28px;
+    gap:28px;
+  }
+  .section{
+    padding-top:28px;
+    padding-bottom:28px;
+  }
+  .processGrid,
+  .productGrid,
+  .supplierDirectoryGrid,
+  .knowledgeListGrid{
+    gap:16px;
+  }
+}
+
+/* Mobile */
+@media(max-width:767px){
+  .container{
+    padding-left:var(--gutter-mobile);
+    padding-right:var(--gutter-mobile);
+  }
+  .heroWrap{
+    padding-top:20px;
+  }
+  .hero{
+    padding:24px 20px;
+    gap:24px;
+    border-radius:22px;
+  }
+  .section{
+    padding-top:24px;
+    padding-bottom:24px;
+  }
+  .sectionTitle{
+    margin-bottom:18px;
+  }
+  .sectionTitle p{
+    margin-top:6px;
+  }
+  .homeSyncBanner{
+    margin-top:16px;
+  }
+  .publicSyncBanner{
+    padding:12px 13px;
+  }
+  .statGrid{
+    gap:12px;
+    padding-top:16px;
+  }
+  .stat{
+    padding:16px;
+  }
+  .processGrid,
+  .productGrid,
+  .supplierDirectoryGrid,
+  .knowledgeListGrid{
+    gap:14px;
+  }
+  .processCard,
+  .marketProductCard,
+  .supplierDirectoryCard,
+  .knowledgeListCard{
+    padding:16px;
+  }
+  .sectionAction{
+    margin-top:18px;
+  }
+}
+
+/* =========================================================
+   Stage 13 - Typography + card alignment polish
+   Visual-only refinements. No data/API/DB behavior changes.
+   ========================================================= */
+
+:root{
+  --type-hero:44px;
+  --type-page:34px;
+  --type-section:28px;
+  --type-card:18px;
+  --type-body:14px;
+  --type-small:12px;
+  --leading-tight:1.16;
+  --leading-body:1.62;
+}
+
+body{
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+/* 1. Global type hierarchy */
+.hero h1{
+  font-size:var(--type-hero);
+  line-height:1.08;
+  letter-spacing:-.035em;
+  font-weight:900;
+}
+.pageHeader h1,
+.knowledgeArticleHero h1,
+.myDeskHero h1{
+  font-size:var(--type-page);
+  line-height:var(--leading-tight);
+  letter-spacing:-.025em;
+  font-weight:900;
+}
+.sectionTitle h2,
+.detailSectionTitle,
+.adminSectionHead h2{
+  font-size:var(--type-section);
+  line-height:1.22;
+  letter-spacing:-.02em;
+  font-weight:900;
+}
+.sectionTitle p,
+.pageHeader p,
+.lead{
+  line-height:var(--leading-body);
+}
+.sectionTitle p{
+  max-width:860px;
+  font-size:14px;
+}
+
+/* 2. Card title/body consistency */
+.processCard h3,
+.marketProductCard h3,
+.supplierDirectoryCard h3,
+.knowledgeListCard h2,
+.supplierCard h3{
+  font-size:var(--type-card);
+  line-height:1.32;
+  letter-spacing:-.01em;
+  font-weight:850;
+}
+.processCard p,
+.marketProductCard p,
+.supplierDirectoryCard p,
+.knowledgeListCard p{
+  font-size:var(--type-body);
+  line-height:1.58;
+}
+
+/* 3. Make grid items align to the same visual baseline */
+.processGrid,
+.productGrid,
+.supplierDirectoryGrid,
+.knowledgeListGrid,
+.statGrid{
+  align-items:stretch;
+}
+.processCard,
+.marketProductCard,
+.supplierDirectoryCard,
+.knowledgeListCard,
+.stat{
+  height:100%;
+}
+
+.processCard{
+  min-height:118px;
+}
+.processCard>div:last-child{
+  min-width:0;
+}
+.processCard p{
+  margin-top:8px;
+}
+
+.marketProductCard,
+.supplierDirectoryCard,
+.knowledgeListCard{
+  display:flex;
+  flex-direction:column;
+}
+.marketProductCard h3,
+.supplierDirectoryCard h3,
+.knowledgeListCard h2{
+  margin-top:12px;
+  margin-bottom:8px;
+}
+.marketProductCard p,
+.supplierDirectoryCard p,
+.knowledgeListCard p{
+  margin-top:0;
+}
+.productMetaLine,
+.productMetaStack,
+.relatedRow,
+.productCardActions,
+.supplierActions{
+  margin-top:auto;
+}
+
+/* Product cards keep media/title/action positions aligned */
+.productVisualCompact{
+  height:148px;
+  flex:0 0 auto;
+}
+.marketProductCard .badge,
+.knowledgeListCard .badge{
+  align-self:flex-start;
+}
+
+/* Supplier cards */
+.supplierDirectoryCard{
+  min-height:250px;
+}
+.supplierDirectoryCard p{
+  min-height:44px;
+}
+.supplierActions{
+  padding-top:12px;
+}
+
+/* Knowledge cards */
+.knowledgeListCard{
+  min-height:350px;
+}
+.knowledgeCover{
+  flex:0 0 auto;
+}
+.knowledgeTags{
+  margin-bottom:12px;
+}
+.knowledgeCardMeta{
+  min-height:28px;
+}
+
+/* 4. KPI cards: same height, same number baseline */
+.stat{
+  min-height:106px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+.stat span{
+  min-height:19px;
+  line-height:1.35;
+}
+.stat strong{
+  line-height:1.05;
+  letter-spacing:-.025em;
+}
+.stat small{
+  min-height:16px;
+  line-height:1.3;
+}
+
+/* 5. Buttons / badges use one control rhythm */
+.btn{
+  min-height:44px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  line-height:1.2;
+}
+.badge{
+  min-height:28px;
+  align-items:center;
+  line-height:1;
+}
+.productCardActions a,
+.processQuickFilter button{
+  min-height:40px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  line-height:1.2;
+}
+
+/* 6. Section header alignment */
+.sectionTitle{
+  display:grid;
+  gap:7px;
+  margin-bottom:24px;
+}
+.sectionTitle h2,
+.sectionTitle p{
+  margin:0;
+}
+.adminSectionHead h2,
+.adminSectionHead p{
+  margin-left:0;
+  margin-right:0;
+}
+
+/* 7. Header text uses a more stable vertical rhythm */
+.brand strong{
+  line-height:1.1;
+  letter-spacing:-.01em;
+}
+.brand small{
+  line-height:1.25;
+  margin-top:2px;
+}
+.desktopNav{
+  align-items:center;
+}
+.desktopNav a{
+  display:inline-flex;
+  align-items:center;
+  min-height:40px;
+}
+
+/* Tablet */
+@media(max-width:1199px){
+  :root{
+    --type-hero:40px;
+    --type-page:32px;
+    --type-section:27px;
+  }
+  .processCard{
+    min-height:116px;
+  }
+  .knowledgeListCard{
+    min-height:330px;
+  }
+}
+
+/* Mobile */
+@media(max-width:767px){
+  :root{
+    --type-hero:31px;
+    --type-page:29px;
+    --type-section:24px;
+    --type-card:17px;
+  }
+  .hero h1{
+    line-height:1.13;
+    letter-spacing:-.03em;
+  }
+  .sectionTitle{
+    margin-bottom:18px;
+    gap:6px;
+  }
+  .sectionTitle p{
+    font-size:13px;
+  }
+  .processCard,
+  .supplierDirectoryCard,
+  .knowledgeListCard{
+    min-height:0;
+  }
+  .marketProductCard p,
+  .supplierDirectoryCard p{
+    min-height:0;
+  }
+  .productVisualCompact{
+    height:136px;
+  }
+  .stat{
+    min-height:96px;
+  }
+  .btn{
+    min-height:42px;
+  }
+}
+
+/* =========================================================
+   Stage 14 - Visual polish
+   Color contrast / CTA hierarchy / border-shadow consistency
+   ========================================================= */
+
+:root{
+  --navy-950:#081f45;
+  --navy-900:#0b2b59;
+  --navy-800:#153d70;
+  --blue-600:#1265f5;
+  --blue-700:#0b56d9;
+  --cyan-500:#19c5ff;
+  --surface:#ffffff;
+  --surface-soft:#f7faff;
+  --surface-blue:#eef5ff;
+  --border-soft:#dbe6f3;
+  --border-strong:#c8d8eb;
+  --text-strong:#102844;
+  --text-body:#3f5d7d;
+  --text-muted-2:#6f86a3;
+  --success:#0a8f50;
+  --success-bg:#eafaf1;
+  --warning:#9a6900;
+  --warning-bg:#fff7e5;
+  --danger:#bf3e3e;
+  --danger-bg:#fff3f3;
+  --shadow-card:0 8px 24px rgba(17,47,91,.065);
+  --shadow-card-hover:0 14px 32px rgba(17,47,91,.105);
+  --shadow-hero:0 18px 44px rgba(7,33,76,.16);
+  --focus-ring:0 0 0 3px rgba(18,101,245,.16);
+}
+
+/* 1. Global surface and text contrast */
+html,body{
+  color:var(--text-strong);
+  background:linear-gradient(180deg,#f8fbff 0%,#f4f8fc 100%);
+}
+.lead,
+.sectionTitle p,
+.marketProductCard p,
+.supplierDirectoryCard p,
+.knowledgeListCard p,
+.pageHeader p,
+.adminTopbar p,
+.adminSectionHead p{
+  color:var(--text-body);
+}
+
+/* 2. Header is visually separated from content without looking heavy */
+.siteHeader{
+  background:rgba(255,255,255,.94);
+  border-bottom-color:#e2eaf4;
+  box-shadow:0 1px 0 rgba(20,55,96,.025);
+}
+.desktopNav a{
+  color:#365371;
+  border-radius:9px;
+  padding:0 3px;
+  transition:color .16s ease, background .16s ease;
+}
+.desktopNav a:hover{
+  color:var(--blue-600);
+  background:#f5f8fe;
+}
+
+/* 3. Hero is the strongest visual zone */
+.hero{
+  background:linear-gradient(135deg,var(--navy-950) 0%,#0c3978 58%,#1767c5 100%);
+  box-shadow:var(--shadow-hero);
+  border:1px solid rgba(255,255,255,.08);
+}
+.hero .lead{
+  color:#dce9fb;
+}
+.kicker{
+  color:#b5d1f2;
+}
+.waferVisual{
+  border:1px solid rgba(165,214,255,.12);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.03);
+}
+
+/* 4. Cards use one border and shadow language */
+.card,
+.stat,
+.processCard,
+.marketProductCard,
+.supplierDirectoryCard,
+.knowledgeListCard,
+.miniCard,
+.stepCard,
+.deskSavedCard,
+.articleProductCard,
+.adminCrudForm,
+.adminOpsCard,
+.adminDataModelV2{
+  border-color:var(--border-soft);
+  box-shadow:var(--shadow-card);
+}
+.marketProductCard,
+.supplierDirectoryCard,
+.knowledgeListCard,
+.processCard{
+  transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+}
+.marketProductCard:hover,
+.supplierDirectoryCard:hover,
+.knowledgeListCard:hover,
+.processCard:hover{
+  transform:translateY(-2px);
+  border-color:#c9d9ee;
+  box-shadow:var(--shadow-card-hover);
+}
+
+/* 5. Primary / Secondary CTA hierarchy */
+.btn{
+  color:#27496f;
+  background:#fff;
+  border-color:var(--border-strong);
+  box-shadow:none;
+  transition:transform .15s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease, color .15s ease;
+}
+.btn:hover{
+  background:#f7faff;
+  border-color:#aec5e3;
+  color:#123d75;
+  transform:translateY(-1px);
+}
+.btn.primary{
+  background:linear-gradient(135deg,var(--blue-600),var(--blue-700));
+  color:#fff;
+  border-color:transparent;
+  box-shadow:0 8px 18px rgba(18,101,245,.18);
+}
+.btn.primary:hover{
+  background:linear-gradient(135deg,#0f5ce6,#084ec8);
+  box-shadow:0 10px 22px rgba(18,101,245,.24);
+}
+.btn.dark{
+  background:linear-gradient(135deg,#0b2a58,#091f43);
+  color:#fff;
+  border-color:transparent;
+}
+.btn.ghost{
+  color:#fff;
+  background:rgba(255,255,255,.04);
+  border-color:rgba(255,255,255,.32);
+}
+.btn.ghost:hover{
+  background:rgba(255,255,255,.09);
+  color:#fff;
+  border-color:rgba(255,255,255,.46);
+}
+
+/* Product-card actions: one strong action, two quiet actions */
+.productCardActions a{
+  background:#fff;
+  border-color:#d8e4f2;
+  color:#355572;
+}
+.productCardActions a:hover{
+  background:#f5f9ff;
+  border-color:#bcd0e8;
+}
+.productCardActions a.primaryAction{
+  background:var(--blue-600);
+  border-color:var(--blue-600);
+  color:#fff;
+  box-shadow:0 6px 15px rgba(18,101,245,.15);
+}
+.productCardActions a.primaryAction:hover{
+  background:var(--blue-700);
+  border-color:var(--blue-700);
+}
+
+/* 6. Status badges are semantically consistent */
+.badge{
+  background:#edf4ff;
+  border-color:#d6e5fa;
+  color:#174f9e;
+}
+.badge.green,
+.deskStatus{
+  background:var(--success-bg);
+  border-color:#c8efd9;
+  color:var(--success);
+}
+.badge.amber{
+  background:var(--warning-bg);
+  border-color:#f1dfa9;
+  color:var(--warning);
+}
+.adminRowActions button.danger{
+  color:var(--danger);
+  background:var(--danger-bg);
+  border-color:#f4d0d0;
+}
+
+/* 7. Search / filter controls share one interaction style */
+.searchBar input,
+.catalogField input,
+.catalogField select,
+.adminSearch input,
+.adminField input,
+.adminField select,
+.adminField textarea,
+.formCard input,
+.formCard textarea,
+.formCard select{
+  border-color:var(--border-soft);
+  box-shadow:none;
+  transition:border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.catalogField input:focus,
+.catalogField select:focus,
+.adminSearch input:focus,
+.adminField input:focus,
+.adminField select:focus,
+.adminField textarea:focus,
+.formCard input:focus,
+.formCard textarea:focus,
+.formCard select:focus{
+  border-color:#79a8ee;
+  box-shadow:var(--focus-ring);
+  outline:none;
+}
+
+/* 8. Keyboard accessibility and interactive focus */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible{
+  outline:2px solid rgba(18,101,245,.75);
+  outline-offset:2px;
+}
+
+/* 9. Public DB sync banner should read as status, not primary CTA */
+.publicSyncBanner{
+  background:linear-gradient(135deg,#f9fcff,#f1f7ff);
+  border-color:#d9e6f7;
+  box-shadow:none;
+}
+.publicSyncBanner strong{
+  color:#254c7e;
+}
+.publicSyncBanner span.live{
+  color:var(--success);
+}
+
+/* 10. Section visual hierarchy */
+.sectionTitle h2,
+.detailSectionTitle,
+.pageHeader h1,
+.adminSectionHead h2{
+  color:#0b315f;
+}
+.processIndex{
+  background:#eaf2ff;
+  color:#0b5bdd;
+  border:1px solid #d9e7fb;
+}
+.productVisualCompact,
+.knowledgeCover{
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);
+}
+
+/* 11. Admin CMS keeps the same public-site visual system */
+.adminCmsNav{
+  box-shadow:0 12px 30px rgba(8,36,78,.12);
+}
+.adminStorageState{
+  background:var(--success-bg);
+  color:var(--success);
+  border:1px solid #c9eed9;
+}
+.adminCrudTable tbody tr{
+  transition:background .14s ease;
+}
+.adminCrudTable tbody tr:hover{
+  background:#f9fbfe;
+}
+.adminRowActions button.publish{
+  background:#edf5ff;
+  border-color:#c6dbf8;
+  color:#0b58d6;
+}
+
+/* 12. Mobile: avoid excessive shadow and maintain clear CTA hierarchy */
+@media(max-width:767px){
+  .hero{
+    box-shadow:0 12px 28px rgba(7,33,76,.13);
+  }
+  .card,
+  .stat,
+  .processCard,
+  .marketProductCard,
+  .supplierDirectoryCard,
+  .knowledgeListCard{
+    box-shadow:0 6px 18px rgba(17,47,91,.055);
+  }
+  .marketProductCard:hover,
+  .supplierDirectoryCard:hover,
+  .knowledgeListCard:hover,
+  .processCard:hover{
+    transform:none;
+  }
+  .mobileSticky,
+  .supplierMobileBar,
+  .rfqMobileBar,
+  .mobileNav{
+    box-shadow:0 -8px 24px rgba(12,42,86,.08);
+  }
+}
+
+/* =========================================================
+   Stage 15 - Visual asset / icon unification + portfolio QA
+   Keeps all existing functionality intact.
+   ========================================================= */
+
+:root{
+  --visual-navy:#08244d;
+  --visual-blue:#1265f5;
+  --visual-cyan:#19c5ff;
+  --visual-surface:#f5f9ff;
+  --visual-line:#dce8f6;
+  --visual-glow:0 14px 34px rgba(15,77,158,.12);
+  --icon-size-sm:32px;
+  --icon-size-md:42px;
+  --icon-size-lg:54px;
+}
+
+/* 1. One icon language across public + admin UI */
+.brandMark,
+.processIndex,
+.chipIcon,
+.stepCard span,
+.articleKeyPoints span,
+.relationStep>span{
+  border:1px solid rgba(93,145,217,.18);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55);
+}
+.brandMark{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  letter-spacing:-.03em;
+  box-shadow:0 8px 20px rgba(18,101,245,.18), inset 0 1px 0 rgba(255,255,255,.22);
+}
+.processIndex{
+  width:34px;
+  height:34px;
+  border-radius:10px;
+  flex:0 0 34px;
+}
+.chipIcon{
+  width:50px;
+  height:50px;
+  border-radius:13px;
+  background:linear-gradient(145deg,#f4f8ff,#e7f0fc);
+  color:#1559cb;
+  font-weight:900;
+}
+.stepCard span{
+  width:32px;
+  height:32px;
+  flex:0 0 32px;
+  background:linear-gradient(145deg,#edf4ff,#e3eeff);
+}
+.articleKeyPoints span,
+.relationStep>span{
+  background:linear-gradient(145deg,#edf4ff,#e4efff);
+}
+
+/* 2. Supplier marks look like deliberate brand placeholders, not random boxes */
+.supplierLogo{
+  background:linear-gradient(145deg,#f5f9ff,#e8f1ff);
+  border:1px solid #d7e5f7;
+  color:#0d56c7;
+  box-shadow:0 8px 20px rgba(17,72,145,.08);
+  letter-spacing:-.04em;
+  text-transform:uppercase;
+}
+.supplierLogo.compact{
+  width:56px;
+  height:56px;
+  border-radius:14px;
+  font-size:15px;
+}
+
+/* 3. All editorial / product visuals share one semiconductor visual system */
+.waferVisual,
+.supplierVisual,
+.productVisualCompact,
+.knowledgeCover,
+.knowledge .thumb,
+.miniVisual{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+  border:1px solid rgba(130,178,230,.2);
+  background:
+    radial-gradient(circle at 72% 24%,rgba(36,212,255,.34),transparent 16%),
+    radial-gradient(circle at 58% 72%,rgba(74,141,255,.23),transparent 30%),
+    linear-gradient(145deg,#081e42 0%,#0d3978 56%,#1265b7 100%);
+}
+.waferVisual::before,
+.supplierVisual::before,
+.productVisualCompact::before,
+.knowledgeCover::after,
+.knowledge .thumb::after,
+.miniVisual::after{
+  content:"";
+  position:absolute;
+  width:58%;
+  aspect-ratio:1;
+  right:-9%;
+  bottom:-30%;
+  border-radius:50%;
+  border:1px solid rgba(205,238,255,.28);
+  box-shadow:
+    inset 0 0 0 12px rgba(191,229,255,.055),
+    inset 0 0 0 28px rgba(191,229,255,.03);
+  z-index:-1;
+}
+.waferVisual::after,
+.supplierVisual::after{
+  border-color:rgba(205,238,255,.25);
+}
+
+/* 4. Stable image ratios make grids read as one design system */
+.productVisualCompact{
+  height:auto;
+  aspect-ratio:16/9;
+  min-height:138px;
+  margin-bottom:16px;
+  border-radius:15px;
+}
+.knowledgeCover{
+  height:auto;
+  aspect-ratio:16/9;
+  min-height:144px;
+  margin-bottom:16px;
+  border-radius:15px;
+}
+.knowledge .thumb{
+  height:auto;
+  aspect-ratio:16/9;
+  min-height:128px;
+  border-radius:14px;
+}
+.miniVisual{
+  height:auto;
+  aspect-ratio:16/9;
+  min-height:92px;
+  border-radius:11px;
+}
+.supplierVisual{
+  min-height:210px;
+  border-radius:18px;
+}
+.waferVisual{
+  min-height:310px;
+  border-radius:22px;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.035);
+}
+
+/* 5. Product hero placeholder gets a cleaner industrial presentation */
+.productMedia{
+  min-height:420px;
+  border-radius:16px;
+  background:
+    radial-gradient(circle at 50% 46%,rgba(18,101,245,.055),transparent 34%),
+    linear-gradient(180deg,#fbfdff,#f4f8fd);
+  border:1px solid #e3ebf5;
+}
+.ring{
+  width:min(260px,70%);
+  aspect-ratio:1;
+  height:auto;
+  filter:drop-shadow(0 20px 28px rgba(24,41,70,.2));
+}
+
+/* 6. Labels on visual assets have the same editorial treatment */
+.productVisualCompact span,
+.knowledgeCover span,
+.waferVisual span{
+  display:inline-flex;
+  align-items:center;
+  min-height:26px;
+  padding:5px 9px;
+  border-radius:8px;
+  background:rgba(5,28,65,.48);
+  border:1px solid rgba(255,255,255,.13);
+  backdrop-filter:blur(6px);
+  color:#eef8ff;
+  letter-spacing:.025em;
+}
+.productVisualCompact span{
+  left:12px;
+  bottom:12px;
+}
+.knowledgeCover span{
+  left:12px;
+  bottom:12px;
+}
+.waferVisual span{
+  right:16px;
+  bottom:16px;
+}
+
+/* 7. Capability / process blocks use the same soft technical surface */
+.capGrid .card,
+.miniCard,
+.entityGrid div,
+.adminEntityFlow div,
+.articleKeyPoints>div{
+  background:linear-gradient(180deg,#fbfdff,#f6f9fd);
+  border-color:#dfe9f5;
+}
+.problem{
+  display:flex;
+  min-height:60px;
+  align-items:center;
+  background:linear-gradient(180deg,#fff,#f8fbff);
+  border-color:#dfe8f4;
+}
+
+/* 8. Visual density: consistent card content rhythm */
+.marketProductCard h3,
+.supplierDirectoryCard h3,
+.knowledgeListCard h2{
+  text-wrap:balance;
+}
+.marketProductCard p,
+.supplierDirectoryCard p,
+.knowledgeListCard p{
+  color:#5b7390;
+}
+.marketProductCard .badge,
+.supplierDirectoryCard .badge,
+.knowledgeListCard .badge{
+  align-self:flex-start;
+}
+
+/* 9. Admin visualization matches public semiconductor graphics */
+.adminHeroGraph{
+  border-color:rgba(255,255,255,.14);
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.045)),
+    repeating-linear-gradient(90deg,transparent 0 39px,rgba(255,255,255,.025) 40px);
+}
+.adminHeroGraph i{
+  background:linear-gradient(180deg,#75e8ff,#2a92ff 50%,#1265f5);
+  box-shadow:0 0 20px rgba(80,202,255,.18);
+}
+
+/* 10. Portfolio-readiness: remove accidental visual noise */
+.cardLink,
+.relatedRow a,
+.articleProductCard>strong{
+  text-decoration:none;
+}
+.crumb{
+  letter-spacing:.005em;
+}
+.badgeRow{
+  row-gap:7px;
+}
+
+/* 11. Motion is subtle and optional */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    scroll-behavior:auto!important;
+    transition:none!important;
+    animation:none!important;
+  }
+}
+
+/* 12. Tablet: maintain editorial ratios without oversized decorative media */
+@media(max-width:1199px){
+  .waferVisual{min-height:250px}
+  .supplierVisual{min-height:185px}
+  .productVisualCompact,.knowledgeCover{min-height:132px}
+}
+
+/* 13. Mobile: compact but still visually intentional */
+@media(max-width:767px){
+  .brandMark{width:36px;height:36px;border-radius:11px}
+  .waferVisual{min-height:190px}
+  .supplierVisual{min-height:160px}
+  .productVisualCompact,
+  .knowledgeCover,
+  .knowledge .thumb,
+  .miniVisual{
+    min-height:0;
+    aspect-ratio:16/9;
+  }
+  .productMedia{min-height:320px}
+  .ring{width:min(205px,68%)}
+  .problem{min-height:56px}
+}
+
+/* Stage 16 — Restore the original prototype visuals exactly as CSS artwork.
+   No stock photos or external image URLs are used. */
+
+/* 1) Main hero: original prototype hero-visual */
+.waferVisual{
+  min-height:320px;
+  border-radius:24px;
+  background:
+    radial-gradient(circle at 60% 40%,rgba(23,198,255,.9) 0%,rgba(23,198,255,.13) 9%,rgba(255,255,255,0) 11%),
+    radial-gradient(circle at 60% 40%,rgba(255,255,255,.18) 0 32%,transparent 34%),
+    linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.03)),
+    linear-gradient(180deg,#0a2248 0%,#091933 100%);
+  border:1px solid rgba(255,255,255,.08);
+  position:relative;
+  overflow:hidden;
+  isolation:auto;
+}
+.waferVisual::before{
+  content:"";
+  position:absolute;
+  inset:auto 11% 10% 11%;
+  width:auto;
+  aspect-ratio:auto;
+  height:56%;
+  border-radius:50%;
+  border:1px solid rgba(166,224,255,.22);
+  box-shadow:inset 0 0 0 10px rgba(112,182,255,.06),inset 0 0 0 24px rgba(112,182,255,.03);
+  z-index:auto;
+}
+.waferVisual::after{
+  content:"";
+  position:absolute;
+  right:18%;
+  top:8%;
+  bottom:auto;
+  width:12px;
+  height:46%;
+  border:0;
+  border-radius:20px;
+  background:linear-gradient(180deg,#95efff 0%,#52c4ff 28%,#195ed0 75%,transparent 100%);
+  box-shadow:0 0 24px rgba(88,191,255,.75);
+}
+.waferVisual span{
+  right:24px;
+  bottom:24px;
+  min-height:0;
+  padding:14px 16px;
+  border-radius:16px;
+  background:rgba(255,255,255,.07);
+  backdrop-filter:blur(10px);
+  color:#eaf4ff;
+  border:1px solid rgba(255,255,255,.15);
+  font-size:13px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+
+/* 2) Knowledge cards: original prototype knowledge-thumb */
+.knowledgeCover,
+.knowledge .thumb{
+  height:124px;
+  min-height:124px;
+  aspect-ratio:auto;
+  border-radius:14px;
+  background:linear-gradient(135deg,#0d305f 0%,#1a5fb8 55%,#80d7ff 100%);
+  position:relative;
+  overflow:hidden;
+  border:0;
+  isolation:auto;
+}
+.knowledgeCover::before,
+.knowledge .thumb::before{
+  content:"";
+  position:absolute;
+  inset:auto 12% 14% 12%;
+  width:auto;
+  aspect-ratio:auto;
+  height:58%;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.28);
+  box-shadow:inset 0 0 0 10px rgba(255,255,255,.07),inset 0 0 0 24px rgba(255,255,255,.03);
+}
+.knowledgeCover::after,
+.knowledge .thumb::after{
+  content:"";
+  position:absolute;
+  right:18%;
+  top:12%;
+  bottom:auto;
+  width:12px;
+  height:42%;
+  border:0;
+  border-radius:20px;
+  background:linear-gradient(180deg,#8cf0ff,#42c1ff,#0b50d0,transparent);
+  box-shadow:none;
+}
+.knowledgeCover span{
+  left:14px;
+  bottom:13px;
+  z-index:2;
+}
+
+/* 3) Supplier detail: original prototype wafer-thumb */
+.supplierVisual{
+  min-height:180px;
+  border-radius:18px;
+  background:linear-gradient(135deg,#092652 0%,#103c7c 60%,#1b71d6 100%);
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.07);
+  isolation:auto;
+}
+.supplierVisual::before{
+  content:"";
+  position:absolute;
+  inset:auto 12% 14% 12%;
+  width:auto;
+  aspect-ratio:auto;
+  height:58%;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.28);
+  box-shadow:inset 0 0 0 10px rgba(255,255,255,.07),inset 0 0 0 24px rgba(255,255,255,.03);
+}
+.supplierVisual::after{
+  content:"";
+  position:absolute;
+  right:20%;
+  top:12%;
+  bottom:auto;
+  width:12px;
+  height:42%;
+  border:0;
+  border-radius:18px;
+  background:linear-gradient(180deg,#91ecff 0%,#49c4ff 35%,#165bd2 80%,transparent 100%);
+  box-shadow:0 0 18px rgba(68,196,255,.5);
+}
+
+/* 4) Product detail: exact four prototype product visuals */
+.prototypeProductGallery{
+  width:100%;
+  display:grid;
+  grid-template-columns:78px minmax(0,1fr);
+  gap:14px;
+  align-items:start;
+}
+.prototypeThumbCol{display:grid;gap:10px}
+.prototypeThumb{
+  height:64px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:#f6f9ff;
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  color:#1150ca;
+}
+.prototypeThumb span{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  background:#f2f6fe;
+  border:1px solid #dce6f5;
+  display:grid;
+  place-items:center;
+  font-weight:900;
+  font-size:16px;
+}
+.prototypeThumb.active{outline:2px solid var(--blue);outline-offset:1px}
+.prototypeMainVisual{
+  position:relative;
+  min-height:320px;
+  border-radius:22px;
+  background:linear-gradient(180deg,#f9fbff 0%,#e9f0fb 100%);
+  border:1px solid #d7e1f1;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+}
+.prototypeMainVisual small{
+  position:absolute;
+  right:18px;
+  bottom:14px;
+  color:#607997;
+  font-size:11px;
+  font-weight:800;
+}
+.prototypeObject{display:block;position:relative}
+.prototype-ring .prototypeObject{
+  width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle at 50% 50%,transparent 38%,#6a7587 40%,#3d4654 54%,#212a36 63%,#667589 69%,transparent 70%);
+  filter:drop-shadow(0 18px 28px rgba(36,49,72,.24));
+}
+.prototype-powder .prototypeObject{
+  width:240px;height:120px;border-radius:50%;
+  background:radial-gradient(ellipse at center,#ffffff 0%,#eef3f8 44%,#d7dde8 75%,transparent 77%);
+  box-shadow:0 28px 30px rgba(50,73,118,.1);
+}
+.prototype-parts .prototypeObject{
+  width:220px;height:140px;
+  background:radial-gradient(circle at 30% 50%,#9da8b7 0,#677285 35%,#3a4454 52%,#2e3540 64%,transparent 66%),radial-gradient(circle at 68% 50%,#b0bccb 0,#788497 35%,#485364 52%,#303743 64%,transparent 66%);
+  filter:drop-shadow(0 16px 22px rgba(36,49,72,.2));
+}
+.prototype-bottle .prototypeObject{
+  width:230px;height:200px;
+  background:linear-gradient(90deg,#d6dde8 0 12%,transparent 12% 25%,#d6dde8 25% 37%,transparent 37% 50%,#d6dde8 50% 62%,transparent 62% 75%,#d6dde8 75% 87%,transparent 87% 100%);
+  -webkit-mask:radial-gradient(circle at 10% 50%,#000 40px,transparent 41px) 0 0/25% 100%,linear-gradient(#000 0 0);
+  mask:radial-gradient(circle at 10% 50%,#000 40px,transparent 41px) 0 0/25% 100%,linear-gradient(#000 0 0);
+  opacity:.9;
+}
+.productMedia{display:flex;align-items:center;justify-content:center;padding:18px}
+
+/* 5) Product list cards use the same prototype objects rather than a generic blue placeholder */
+.prototypeProductThumb{
+  display:grid;
+  place-items:center;
+  background:linear-gradient(180deg,#f9fbff 0%,#e9f0fb 100%);
+  border:1px solid #d7e1f1;
+}
+.prototypeProductThumb::before,
+.prototypeProductThumb::after{content:none!important}
+.prototypeProductThumb .prototypeObject{transform:scale(.56)}
+.prototypeProductThumb.prototype-ring .prototypeObject{transform:scale(.52)}
+.prototypeProductThumb.prototype-bottle .prototypeObject{transform:scale(.50)}
+.prototypeProductThumb>span{
+  position:absolute;
+  left:12px;
+  bottom:12px;
+  z-index:2;
+  display:inline-flex;
+  min-height:26px;
+  align-items:center;
+  padding:5px 9px;
+  border-radius:8px;
+  background:rgba(5,28,65,.72);
+  border:1px solid rgba(255,255,255,.16);
+  color:#eef8ff;
+  font-size:11px;
+  font-weight:800;
+}
+
+@media(max-width:1199px){
+  .waferVisual{min-height:280px}
+  .prototypeMainVisual{min-height:300px}
+}
+@media(max-width:767px){
+  .waferVisual{min-height:210px}
+  .knowledgeCover,.knowledge .thumb{height:130px;min-height:130px;aspect-ratio:auto}
+  .supplierVisual{min-height:160px}
+  .prototypeProductGallery{grid-template-columns:1fr}
+  .prototypeThumbCol{grid-template-columns:repeat(4,1fr)}
+  .prototypeThumb{height:56px}
+  .prototypeMainVisual{min-height:270px}
+  .prototypeMainVisual .prototypeObject{transform:scale(.78)}
+  .prototypeProductThumb .prototypeObject{transform:scale(.5)}
+}
+
+/* =========================================================
+   Stage 17 - Real AI image assets
+   Generated photo-style assets are used as real web images,
+   not as UI mockups. Existing layout / DB logic is unchanged.
+   ========================================================= */
+
+/* Hero: use the generated wafer-inspection asset as the real key visual. */
+.waferVisual{
+  min-height:320px;
+  background:
+    linear-gradient(90deg,rgba(5,22,49,.18),rgba(5,22,49,.03)),
+    url('/images/ai/wafer-inspection.webp') center center/cover no-repeat;
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:inset 0 0 60px rgba(4,20,48,.18);
+}
+.waferVisual::before,
+.waferVisual::after{content:none!important}
+.waferVisual span{
+  background:rgba(5,25,58,.68);
+  border-color:rgba(255,255,255,.16);
+  box-shadow:0 10px 30px rgba(0,0,0,.16);
+}
+
+/* Process cards: compact photography is placed below the text block. */
+.processCard{
+  display:grid;
+  grid-template-rows:auto 118px;
+  gap:14px;
+  padding:14px;
+  overflow:hidden;
+}
+.processCardBody{display:flex;gap:14px;align-items:flex-start}
+.processPhoto{
+  min-width:0;
+  height:118px;
+  overflow:hidden;
+  border-radius:13px;
+  background:#eaf1fa;
+  border:1px solid #dce7f4;
+}
+.processPhoto img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  transition:transform .24s ease;
+}
+.processCard:hover .processPhoto img{transform:scale(1.035)}
+
+/* Product cards: replace CSS illustrations with the generated actual images. */
+.actualProductThumb{
+  position:relative;
+  display:block;
+  height:auto;
+  aspect-ratio:16/9;
+  background:#edf3fa;
+  border:1px solid #dbe5f2;
+  overflow:hidden;
+  isolation:isolate;
+}
+.productVisualCompact.actualProductThumb::before,
+.productVisualCompact.actualProductThumb::after{content:none!important}
+.actualProductThumb img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  transition:transform .24s ease;
+}
+.marketProductCard:hover .actualProductThumb img{transform:scale(1.035)}
+.actualProductThumb>span{
+  position:absolute;
+  left:12px;
+  bottom:12px;
+  z-index:2;
+  display:inline-flex;
+  align-items:center;
+  min-height:26px;
+  max-width:calc(100% - 24px);
+  padding:5px 9px;
+  border-radius:8px;
+  background:rgba(5,28,65,.74);
+  border:1px solid rgba(255,255,255,.16);
+  color:#eef8ff;
+  font-size:11px;
+  font-weight:800;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+/* Product detail gallery: clickable real image thumbnails. */
+.actualImageThumb{overflow:hidden;padding:0;background:#f7faff}
+.actualImageThumb img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.actualMainVisual{
+  min-height:360px;
+  display:block;
+  background:#f2f6fb;
+}
+.actualMainVisual>img{
+  display:block;
+  width:100%;
+  height:360px;
+  object-fit:cover;
+  object-position:center;
+}
+.actualMainVisual small{
+  padding:6px 9px;
+  border-radius:999px;
+  background:rgba(5,28,65,.74);
+  color:#fff;
+}
+
+/* Knowledge: photographic thumbnails replace generic gradient placeholders. */
+.knowledgePhoto,
+.knowledgeCover,
+.knowledge .knowledgePhoto{
+  position:relative;
+  height:150px;
+  min-height:150px;
+  border-radius:14px;
+  overflow:hidden;
+  background:#e9f0f8;
+  border:1px solid #dbe6f3;
+  margin-bottom:14px;
+  isolation:isolate;
+}
+.knowledgePhoto::before,
+.knowledgePhoto::after,
+.knowledgeCover::before,
+.knowledgeCover::after{content:none!important}
+.knowledgePhoto img,
+.knowledgeCover img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  transition:transform .24s ease;
+}
+.knowledge:hover .knowledgePhoto img,
+.knowledgeListCard:hover .knowledgePhoto img{transform:scale(1.035)}
+.knowledgePhoto>span,
+.knowledgeCover>span{
+  position:absolute;
+  left:12px;
+  bottom:12px;
+  z-index:2;
+  display:inline-flex;
+  align-items:center;
+  min-height:25px;
+  max-width:calc(100% - 24px);
+  padding:5px 8px;
+  border-radius:8px;
+  background:rgba(5,28,65,.72);
+  border:1px solid rgba(255,255,255,.15);
+  color:#fff;
+  font-size:10px;
+  font-weight:900;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+/* Knowledge detail hero gets a real visual without changing article data. */
+.knowledgeArticleHeroWithImage{
+  display:grid;
+  grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);
+  gap:24px;
+  align-items:stretch;
+}
+.knowledgeArticleHeroCopy{min-width:0}
+.knowledgeArticleHeroImage{
+  height:100%;
+  min-height:280px;
+  margin:0;
+  border-radius:18px;
+}
+
+/* Supplier detail: derive an image from the supplier's first connected product. */
+.supplierActualVisual{padding:0;overflow:hidden}
+.supplierActualVisual::before,
+.supplierActualVisual::after{content:none!important}
+.supplierActualVisual img{
+  display:block;
+  width:100%;
+  height:100%;
+  min-height:190px;
+  object-fit:cover;
+  object-position:center;
+}
+
+@media(max-width:1199px){
+  .processCard{grid-template-rows:auto 132px}
+  .processPhoto{height:132px}
+  .knowledgeArticleHeroWithImage{grid-template-columns:1fr}
+  .knowledgeArticleHeroImage{min-height:260px}
+}
+
+@media(max-width:767px){
+  .waferVisual{min-height:230px;background-position:center}
+  .processCard{grid-template-rows:auto 150px}
+  .processPhoto{height:150px}
+  .actualMainVisual{min-height:280px}
+  .actualMainVisual>img{height:280px}
+  .knowledgePhoto,.knowledgeCover,.knowledge .knowledgePhoto{height:150px;min-height:150px}
+  .knowledgeArticleHeroImage{min-height:220px}
+  .supplierActualVisual img{min-height:180px}
+}
+
+
+/* =========================================================
+   Stage 18 - Image crop / fit / visual consistency
+   Studio product shots use contain; editorial/process visuals use cover.
+   ========================================================= */
+
+/* Product cards get a slightly taller, calmer photo window. */
+.actualProductThumb{
+  aspect-ratio:16/10;
+  border-radius:14px;
+  background:linear-gradient(145deg,#f8fbff,#edf3f8);
+}
+
+/* Clean studio assets must never be cropped. */
+.actualProductThumb.fit-contain img{
+  object-fit:contain;
+  object-position:center;
+  padding:12px 14px;
+  background:linear-gradient(145deg,#fbfdff,#f1f5f9);
+}
+
+/* Process / simulation / packaging imagery can fill the frame. */
+.actualProductThumb.fit-cover img{
+  object-fit:cover;
+  object-position:center;
+}
+
+/* Keep product hover subtle for contained product photography. */
+.marketProductCard:hover .actualProductThumb.fit-contain img{
+  transform:scale(1.018);
+}
+.marketProductCard:hover .actualProductThumb.fit-cover img{
+  transform:scale(1.035);
+}
+
+/* Detail thumbnails follow the same crop rule as the main visual. */
+.actualImageThumb.fit-contain img{
+  object-fit:contain;
+  padding:6px;
+  background:#f8fbff;
+}
+.actualImageThumb.fit-cover img{object-fit:cover}
+
+.actualMainVisual{
+  min-height:380px;
+  height:380px;
+  border-radius:16px;
+  overflow:hidden;
+  background:linear-gradient(145deg,#f8fbff,#eef3f8);
+}
+.actualMainVisual>img{
+  height:100%;
+  transition:transform .22s ease;
+}
+.actualMainVisual.fit-contain>img{
+  object-fit:contain;
+  padding:28px;
+  background:linear-gradient(145deg,#fbfdff,#f1f5f9);
+}
+.actualMainVisual.fit-cover>img{
+  object-fit:cover;
+  object-position:center;
+}
+
+/* Process and knowledge visuals always behave like editorial photography. */
+.processPhoto img,
+.knowledgePhoto img,
+.knowledgeCover img{
+  object-fit:cover;
+  object-position:center;
+}
+
+/* Supplier hero can also display isolated product photography without clipping. */
+.supplierActualVisual.fit-contain{
+  background:linear-gradient(145deg,#fbfdff,#eef3f8);
+}
+.supplierActualVisual.fit-contain img{
+  object-fit:contain;
+  padding:20px;
+}
+.supplierActualVisual.fit-cover img{object-fit:cover}
+
+/* Improve the homepage hero focal point at common desktop widths. */
+.waferVisual{
+  background-position:56% center;
+}
+
+@media(max-width:1199px){
+  .actualProductThumb{aspect-ratio:16/10}
+  .actualMainVisual{min-height:340px;height:340px}
+  .actualMainVisual.fit-contain>img{padding:22px}
+}
+
+@media(max-width:767px){
+  .actualProductThumb{aspect-ratio:3/2}
+  .actualProductThumb.fit-contain img{padding:10px}
+  .actualMainVisual{min-height:270px;height:270px}
+  .actualMainVisual.fit-contain>img{padding:18px}
+  .supplierActualVisual.fit-contain img{padding:14px}
+  .waferVisual{background-position:62% center}
+}
+
+/* =========================================================
+   Stage 19 - Content ↔ image matching
+   Explicit asset maps reduce semantic mismatches and repeated fallback art.
+   ========================================================= */
+
+.supplierDirectoryVisual{
+  position:relative;
+  width:100%;
+  aspect-ratio:16/9;
+  margin-bottom:14px;
+  overflow:hidden;
+  border-radius:14px;
+  border:1px solid #dbe6f3;
+  background:linear-gradient(145deg,#f8fbff,#edf3f8);
+}
+.supplierDirectoryVisual img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  transition:transform .24s ease;
+}
+.supplierDirectoryVisual.fit-contain img{
+  object-fit:contain;
+  padding:14px;
+  background:linear-gradient(145deg,#fbfdff,#f1f5f9);
+}
+.supplierDirectoryVisual>span{
+  position:absolute;
+  left:11px;
+  bottom:10px;
+  z-index:2;
+  max-width:calc(100% - 22px);
+  padding:5px 8px;
+  border-radius:8px;
+  background:rgba(5,28,65,.74);
+  border:1px solid rgba(255,255,255,.14);
+  color:#fff;
+  font-size:10px;
+  font-weight:900;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.supplierDirectoryCard:hover .supplierDirectoryVisual img{transform:scale(1.035)}
+.supplierDirectoryCard:hover .supplierDirectoryVisual.fit-contain img{transform:scale(1.018)}
+
+/* Keep explicit editorial subjects framed consistently across content cards. */
+.processPhoto.tone-dark img,
+.knowledgePhoto.tone-dark img,
+.supplierDirectoryVisual.tone-dark img{object-position:center}
+
+/* Product studio photography stays visually separate from editorial/process art. */
+.actualProductThumb.fit-contain,
+.supplierDirectoryVisual.fit-contain,
+.supplierActualVisual.fit-contain{
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.55);
+}
+
+@media(max-width:767px){
+  .supplierDirectoryVisual{aspect-ratio:3/2}
+  .supplierDirectoryVisual.fit-contain img{padding:10px}
+}
+
+/* =========================================================
+   Stage 20 - Final Responsive QA
+   Target widths: 1440 / 1280 / 1024 / 768 / 430 / 390 / 375
+   Layout-only fixes. No API / DB / RFQ behavior changes.
+   ========================================================= */
+
+/* 1. Global overflow and shrink-safety */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{overflow-x:clip}
+img,svg,video,canvas{max-width:100%}
+input,select,textarea,button{min-width:0;max-width:100%}
+.container>* ,
+.hero>* ,
+.productTop>* ,
+.supplierHero>* ,
+.rfqGrid>* ,
+.knowledgeDetailLayout>* ,
+.adminCmsShell>* ,
+.adminHeroV2>* ,
+.twoGrid>* ,
+.threeGrid>* ,
+.productGrid>* ,
+.supplierGrid>* ,
+.processGrid>* ,
+.knowledgeListGrid>*{min-width:0}
+
+/* Long B2B labels / URLs / names should wrap instead of forcing horizontal scroll. */
+.card,
+.publicSyncBanner,
+.productInfo,
+.supplierSummary,
+.adminCrudForm,
+.deskSavedCard,
+.deskRfqCard{overflow-wrap:anywhere}
+.badge{max-width:100%;white-space:normal;text-align:center}
+
+/* 2. 1024-ish tablet: keep cards readable, not merely squeezed desktop. */
+@media(max-width:1024px){
+  .headerInner{gap:14px}
+  .hero{grid-template-columns:minmax(0,1fr)}
+  .hero>div:first-child{max-width:860px}
+  .waferVisual{width:100%;min-height:300px}
+  .statGrid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .productTop{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .supplierSummary{grid-column:1/-1}
+  .rfqGrid{grid-template-columns:1fr}
+  .rfqSummary{position:static}
+  .knowledgeDetailLayout{grid-template-columns:1fr}
+  .knowledgeSide{position:static}
+}
+
+/* 3. 900px bridge breakpoint: product/admin pages need one more step before mobile. */
+@media(max-width:900px){
+  .productTop{grid-template-columns:1fr}
+  .supplierSummary{grid-column:auto}
+  .productMedia{min-height:0}
+  .supplierHero{grid-template-columns:96px minmax(0,1fr)}
+  .supplierHero .supplierVisual,
+  .supplierHero .supplierActualVisual{grid-column:1/-1}
+  .supplierLogo{width:92px;height:92px;font-size:25px}
+  .capGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .problemGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .adminCmsNav{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .adminHeroV2{grid-template-columns:1fr}
+  .adminHeroGraph{height:120px}
+  .adminTopbar{align-items:flex-start}
+}
+
+/* 4. Mobile baseline: safe-area, tap targets, stable header and sticky controls. */
+@media(max-width:767px){
+  body{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+  .productDetailPage,
+  .supplierDetailPage,
+  .rfqPage{padding-bottom:calc(140px + env(safe-area-inset-bottom))}
+
+  .headerInner{
+    height:auto;
+    min-height:68px;
+    padding-top:9px;
+    padding-bottom:9px;
+    gap:10px;
+  }
+  .brand{min-width:0;max-width:calc(100% - 54px)}
+  .brand>span:last-child{min-width:0}
+  .brand strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .headerActions{flex:0 0 auto}
+  .navToggle{width:44px;height:44px}
+
+  .heroWrap{padding-top:16px}
+  .hero{padding:24px 20px}
+  .hero>div:first-child{min-width:0}
+  .lead{font-size:14px}
+  .searchBar input,.searchBar button,.searchBar a{min-height:46px}
+  .ctaRow .btn{min-width:0}
+
+  .statGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stat{min-width:0}
+  .stat strong{font-size:26px}
+
+  .processGrid,
+  .productGrid,
+  .supplierDirectoryGrid,
+  .knowledgeListGrid,
+  .supplierGrid,
+  .threeGrid,
+  .twoGrid{grid-template-columns:1fr}
+
+  .capGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .problemGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .problem{display:flex;align-items:center;min-width:0;font-size:13px;line-height:1.35}
+
+  .rowBetween{flex-wrap:wrap}
+  dl div{min-width:0}
+  dt,dd{min-width:0}
+  dd{overflow-wrap:anywhere}
+
+  .catalogFilterFooter,.filterResultActions{min-width:0;flex-wrap:wrap}
+  .processQuickFilter{max-width:100%;overscroll-behavior-inline:contain}
+
+  .mobileNav{
+    min-height:55px;
+    padding:8px 8px calc(8px + env(safe-area-inset-bottom));
+    gap:2px;
+  }
+  .mobileNav a{
+    flex:1 1 0;
+    min-width:0;
+    min-height:40px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    white-space:nowrap;
+    padding:7px 4px;
+  }
+  .mobileSticky,
+  .supplierMobileBar,
+  .rfqMobileBar{bottom:calc(55px + env(safe-area-inset-bottom))}
+
+  .tabletNavPanel{
+    width:min(360px,92vw);
+    padding:18px;
+    padding-top:calc(18px + env(safe-area-inset-top));
+    padding-bottom:calc(18px + env(safe-area-inset-bottom));
+    overflow:auto;
+  }
+
+  .adminTableWrap{-webkit-overflow-scrolling:touch;overscroll-behavior-inline:contain}
+  .adminCrudTable{min-width:720px}
+}
+
+/* 5. 430px phones: remove desktop-like density and let Korean text wrap naturally. */
+@media(max-width:430px){
+  .brand small{display:none}
+  .brand strong{font-size:13px;max-width:235px}
+  .brandMark{flex:0 0 auto}
+
+  .hero{padding:22px 18px;border-radius:20px}
+  .hero h1{font-size:28px;line-height:1.15}
+  .hero h1 br{display:none}
+  .kicker{font-size:10px;letter-spacing:.09em;line-height:1.45}
+  .chipRow{gap:6px}
+  .chipRow span{font-size:11px;padding:7px 9px}
+  .ctaRow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .ctaRow .btn,.ctaRow button,.ctaRow a{width:100%}
+  .conversionCard .btn{width:100%}
+
+  .publicSyncBanner{gap:6px 8px}
+  .publicSyncBanner strong{font-size:12px;line-height:1.4}
+  .publicSyncBanner small{font-size:11px;line-height:1.45}
+
+  .stat{padding:14px;min-height:92px}
+  .stat span{font-size:12px}
+  .stat strong{font-size:24px}
+  .stat small{font-size:11px}
+
+  .sectionTitle h2,.detailSectionTitle{font-size:23px;line-height:1.25}
+  .sectionTitle p{font-size:12.5px;line-height:1.55}
+  .pageHeader h1,.productInfo h1,.supplierHero h1{font-size:28px;line-height:1.18}
+
+  .productInfo dl div{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:4px;
+    padding:9px 0;
+  }
+  .productInfo dd{text-align:left}
+  .miniStats{grid-template-columns:repeat(2,minmax(0,1fr))}
+
+  .knowledgeBottomCta .ctaRow{grid-template-columns:1fr}
+  .productCardActions{gap:6px}
+  .productCardActions a{font-size:11px;padding:8px 4px}
+
+  .myDeskTabs button{font-size:12px;padding:14px 8px}
+  .deskPanel{padding:15px}
+  .deskSavedActions,.deskRfqActions{display:grid;grid-template-columns:1fr 1fr;width:100%}
+
+  .adminTopbar{padding:18px}
+  .adminTopbar h1{font-size:27px}
+  .adminCmsNav{grid-template-columns:1fr 1fr;gap:6px;padding:10px}
+  .adminCmsNav button{padding:11px 9px;font-size:12px}
+  .adminHeroV2{padding:18px;min-height:0}
+  .adminQuickGrid{grid-template-columns:1fr}
+  .adminWorkflowV2{grid-template-columns:1fr}
+  .adminEntityFlow{grid-template-columns:1fr}
+  .adminKpiV2{gap:8px}
+
+  .mobileSticky{grid-template-columns:42px minmax(0,.9fr) minmax(0,1.2fr);gap:6px;padding:8px}
+  .supplierMobileBar,.rfqMobileBar{gap:6px;padding:8px}
+}
+
+/* 6. 390 / 375px narrow phones: final no-overflow tuning. */
+@media(max-width:390px){
+  .container{padding-left:16px;padding-right:16px}
+  .brand strong{max-width:205px;font-size:12.5px}
+  .hero{padding:20px 16px}
+  .hero h1{font-size:27px}
+  .lead{font-size:13.5px}
+  .searchBar input{font-size:13px;padding-left:13px;padding-right:13px}
+  .statGrid{gap:10px}
+  .stat{padding:13px}
+  .problemGrid{gap:8px}
+  .problem{padding:12px;font-size:12px}
+  .capGrid{gap:8px}
+  .capGrid .card{padding:14px}
+  .mobileNav a{font-size:10.5px;padding-left:2px;padding-right:2px}
+  .mobileSticky button,.mobileSticky a,.supplierMobileBar button,.supplierMobileBar a{font-size:12px;padding:10px 7px}
+  .rfqMobileBar{grid-template-columns:minmax(0,1fr) minmax(110px,1fr)}
+}
+
+@media(max-width:375px){
+  .brand strong{max-width:190px}
+  .hero h1{font-size:26px}
+  .ctaRow{grid-template-columns:1fr}
+  .stat strong{font-size:23px}
+  .myDeskTabs{grid-template-columns:1fr 1fr}
+  .adminCmsNav{grid-template-columns:1fr}
+}
+
+/* Stage 22 - Smooth responsive navigation */
+.siteHeader{
+  z-index:90;
+  transition:background-color .28s ease,box-shadow .28s ease,border-color .28s ease;
+}
+.siteHeader.menuOpen{
+  background:rgba(255,255,255,.98);
+  box-shadow:0 8px 28px rgba(8,31,69,.08);
+}
+
+.navToggle{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+  font-size:0;
+  transition:background-color .25s ease,border-color .25s ease,box-shadow .25s ease,transform .2s ease;
+}
+.navToggle:hover{
+  background:#f4f8ff;
+  border-color:#b9cfee;
+  box-shadow:0 7px 18px rgba(18,70,135,.10);
+}
+.navToggle:active{transform:scale(.96)}
+.navToggle:focus-visible{
+  outline:3px solid rgba(18,101,245,.18);
+  outline-offset:2px;
+  border-color:#75a5ee;
+}
+.navToggleLine{
+  position:absolute;
+  left:50%;
+  width:20px;
+  height:2px;
+  border-radius:999px;
+  background:currentColor;
+  transform:translateX(-50%);
+  transform-origin:center;
+  transition:top .32s cubic-bezier(.22,1,.36,1),transform .32s cubic-bezier(.22,1,.36,1),opacity .18s ease,width .25s ease;
+}
+.navToggleLine:nth-child(1){top:13px}
+.navToggleLine:nth-child(2){top:20px}
+.navToggleLine:nth-child(3){top:27px}
+.navToggle.isOpen .navToggleLine:nth-child(1){top:20px;transform:translateX(-50%) rotate(45deg)}
+.navToggle.isOpen .navToggleLine:nth-child(2){opacity:0;width:6px;transform:translateX(-50%) scaleX(0)}
+.navToggle.isOpen .navToggleLine:nth-child(3){top:20px;transform:translateX(-50%) rotate(-45deg)}
+.navToggle.isOpen{
+  background:#edf4ff;
+  border-color:#bfd5f5;
+  color:#0d58d8;
+}
+
+.tabletNavOverlay{
+  display:block;
+  position:fixed;
+  inset:0;
+  z-index:80;
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  background:rgba(7,24,52,.34);
+  backdrop-filter:blur(0);
+  -webkit-backdrop-filter:blur(0);
+  transition:opacity .30s ease,visibility 0s linear .40s,backdrop-filter .34s ease,-webkit-backdrop-filter .34s ease;
+}
+.tabletNavOverlay.open{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  transition-delay:0s;
+}
+.tabletNavPanel{
+  position:absolute;
+  right:0;
+  top:76px;
+  width:min(380px,88vw);
+  height:calc(100dvh - 76px);
+  padding:22px;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  background:rgba(255,255,255,.985);
+  border-left:1px solid rgba(219,230,243,.9);
+  border-top:1px solid rgba(219,230,243,.72);
+  border-radius:22px 0 0 0;
+  box-shadow:-22px 18px 54px rgba(8,31,69,.18);
+  display:grid;
+  align-content:start;
+  gap:8px;
+  transform:translate3d(104%,0,0);
+  opacity:.96;
+  transition:transform .40s cubic-bezier(.22,1,.36,1),opacity .28s ease;
+  will-change:transform;
+}
+.tabletNavOverlay.open .tabletNavPanel{
+  transform:translate3d(0,0,0);
+  opacity:1;
+}
+.tabletNavHeading{
+  display:grid;
+  gap:2px;
+  padding:5px 12px 14px;
+  margin-bottom:5px;
+  border-bottom:1px solid var(--line);
+}
+.tabletNavHeading span{
+  color:#8499b4;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.tabletNavHeading strong{color:var(--navy);font-size:19px}
+
+.tabletNavPanel>a{
+  opacity:0;
+  transform:translateX(16px);
+  transition:opacity .22s ease,transform .32s cubic-bezier(.22,1,.36,1),background-color .2s ease,color .2s ease;
+}
+.tabletNavOverlay.open .tabletNavPanel>a{
+  opacity:1;
+  transform:translateX(0);
+}
+.tabletNavOverlay.open .tabletNavPanel>a:nth-of-type(1){transition-delay:.07s}
+.tabletNavOverlay.open .tabletNavPanel>a:nth-of-type(2){transition-delay:.09s}
+.tabletNavOverlay.open .tabletNavPanel>a:nth-of-type(3){transition-delay:.11s}
+.tabletNavOverlay.open .tabletNavPanel>a:nth-of-type(4){transition-delay:.13s}
+.tabletNavOverlay.open .tabletNavPanel>a:nth-of-type(5){transition-delay:.15s}
+.tabletNavOverlay.open .tabletNavPanel>a:nth-of-type(6){transition-delay:.17s}
+.tabletNavOverlay.open .tabletNavPanel>a:nth-of-type(7){transition-delay:.19s}
+.tabletNavOverlay.open .tabletNavPanel>a:nth-of-type(8){transition-delay:.21s}
+.tabletNavOverlay.open .tabletNavPanel>a:nth-of-type(9){transition-delay:.23s}
+
+@media(max-width:767px){
+  .navToggleLine:nth-child(1){top:14px}
+  .navToggleLine:nth-child(2){top:21px}
+  .navToggleLine:nth-child(3){top:28px}
+  .navToggle.isOpen .navToggleLine:nth-child(1),
+  .navToggle.isOpen .navToggleLine:nth-child(3){top:21px}
+  .tabletNavPanel{
+    top:68px;
+    width:min(360px,92vw);
+    height:calc(100dvh - 68px);
+    padding:18px;
+    padding-bottom:calc(18px + env(safe-area-inset-bottom));
+    border-radius:18px 0 0 0;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .siteHeader,
+  .navToggle,
+  .navToggleLine,
+  .tabletNavOverlay,
+  .tabletNavPanel,
+  .tabletNavPanel>a{
+    transition-duration:.01ms!important;
+    transition-delay:0s!important;
+  }
+}
