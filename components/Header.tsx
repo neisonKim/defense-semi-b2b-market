@@ -1,101 +1,169 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import {
+  useEffect,
+  useState,
+  type CSSProperties,
+} from "react";
 
-const navItems = [
-  ["/", "Marketplace"],
-  ["/#process", "Process"],
-  ["/products", "Products"],
-  ["/suppliers", "Suppliers"],
-  ["/knowledge", "Knowledge"],
-  ["/rfq", "RFQ"],
-  ["/my-desk", "My Desk"],
-  ["/admin", "Admin CMS"],
-] as const;
+const NAV_ITEMS = [
+  { label: "Marketplace", href: "/" },
+  { label: "Process", href: "/#process" },
+  { label: "Products", href: "/products" },
+  { label: "Suppliers", href: "/suppliers" },
+  { label: "Knowledge", href: "/knowledge" },
+  { label: "RFQ", href: "/rfq" },
+  { label: "My Desk", href: "/my-desk" },
+  { label: "Admin CMS", href: "/admin" },
+];
 
-export function Header() {
-  const [open, setOpen] = useState(false);
-  const close = () => setOpen(false);
+export default function Header() {
+  const pathname = usePathname();
+  const [menuOpen, setMenuOpen] = useState(false);
 
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
+
+  /* 페이지 이동 시 메뉴 닫기 */
   useEffect(() => {
-    if (!open) return;
+    closeMenu();
+  }, [pathname]);
 
-    const previousOverflow = document.body.style.overflow;
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") close();
-    };
-
-    document.body.style.overflow = "hidden";
-    window.addEventListener("keydown", handleKeyDown);
+  /* 메뉴가 열리면 body 스크롤 잠금 */
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
 
     return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "";
     };
-  }, [open]);
+  }, [menuOpen]);
+
+  /* ESC 키로 메뉴 닫기 */
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeMenu();
+      }
+    };
+
+    window.addEventListener("keydown", handleEscape);
+
+    return () => {
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, []);
 
   return (
     <>
-      <header className={`siteHeader ${open ? "menuOpen" : ""}`}>
+      <header className={`siteHeader ${menuOpen ? "menuOpen" : ""}`}>
         <div className="container headerInner">
-          <Link className="brand" href="/" onClick={close}>
+          {/* BRAND */}
+          <Link href="/" className="brand">
             <span className="brandMark">DS</span>
-            <span>
+
+            <span className="brandText">
               <strong>DEFENSE SEMI B2B MARKET</strong>
-              <small>Semiconductor intelligence + sourcing</small>
+              <small>Semiconductor Intelligence + Sourcing</small>
             </span>
           </Link>
 
-          <nav className="desktopNav" aria-label="주요 메뉴">
-            {navItems.map(([href, label]) => (
-              <Link key={href} href={href}>{label}</Link>
-            ))}
-          </nav>
+          {/* RIGHT AREA */}
+          <div className="headerRight">
+            {/* DESKTOP NAV */}
+            <nav className="desktopNav" aria-label="Main navigation">
+              {NAV_ITEMS.map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
 
-          <div className="headerActions">
-            <div className="headerCta">
-              <Link className="btn primary" href="/rfq">RFQ 요청</Link>
-            </div>
-
-            <button
-              className={`navToggle ${open ? "isOpen" : ""}`}
-              type="button"
-              aria-label={open ? "메뉴 닫기" : "메뉴 열기"}
-              aria-expanded={open}
-              aria-controls="responsive-navigation"
-              onClick={() => setOpen((value) => !value)}
+            {/* RFQ CTA */}
+            <Link
+              href="/rfq"
+              className="headerCta"
             >
-              <span className="navToggleLine" />
-              <span className="navToggleLine" />
-              <span className="navToggleLine" />
+              RFQ 요청
+            </Link>
+
+            {/* TABLET / MOBILE MENU BUTTON */}
+            <button
+              type="button"
+              className={`navToggle ${menuOpen ? "active" : ""}`}
+              onClick={() => setMenuOpen((prev) => !prev)}
+              aria-label={menuOpen ? "메뉴 닫기" : "메뉴 열기"}
+              aria-expanded={menuOpen}
+              aria-controls="mobile-navigation"
+            >
+              <span />
+              <span />
+              <span />
             </button>
           </div>
         </div>
       </header>
 
+      {/* TABLET / MOBILE MENU */}
       <div
-        className={`tabletNavOverlay ${open ? "open" : ""}`}
-        onClick={close}
-        aria-hidden={!open}
+        className={`tabletNavOverlay ${menuOpen ? "open" : ""}`}
+        onClick={closeMenu}
+        aria-hidden={!menuOpen}
       >
-        <nav
-          id="responsive-navigation"
+        <aside
+          id="mobile-navigation"
           className="tabletNavPanel"
-          aria-label="반응형 메뉴"
           onClick={(event) => event.stopPropagation()}
         >
-          <div className="tabletNavHeading">
-            <span>Navigation</span>
-            <strong>메뉴</strong>
+          <div className="tabletNavHead">
+            <div>
+              <strong>DEFENSE SEMI</strong>
+              <small>B2B MARKET</small>
+            </div>
+
+            <button
+              type="button"
+              className="navClose"
+              onClick={closeMenu}
+              aria-label="메뉴 닫기"
+            >
+              ×
+            </button>
           </div>
 
-          {navItems.map(([href, label]) => (
-            <Link key={href} href={href} onClick={close}>{label}</Link>
-          ))}
+          <nav
+            className="tabletNavLinks"
+            aria-label="Mobile navigation"
+          >
+            {NAV_ITEMS.map((item, index) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                onClick={closeMenu}
+                style={
+                  {
+                    "--nav-index": index,
+                  } as CSSProperties
+                }
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
 
-          <Link className="btn primary full" href="/rfq" onClick={close}>RFQ 요청</Link>
-        </nav>
+          <Link
+            href="/rfq"
+            className="btn primary tabletRfqButton"
+            onClick={closeMenu}
+          >
+            RFQ 요청하기
+          </Link>
+        </aside>
       </div>
     </>
   );
