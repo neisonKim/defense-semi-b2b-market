@@ -73,11 +73,99 @@ export default function ProductPage() {
         </aside>
       </div>
 
-      <div className="desktopDetailGrid section">
-        <article className="card"><h2>제품 개요</h2><p>{product.subtitle}. 공정·소재·장비·공급사 데이터를 분리해 보여주는 제품 상세 구조입니다.</p></article>
-        <article className="card"><h2>주요 사양</h2><dl>{[["Wafer Size",product.wafer],["Purity",product.purity],["Process",product.process],["Equipment",product.equipment]].map(([a,b])=><div key={a}><dt>{a}</dt><dd>{b}</dd></div>)}</dl></article>
-        <article className="card"><h2>Application Fit</h2><ul><li>{product.process} 적용 검토</li><li>{product.equipment} 호환성 확인</li><li>양산 전 공급사 기술 검토 권장</li></ul></article>
+<div className="desktopDetailGrid section productInsightGrid">
+
+  <article className="card productInsightCard overviewCard">
+    <div className="insightHeader">
+      <span className="insightNumber">01</span>
+      <div>
+        <small>PRODUCT OVERVIEW</small>
+        <h2>제품 개요</h2>
       </div>
+    </div>
+
+    <p className="overviewText">
+      {product.subtitle}. 반도체 공정 환경에서 요구되는 소재,
+      장비 호환성 및 공급 조건을 기준으로 검토할 수 있는 제품입니다.
+    </p>
+
+    <div className="overviewTags">
+      <span>{product.material}</span>
+      <span>{product.process}</span>
+      <span>{product.category}</span>
+    </div>
+  </article>
+
+
+  <article className="card productInsightCard specCard">
+    <div className="insightHeader">
+      <span className="insightNumber">02</span>
+      <div>
+        <small>KEY SPECIFICATIONS</small>
+        <h2>주요 사양</h2>
+      </div>
+    </div>
+
+    <div className="specTable">
+      {[
+        ["Wafer Size", product.wafer],
+        ["Purity", product.purity],
+        ["Process", product.process],
+        ["Equipment", product.equipment],
+      ].map(([label, value]) => (
+        <div className="specRow" key={label}>
+          <span>{label}</span>
+          <strong>{value}</strong>
+        </div>
+      ))}
+    </div>
+  </article>
+
+
+  <article className="card productInsightCard fitCard">
+    <div className="insightHeader">
+      <span className="insightNumber">03</span>
+      <div>
+        <small>APPLICATION FIT</small>
+        <h2>적용 적합성</h2>
+      </div>
+    </div>
+
+    <div className="fitList">
+      <div>
+        <span className="fitCheck">✓</span>
+        <div>
+          <strong>{product.process}</strong>
+          <small>공정 적용 가능성 검토</small>
+        </div>
+      </div>
+
+      <div>
+        <span className="fitCheck">✓</span>
+        <div>
+          <strong>{product.equipment}</strong>
+          <small>장비 및 Chamber 호환성 확인</small>
+        </div>
+      </div>
+
+      <div>
+        <span className="fitCheck">✓</span>
+        <div>
+          <strong>Technical Review</strong>
+          <small>양산 적용 전 공급사 기술 검토 권장</small>
+        </div>
+      </div>
+    </div>
+
+    <Link
+      className="fitAction"
+      href={`/rfq?product=${product.slug}`}
+    >
+      RFQ 검토하기 →
+    </Link>
+  </article>
+
+</div>
 
       {articles.length > 0 && (
         <section className="section">

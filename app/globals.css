@@ -66,7 +66,7 @@ textarea {
 .brandMark {
   width: 38px;
   height: 38px;
-  border-radius: 12px;
+  border-radius: 10px;
   background: linear-gradient(135deg, #0e3a8a, #1dc6ff);
   color: #fff;
   display: grid;
@@ -90,7 +90,7 @@ textarea {
 .btn {
   border: 1px solid var(--line);
   background: #fff;
-  border-radius: 12px;
+  border-radius: 10px;
   padding: 11px 15px;
   font-weight: 800;
   cursor: pointer;
@@ -118,7 +118,7 @@ textarea {
 .card {
   background: #fff;
   border: 1px solid var(--line);
-  border-radius: 18px;
+  border-radius: 10px;
   box-shadow: var(--shadow);
   padding: 18px;
 }
@@ -126,7 +126,7 @@ textarea {
   padding-top: 26px;
 }
 .hero {
-  border-radius: 28px;
+  border-radius: 10px;
   padding: 34px;
   background: linear-gradient(135deg, #081f45, #0e3978 60%, #145bb5);
   display: grid;
@@ -161,12 +161,12 @@ textarea {
 .searchBar input {
   flex: 1;
   padding: 14px 16px;
-  border-radius: 12px;
+  border-radius: 10px;
   border: none;
 }
 .searchBar button {
   border: none;
-  border-radius: 12px;
+  border-radius: 10px;
   background: #fff;
   color: #0f4fc4;
   font-weight: 900;
@@ -197,7 +197,7 @@ textarea {
 }
 .waferVisual {
   min-height: 290px;
-  border-radius: 22px;
+  border-radius: 10px;
   position: relative;
   background:
     radial-gradient(circle at 58% 45%, rgba(28, 206, 255, 0.8), transparent 7%),
@@ -237,7 +237,7 @@ textarea {
 .stat {
   background: #fff;
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: 10px;
   padding: 16px;
 }
 .stat span {
@@ -287,7 +287,7 @@ textarea {
 .problem {
   background: #fff;
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: 10px;
   padding: 15px;
   color: #22456e;
   font-weight: 800;
@@ -328,7 +328,7 @@ textarea {
 }
 .knowledge .thumb {
   height: 120px;
-  border-radius: 12px;
+  border-radius: 10px;
   background: linear-gradient(135deg, #0a2e63, #1c6fce);
   margin-bottom: 12px;
 }
@@ -399,7 +399,7 @@ dd {
 .miniStats div {
   background: #f6f9ff;
   padding: 12px;
-  border-radius: 12px;
+  border-radius: 10px;
 }
 .miniStats strong,
 .miniStats span {
@@ -420,7 +420,7 @@ dd {
 .mobileAccordions details {
   background: #fff;
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: 10px;
   padding: 14px;
   margin-bottom: 10px;
 }
@@ -445,7 +445,7 @@ dd {
   height: 110px;
   display: grid;
   place-items: center;
-  border-radius: 18px;
+  border-radius: 10px;
   background: #edf4ff;
   color: #0b53c9;
   font-size: 30px;
@@ -453,7 +453,7 @@ dd {
 }
 .supplierVisual {
   min-height: 190px;
-  border-radius: 18px;
+  border-radius: 10px;
   background: linear-gradient(135deg, #092650, #155fb5);
   position: relative;
 }
@@ -493,7 +493,7 @@ dd {
 .miniCard {
   background: #f8fbff;
   border: 1px solid #e2ecf8;
-  border-radius: 14px;
+  border-radius: 10px;
   padding: 12px;
 }
 .miniVisual {
@@ -519,7 +519,7 @@ dd {
 .stepCard {
   background: #fff;
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: 10px;
   padding: 14px;
   display: flex;
   align-items: center;
@@ -548,7 +548,7 @@ dd {
 .formCard select {
   width: 100%;
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 10px;
   padding: 12px;
   margin-top: 7px;
 }
@@ -572,7 +572,7 @@ dd {
   align-items: center;
   background: #f8fbff;
   border: 1px solid #e2ecf8;
-  border-radius: 14px;
+  border-radius: 10px;
   padding: 12px;
   margin-top: 10px;
 }
@@ -587,7 +587,7 @@ dd {
 .chipIcon {
   width: 48px;
   height: 48px;
-  border-radius: 12px;
+  border-radius: 10px;
   background: #edf3fb;
   display: grid;
   place-items: center;
@@ -596,7 +596,7 @@ dd {
   margin-top: 12px;
   border: 1px dashed #b9cce7;
   background: #f8fbff;
-  border-radius: 14px;
+  border-radius: 10px;
   padding: 20px;
   text-align: center;
   color: #607997;
@@ -618,7 +618,7 @@ dd {
 .adminSide {
   background: linear-gradient(#09234b, #0b2b59);
   padding: 16px;
-  border-radius: 20px;
+  border-radius: 10px;
   color: #fff;
   position: sticky;
   top: 96px;
@@ -643,7 +643,7 @@ dd {
   grid-template-columns: 1.2fr 0.8fr;
   gap: 16px;
   background: linear-gradient(135deg, #08234c, #125aaf);
-  border-radius: 20px;
+  border-radius: 10px;
   padding: 22px;
   color: #fff;
 }
@@ -667,7 +667,7 @@ dd {
 .entityGrid div {
   background: #f8fbff;
   border: 1px solid #e1ebf7;
-  border-radius: 12px;
+  border-radius: 10px;
   padding: 12px;
 }
 .entityGrid strong,
@@ -682,7 +682,7 @@ dd {
 .bridge {
   margin-top: 12px;
   padding: 14px;
-  border-radius: 14px;
+  border-radius: 10px;
   background: #edf4ff;
   color: #204b87;
   font-weight: 700;
@@ -769,7 +769,7 @@ dd {
 }
 @media (max-width: 767px) {
   body {
-    padding-bottom: 72px;
+    padding-bottom: 0;
   }
   .container {
     padding: 0 14px;
@@ -885,7 +885,7 @@ dd {
     position: fixed;
     left: 0;
     right: 0;
-    bottom: 55px;
+    bottom: 0px;
     background: #fff;
     border-top: 1px solid var(--line);
     padding: 10px;
@@ -973,7 +973,7 @@ dd {
 }
 .productVisualCompact {
   height: 130px;
-  border-radius: 14px;
+  border-radius: 10px;
   background: linear-gradient(135deg, #081f45, #1157aa 62%, #18b8ee);
   margin-bottom: 14px;
   position: relative;
@@ -1157,7 +1157,7 @@ dd {
 .catalogField select {
   width: 100%;
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 10px;
   background: #fff;
   padding: 12px 13px;
   color: var(--text);
@@ -1208,7 +1208,7 @@ dd {
   border: 1px solid var(--line);
   background: #fff;
   color: #3c5878;
-  border-radius: 12px;
+  border-radius: 10px;
   padding: 10px 12px;
   font-weight: 800;
   cursor: pointer;
@@ -1322,7 +1322,7 @@ dd {
   display: inline-flex;
   margin: 14px 0 18px;
   padding: 11px 15px;
-  border-radius: 12px;
+  border-radius: 10px;
   background: #edf4ff;
   color: #0e55ce;
   font-weight: 900;
@@ -1335,7 +1335,7 @@ dd {
 .rfqSuccessMeta > div {
   background: #f8fbff;
   border: 1px solid #e2ecf8;
-  border-radius: 14px;
+  border-radius: 10px;
   padding: 14px;
 }
 .rfqSuccessMeta span,
@@ -1408,7 +1408,7 @@ dd {
   justify-content: center;
   gap: 10px;
   padding: 20px;
-  border-radius: 18px;
+  border-radius: 10px;
   background: linear-gradient(135deg, #0b2b59, #1265f5);
   color: #fff;
 }
@@ -1459,7 +1459,7 @@ dd {
 }
 .knowledgeCover {
   height: 150px;
-  border-radius: 14px;
+  border-radius: 10px;
   background: linear-gradient(135deg, #081f45, #104f9c 60%, #19c5ff);
   position: relative;
   overflow: hidden;
@@ -1580,7 +1580,7 @@ dd {
   gap: 12px;
   align-items: start;
   padding: 15px;
-  border-radius: 14px;
+  border-radius: 10px;
   background: #f6f9ff;
   border: 1px solid #e0ebf8;
 }
@@ -1602,7 +1602,7 @@ dd {
 }
 .processConnectionCard {
   padding: 17px;
-  border-radius: 15px;
+  border-radius: 10px;
   background: linear-gradient(135deg, #0b2b59, #1159b0);
   color: #fff;
   display: grid;
@@ -1623,7 +1623,7 @@ dd {
 .articleProductCard {
   padding: 16px;
   border: 1px solid var(--line);
-  border-radius: 15px;
+  border-radius: 10px;
   background: #fff;
   display: flex;
   justify-content: space-between;
@@ -1653,7 +1653,7 @@ dd {
 .knowledgeNotice {
   margin-top: 18px;
   padding: 16px;
-  border-radius: 14px;
+  border-radius: 10px;
   background: #fff8e8;
   border: 1px solid #ffe1a3;
   color: #7d5b14;
@@ -1858,7 +1858,7 @@ dd {
   justify-content: center;
   gap: 10px;
   padding: 20px;
-  border-radius: 18px;
+  border-radius: 10px;
   background: linear-gradient(135deg, #0b2b59, #1265f5);
   color: #fff;
 }
@@ -1938,7 +1938,7 @@ dd {
   align-items: center;
   padding: 16px;
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: 10px;
   background: #fff;
 }
 .deskRfqCard h3 {
@@ -1975,7 +1975,7 @@ dd {
 .deskSavedCard {
   padding: 18px;
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: 10px;
   background: #fff;
   display: grid;
   align-content: start;
@@ -2002,7 +2002,7 @@ dd {
   text-align: center;
   padding: 42px 20px;
   border: 1px dashed #cbd9eb;
-  border-radius: 16px;
+  border-radius: 10px;
   background: #f9fbff;
   margin-top: 18px;
 }
@@ -2069,7 +2069,7 @@ dd {
   top: 94px;
   z-index: 90;
   padding: 13px 16px;
-  border-radius: 12px;
+  border-radius: 10px;
   background: #0b2b59;
   color: #fff;
   box-shadow: 0 14px 34px rgba(10, 43, 89, 0.24);
@@ -2161,7 +2161,7 @@ dd {
 .adminCmsNavNote {
   margin-top: 8px;
   padding: 12px;
-  border-radius: 11px;
+  border-radius: 10px;
   background: rgba(255, 255, 255, 0.07);
   font-size: 10px;
   color: #bad2f7;
@@ -2173,7 +2173,7 @@ dd {
 }
 .adminHeroV2 {
   min-height: 220px;
-  border-radius: 20px;
+  border-radius: 10px;
   padding: 28px;
   background: linear-gradient(135deg, #09244d, #0d3b7b 58%, #126ee2);
   color: #fff;
@@ -2206,7 +2206,7 @@ dd {
   align-items: end;
   gap: 12px;
   padding: 18px;
-  border-radius: 16px;
+  border-radius: 10px;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
@@ -2261,7 +2261,7 @@ dd {
   border: 1px solid var(--line);
   background: #f8fbff;
   padding: 15px;
-  border-radius: 13px;
+  border-radius: 10px;
   text-align: left;
   cursor: pointer;
 }
@@ -2286,7 +2286,7 @@ dd {
 .adminWorkflowV2 div {
   padding: 11px;
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 10px;
   background: #f8fbff;
 }
 .adminWorkflowV2 span {
@@ -2313,7 +2313,7 @@ dd {
   text-align: center;
   border: 1px solid #d9e7fa;
   background: #f4f8ff;
-  border-radius: 12px;
+  border-radius: 10px;
   color: #163c72;
   font-size: 12px;
   font-weight: 900;
@@ -2586,7 +2586,7 @@ dd {
 }
 .searchBar a {
   border: none;
-  border-radius: 12px;
+  border-radius: 10px;
   background: #fff;
   color: #0f4fc4;
   font-weight: 900;
@@ -2603,7 +2603,7 @@ dd {
   margin: 0 0 14px;
   padding: 12px 14px;
   border: 1px solid #d9e7fb;
-  border-radius: 14px;
+  border-radius: 10px;
   background: linear-gradient(135deg, #f8fbff, #eef5ff);
   color: #355271;
 }
@@ -2698,7 +2698,7 @@ dd {
   width: 42px;
   height: 42px;
   border: 1px solid var(--line);
-  border-radius: 11px;
+  border-radius: 10px;
   background: #fff;
   color: var(--navy);
   font-size: 20px;
@@ -2779,7 +2779,7 @@ dd {
   min-height: 76px;
   padding: 14px;
   border: 1px solid #dce6f5;
-  border-radius: 14px;
+  border-radius: 10px;
   background: #f8fbff;
   color: #12345f;
   text-decoration: none;
@@ -2917,7 +2917,7 @@ dd {
   .hero {
     padding: 24px 20px;
     gap: 24px;
-    border-radius: 22px;
+    border-radius: 10px;
   }
   .section {
     padding-top: 24px;
@@ -3541,7 +3541,7 @@ summary:focus-visible {
 .brandMark {
   width: 40px;
   height: 40px;
-  border-radius: 12px;
+  border-radius: 10px;
   letter-spacing: -0.03em;
   box-shadow:
     0 8px 20px rgba(18, 101, 245, 0.18),
@@ -3556,7 +3556,7 @@ summary:focus-visible {
 .chipIcon {
   width: 50px;
   height: 50px;
-  border-radius: 13px;
+  border-radius: 10px;
   background: linear-gradient(145deg, #f4f8ff, #e7f0fc);
   color: #1559cb;
   font-weight: 900;
@@ -3582,7 +3582,7 @@ summary:focus-visible {
 .supplierLogo.compact {
   width: 56px;
   height: 56px;
-  border-radius: 14px;
+  border-radius: 10px;
   font-size: 15px;
 }
 .waferVisual,
@@ -3636,39 +3636,39 @@ summary:focus-visible {
   aspect-ratio: 16/9;
   min-height: 138px;
   margin-bottom: 16px;
-  border-radius: 15px;
+  border-radius: 10px;
 }
 .knowledgeCover {
   height: auto;
   aspect-ratio: 16/9;
   min-height: 144px;
   margin-bottom: 16px;
-  border-radius: 15px;
+  border-radius: 10px;
 }
 .knowledge .thumb {
   height: auto;
   aspect-ratio: 16/9;
   min-height: 128px;
-  border-radius: 14px;
+  border-radius: 10px;
 }
 .miniVisual {
   height: auto;
   aspect-ratio: 16/9;
   min-height: 92px;
-  border-radius: 11px;
+  border-radius: 10px;
 }
 .supplierVisual {
   min-height: 210px;
-  border-radius: 18px;
+  border-radius: 10px;
 }
 .waferVisual {
   min-height: 310px;
-  border-radius: 22px;
+  border-radius: 10px;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.035);
 }
 .productMedia {
   min-height: 420px;
-  border-radius: 16px;
+  border-radius: 10px;
   background:
     radial-gradient(
       circle at 50% 46%,
@@ -3794,7 +3794,7 @@ summary:focus-visible {
   .brandMark {
     width: 36px;
     height: 36px;
-    border-radius: 11px;
+    border-radius: 10px;
   }
   .waferVisual {
     min-height: 190px;
@@ -3821,7 +3821,7 @@ summary:focus-visible {
 }
 .waferVisual {
   min-height: 320px;
-  border-radius: 24px;
+  border-radius: 10px;
   background:
     radial-gradient(
       circle at 60% 40%,
@@ -3868,7 +3868,7 @@ summary:focus-visible {
   width: 12px;
   height: 46%;
   border: 0;
-  border-radius: 20px;
+  border-radius: 10px;
   background: linear-gradient(
     180deg,
     #95efff 0%,
@@ -3883,7 +3883,7 @@ summary:focus-visible {
   bottom: 24px;
   min-height: 0;
   padding: 14px 16px;
-  border-radius: 16px;
+  border-radius: 10px;
   background: rgba(255, 255, 255, 0.07);
   backdrop-filter: blur(10px);
   color: #eaf4ff;
@@ -3898,7 +3898,7 @@ summary:focus-visible {
   height: 124px;
   min-height: 124px;
   aspect-ratio: auto;
-  border-radius: 14px;
+  border-radius: 10px;
   background: linear-gradient(135deg, #0d305f 0%, #1a5fb8 55%, #80d7ff 100%);
   position: relative;
   overflow: hidden;
@@ -3929,7 +3929,7 @@ summary:focus-visible {
   width: 12px;
   height: 42%;
   border: 0;
-  border-radius: 20px;
+  border-radius: 10px;
   background: linear-gradient(180deg, #8cf0ff, #42c1ff, #0b50d0, transparent);
   box-shadow: none;
 }
@@ -3940,7 +3940,7 @@ summary:focus-visible {
 }
 .supplierVisual {
   min-height: 180px;
-  border-radius: 18px;
+  border-radius: 10px;
   background: linear-gradient(135deg, #092652 0%, #103c7c 60%, #1b71d6 100%);
   position: relative;
   overflow: hidden;
@@ -3969,7 +3969,7 @@ summary:focus-visible {
   width: 12px;
   height: 42%;
   border: 0;
-  border-radius: 18px;
+  border-radius: 10px;
   background: linear-gradient(
     180deg,
     #91ecff 0%,
@@ -3981,29 +3981,47 @@ summary:focus-visible {
 }
 .prototypeProductGallery {
   width: 100%;
-  display: grid;
-  grid-template-columns: 78px minmax(0, 1fr);
+  display: flex;
+  flex-direction: column;
   gap: 14px;
-  align-items: start;
+  min-width: 0;
 }
+
 .prototypeThumbCol {
   display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
+  width: 100%;
 }
+
 .prototypeThumb {
-  height: 64px;
-  border-radius: 14px;
+  position: relative;
+  width: 100%;
+  height: 68px;
+  padding: 0;
+  border-radius: 10px;
   border: 1px solid var(--line);
   background: #f6f9ff;
   display: grid;
   place-items: center;
+  overflow: hidden;
   cursor: pointer;
   color: #1150ca;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
 }
+
+.prototypeThumb:hover {
+  transform: translateY(-1px);
+  border-color: #a9c7f4;
+}
+
 .prototypeThumb span {
   width: 40px;
   height: 40px;
-  border-radius: 12px;
+  border-radius: 10px;
   background: #f2f6fe;
   border: 1px solid #dce6f5;
   display: grid;
@@ -4011,27 +4029,125 @@ summary:focus-visible {
   font-weight: 900;
   font-size: 16px;
 }
+
 .prototypeThumb.active {
-  outline: 2px solid var(--blue);
-  outline-offset: 1px;
+  outline: none;
+  border: 2px solid var(--blue);
+  box-shadow: 0 0 0 2px rgba(18, 101, 245, 0.08);
 }
+
 .prototypeMainVisual {
   position: relative;
-  min-height: 320px;
-  border-radius: 22px;
+  width: 100%;
+  min-height: 380px;
+  border-radius: 10px;
   background: linear-gradient(180deg, #f9fbff 0%, #e9f0fb 100%);
   border: 1px solid #d7e1f1;
-  display: grid;
-  place-items: center;
+  display: block;
   overflow: hidden;
+  touch-action: pan-y;
+  outline: none;
 }
+
+.prototypeSliderTrack {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+  transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.prototypeSlide {
+  position: relative;
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: linear-gradient(145deg, #f8fbff, #eef3f8);
+}
+
+.prototypeSlide > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  user-select: none;
+  -webkit-user-drag: none;
+  transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.prototypeSlide.fit-contain > img {
+  object-fit: contain;
+  object-position: center;
+  padding: 28px;
+  background: linear-gradient(145deg, #fbfdff, #f1f5f9);
+}
+
+.prototypeSlide.fit-cover > img {
+  object-fit: cover;
+  object-position: center;
+}
+
 .prototypeMainVisual small {
   position: absolute;
   right: 18px;
   bottom: 14px;
-  color: #607997;
+  z-index: 6;
+  min-width: 46px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: rgba(16, 49, 91, 0.82);
+  color: #ffffff;
   font-size: 11px;
   font-weight: 800;
+  text-align: center;
+  backdrop-filter: blur(6px);
+}
+
+/* Product gallery slider arrows */
+.prototypeGalleryArrow {
+  position: absolute;
+  top: 50%;
+  z-index: 7;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(10, 39, 82, 0.78);
+  color: #ffffff;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.prototypeGalleryArrow:hover {
+  background: rgba(18, 101, 245, 0.92);
+}
+
+.prototypeGalleryPrev {
+  left: 14px;
+}
+
+.prototypeGalleryNext {
+  right: 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prototypeSliderTrack,
+  .prototypeSlide > img,
+  .prototypeThumb,
+  .prototypeGalleryArrow {
+    transition: none !important;
+  }
 }
 .prototypeObject {
   display: block;
@@ -4172,16 +4288,49 @@ summary:focus-visible {
     min-height: 160px;
   }
   .prototypeProductGallery {
-    grid-template-columns: 1fr;
+    gap: 10px;
   }
+
   .prototypeThumbCol {
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 2px 2px 4px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
   }
+
+  .prototypeThumbCol::-webkit-scrollbar {
+    display: none;
+  }
+
   .prototypeThumb {
-    height: 56px;
+    flex: 0 0 76px;
+    width: 76px;
+    height: 58px;
+    scroll-snap-align: start;
   }
+
   .prototypeMainVisual {
     min-height: 270px;
+  }
+
+  .prototypeSlide.fit-contain > img {
+    padding: 18px;
+  }
+
+  .prototypeGalleryArrow {
+    width: 38px;
+    height: 38px;
+    font-size: 25px;
+  }
+
+  .prototypeGalleryPrev {
+    left: 10px;
+  }
+
+  .prototypeGalleryNext {
+    right: 10px;
   }
   .prototypeMainVisual .prototypeObject {
     transform: scale(0.78);
@@ -4223,7 +4372,7 @@ summary:focus-visible {
   min-width: 0;
   height: 118px;
   overflow: hidden;
-  border-radius: 13px;
+  border-radius: 10px;
   background: #eaf1fa;
   border: 1px solid #dce7f4;
 }
@@ -4299,12 +4448,10 @@ summary:focus-visible {
   display: block;
   background: #f2f6fb;
 }
-.actualMainVisual > img {
+.actualMainVisual .prototypeSlide > img {
   display: block;
   width: 100%;
-  height: 360px;
-  object-fit: cover;
-  object-position: center;
+  height: 100%;
 }
 .actualMainVisual small {
   padding: 6px 9px;
@@ -4318,7 +4465,7 @@ summary:focus-visible {
   position: relative;
   height: 150px;
   min-height: 150px;
-  border-radius: 14px;
+  border-radius: 10px;
   overflow: hidden;
   background: #e9f0f8;
   border: 1px solid #dbe6f3;
@@ -4378,7 +4525,7 @@ summary:focus-visible {
   height: 100%;
   min-height: 280px;
   margin: 0;
-  border-radius: 18px;
+  border-radius: 10px;
 }
 .supplierActualVisual {
   padding: 0;
@@ -4396,6 +4543,162 @@ summary:focus-visible {
   object-fit: cover;
   object-position: center;
 }
+
+.productInsightGrid {
+  align-items: stretch;
+}
+
+.productInsightCard {
+  min-height: 320px;
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #d9e5f3;
+  background: #ffffff;
+  box-shadow: 0 10px 28px rgba(18, 54, 96, 0.05);
+}
+
+.insightHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.insightNumber {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: #edf4ff;
+  color: #1265f5;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.insightHeader small {
+  display: block;
+  margin-bottom: 4px;
+  color: #7690ad;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.insightHeader h2 {
+  margin: 0;
+  color: #0b2b59;
+  font-size: 23px;
+}
+
+.overviewText {
+  margin: 0;
+  color: #45627f;
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.overviewTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: auto;
+  padding-top: 24px;
+}
+
+.overviewTags span {
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: #f1f6fd;
+  border: 1px solid #dce8f5;
+  color: #315d8f;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.specTable {
+  display: grid;
+}
+
+.specRow {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  align-items: center;
+  gap: 20px;
+  min-height: 54px;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.specRow:last-child {
+  border-bottom: 0;
+}
+
+.specRow span {
+  color: #7187a0;
+  font-size: 12px;
+}
+
+.specRow strong {
+  color: #0b2b59;
+  font-size: 15px;
+  text-align: right;
+}
+
+.fitCard {
+  background: linear-gradient(180deg, #ffffff 0%, #f6f9fd 100%);
+}
+
+.fitList {
+  display: grid;
+  gap: 12px;
+}
+
+.fitList > div {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 10px;
+  align-items: center;
+  padding: 11px 12px;
+  border: 1px solid #e1eaf5;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.fitCheck {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #eaf8f1;
+  color: #14955c;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.fitList strong {
+  display: block;
+  color: #15355d;
+  font-size: 13px;
+}
+
+.fitList small {
+  display: block;
+  margin-top: 2px;
+  color: #758ba4;
+  font-size: 10px;
+}
+
+.fitAction {
+  margin-top: auto;
+  padding-top: 20px;
+  color: #1265f5;
+  font-size: 12px;
+  font-weight: 900;
+}
+
 @media (max-width: 1199px) {
   .processCard {
     grid-template-rows: auto 132px;
@@ -4424,8 +4727,8 @@ summary:focus-visible {
   .actualMainVisual {
     min-height: 280px;
   }
-  .actualMainVisual > img {
-    height: 280px;
+  .actualMainVisual .prototypeSlide > img {
+    height: 100%;
   }
   .knowledgePhoto,
   .knowledgeCover,
@@ -4442,7 +4745,7 @@ summary:focus-visible {
 }
 .actualProductThumb {
   aspect-ratio: 16/10;
-  border-radius: 14px;
+  border-radius: 10px;
   background: linear-gradient(145deg, #f8fbff, #edf3f8);
 }
 .actualProductThumb.fit-contain img {
@@ -4472,22 +4775,16 @@ summary:focus-visible {
 .actualMainVisual {
   min-height: 380px;
   height: 380px;
-  border-radius: 16px;
+  border-radius: 10px;
   overflow: hidden;
   background: linear-gradient(145deg, #f8fbff, #eef3f8);
 }
-.actualMainVisual > img {
+.actualMainVisual .prototypeSliderTrack {
   height: 100%;
-  transition: transform 0.22s ease;
 }
-.actualMainVisual.fit-contain > img {
-  object-fit: contain;
-  padding: 28px;
-  background: linear-gradient(145deg, #fbfdff, #f1f5f9);
-}
-.actualMainVisual.fit-cover > img {
-  object-fit: cover;
-  object-position: center;
+.actualMainVisual .prototypeSlide > img {
+  width: 100%;
+  height: 100%;
 }
 .processPhoto img,
 .knowledgePhoto img,
@@ -4547,7 +4844,7 @@ summary:focus-visible {
   aspect-ratio: 16/9;
   margin-bottom: 14px;
   overflow: hidden;
-  border-radius: 14px;
+  border-radius: 10px;
   border: 1px solid #dbe6f3;
   background: linear-gradient(145deg, #f8fbff, #edf3f8);
 }
@@ -4734,7 +5031,7 @@ button {
 }
 @media (max-width: 767px) {
   body {
-    padding-bottom: calc(72px + env(safe-area-inset-bottom));
+    padding-bottom: 0;
   }
   .productDetailPage,
   .supplierDetailPage,
@@ -4860,7 +5157,7 @@ button {
   .mobileSticky,
   .supplierMobileBar,
   .rfqMobileBar {
-    bottom: calc(55px + env(safe-area-inset-bottom));
+    bottom: calc(env(safe-area-inset-bottom));
   }
   .tabletNavPanel {
     width: min(360px, 92vw);
@@ -4890,7 +5187,7 @@ button {
   }
   .hero {
     padding: 22px 18px;
-    border-radius: 20px;
+    border-radius: 10px;
   }
   .hero h1 {
     font-size: 28px;
@@ -5232,7 +5529,7 @@ button {
   background: rgba(255, 255, 255, 0.985);
   border-left: 1px solid rgba(219, 230, 243, 0.9);
   border-top: 1px solid rgba(219, 230, 243, 0.72);
-  border-radius: 22px 0 0 0;
+  border-radius: 10px 0 0 0;
   box-shadow: -22px 18px 54px rgba(8, 31, 69, 0.18);
   display: grid;
   align-content: start;
@@ -5326,7 +5623,7 @@ button {
     height: calc(100dvh - 68px);
     padding: 18px;
     padding-bottom: calc(18px + env(safe-area-inset-bottom));
-    border-radius: 18px 0 0 0;
+    border-radius: 10px 0 0 0;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -5379,7 +5676,7 @@ button {
   min-height: 430px;
   padding: 0;
   border: 1px solid rgba(138, 195, 255, 0.15);
-  border-radius: 30px;
+  border-radius: 10px;
   background:
     radial-gradient(
       circle at 82% 15%,
@@ -5414,9 +5711,7 @@ button {
   position: relative;
   z-index: 2;
   display: grid;
-  grid-template-columns:
-    minmax(0, 1.08fr)
-    minmax(380px, 0.92fr);
+  grid-template-columns: minmax(0, 1.08fr) minmax(380px, 0.92fr);
   gap: 52px;
   align-items: center;
   min-height: 430px;
@@ -5437,11 +5732,11 @@ button {
 }
 .heroTitle {
   margin: 0 !important;
-  max-width: 720px;
-  font-size: clamp(40px, 3.7vw, 58px) !important;
+  max-width: 760px;
+  font-size: clamp(38px, 3.2vw, 50px) !important;
   font-weight: 900;
-  line-height: 1.1 !important;
-  letter-spacing: -0.045em !important;
+  line-height: 1.12 !important;
+  letter-spacing: -0.035em !important;
   color: #ffffff;
 }
 .heroTitle em {
@@ -5466,7 +5761,7 @@ button {
   margin: 27px 0 14px;
   padding: 6px;
   border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 15px;
+  border-radius: 10px;
   background: rgba(255, 255, 255, 0.96);
   box-shadow: 0 16px 38px rgba(0, 15, 44, 0.18);
 }
@@ -5524,7 +5819,7 @@ button {
 .heroCtaRow .btn {
   min-height: 45px;
   padding: 0 18px;
-  border-radius: 11px;
+  border-radius: 10px;
   font-size: 12px;
 }
 .heroCtaRow .btn.primary {
@@ -5539,7 +5834,7 @@ button {
   position: relative;
   min-height: 330px !important;
   height: 100%;
-  border-radius: 22px !important;
+  border-radius: 10px !important;
   background-position: 57% center !important;
   box-shadow:
     0 20px 50px rgba(0, 14, 39, 0.3),
@@ -5575,7 +5870,7 @@ button {
   max-width: 250px;
   padding: 12px 14px;
   border: 1px solid rgba(255, 255, 255, 0.13);
-  border-radius: 12px;
+  border-radius: 10px;
   background: rgba(5, 25, 58, 0.72);
   box-shadow: 0 12px 34px rgba(0, 0, 0, 0.18);
   backdrop-filter: blur(12px);
@@ -5632,7 +5927,7 @@ button {
   padding: 21px 22px;
   overflow: hidden;
   border: 1px solid #dde8f5;
-  border-radius: 17px;
+  border-radius: 10px;
   background: linear-gradient(145deg, #ffffff 0%, #fbfdff 100%);
   box-shadow: 0 12px 30px rgba(20, 55, 101, 0.055);
   transition:
@@ -5704,7 +5999,7 @@ button {
   overflow: hidden;
   padding: 0;
   border-color: #dce7f3;
-  border-radius: 18px;
+  border-radius: 10px;
   background: #ffffff;
   box-shadow: 0 10px 28px rgba(20, 55, 101, 0.05);
   transition:
@@ -5748,7 +6043,7 @@ button {
 .homeSection .marketProductCard {
   overflow: hidden;
   border-color: #dfe8f3;
-  border-radius: 19px;
+  border-radius: 10px;
   background: #ffffff;
   box-shadow: 0 10px 28px rgba(22, 56, 100, 0.055);
 }
@@ -5788,7 +6083,7 @@ button {
   min-height: 58px;
   padding: 13px 14px;
   border: 1px solid #d9e6f6;
-  border-radius: 13px;
+  border-radius: 10px;
   background: rgba(255, 255, 255, 0.82);
   color: #294d75;
   font-size: 11px;
@@ -5819,7 +6114,7 @@ button {
   min-height: 150px;
   padding: 18px;
   border-color: #dfe8f3;
-  border-radius: 18px;
+  border-radius: 10px;
   box-shadow: 0 10px 26px rgba(21, 55, 98, 0.045);
   transition:
     transform 0.2s ease,
@@ -5842,7 +6137,7 @@ button {
   display: grid;
   place-items: center;
   border: 1px solid #d6e5f8;
-  border-radius: 12px;
+  border-radius: 10px;
   background: linear-gradient(145deg, #edf5ff, #e1eeff);
   color: #0d5ddb;
   font-size: 12px;
@@ -5906,15 +6201,15 @@ button {
   min-height: 42px;
   padding: 0 17px;
   border-color: #d4e2f2;
-  border-radius: 11px;
+  border-radius: 10px;
   background: #ffffff;
   color: #33597f;
   font-size: 11px;
   box-shadow: 0 5px 14px rgba(20, 55, 101, 0.035);
 }
 .homeFinalCtaSection {
-  padding: 62px 0 72px;
-  background: linear-gradient(180deg, #f4f8fd, #eef4fb);
+  padding: 62px 0 30px;
+  background: transparent;
 }
 .homeFinalCta {
   position: relative;
@@ -5922,7 +6217,7 @@ button {
   padding: 38px 42px !important;
   overflow: hidden;
   border: 1px solid rgba(111, 182, 255, 0.17);
-  border-radius: 24px;
+  border-radius: 10px;
   background:
     radial-gradient(
       circle at 83% 10%,
@@ -6017,7 +6312,7 @@ button {
   }
   .homeHeroSection .hero {
     min-height: 0;
-    border-radius: 22px;
+    border-radius: 10px;
   }
   .heroContent {
     display: grid;
@@ -6050,7 +6345,7 @@ button {
     gap: 6px;
     margin-top: 21px;
     padding: 5px;
-    border-radius: 13px;
+    border-radius: 10px;
   }
   .heroSearchBar input,
   .heroSearchBar button {
@@ -6077,7 +6372,7 @@ button {
   }
   .heroVisual {
     min-height: 225px !important;
-    border-radius: 17px !important;
+    border-radius: 10px !important;
     background-position: 62% center !important;
   }
   .heroVisualLabel {
@@ -6150,14 +6445,14 @@ button {
     flex-basis: 41px;
   }
   .homeFinalCtaSection {
-    padding: 42px 0 90px;
+    padding: 42px 0 20px;
   }
   .homeFinalCta {
     display: grid;
     gap: 22px;
     min-height: 0;
     padding: 28px 22px !important;
-    border-radius: 20px;
+    border-radius: 10px;
   }
   .homeFinalCta h2 {
     font-size: 25px;
@@ -6504,7 +6799,7 @@ p,
   justify-content: center;
   height: 46px;
   padding: 0 20px;
-  border-radius: 14px;
+  border-radius: 10px;
   background: linear-gradient(135deg, #1d6fff, #0c59df);
   color: #ffffff;
   font-size: 15px;
@@ -6546,7 +6841,7 @@ p,
   height: 38px;
   display: grid;
   place-items: center;
-  border-radius: 11px;
+  border-radius: 10px;
   background: linear-gradient(135deg, #0d59d7, #25c8ff);
   color: #ffffff;
   font-size: 20px;
@@ -6622,7 +6917,7 @@ p,
   align-items: center;
   justify-content: center;
   padding: 0 19px;
-  border-radius: 13px;
+  border-radius: 10px;
   background: linear-gradient(135deg, #176cf5, #0758e6);
   color: #ffffff !important;
   font-size: 15px;
@@ -6648,7 +6943,7 @@ p,
   position: relative;
   padding: 0;
   border: 1px solid #dce6f3;
-  border-radius: 11px;
+  border-radius: 10px;
   background: #ffffff;
   cursor: pointer;
 }

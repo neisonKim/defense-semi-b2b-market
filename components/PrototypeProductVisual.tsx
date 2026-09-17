@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type ProductVisualSource = {
   slug?: string;
@@ -228,10 +228,55 @@ export function PrototypeProductThumb({ source, label }: { source: ProductVisual
 export function PrototypeProductGallery({ source }: { source: ProductVisualSource }) {
   const assets = useMemo(() => getProductGalleryAssets(source), [source]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const touchStartX = useRef<number | null>(null);
 
   useEffect(() => setActiveIndex(0), [source.slug, source.name]);
 
   const active = assets[activeIndex] ?? assets[0];
+  const hasMultipleImages = assets.length > 1;
+
+  const showPrevious = () => {
+    if (!hasMultipleImages) return;
+    setActiveIndex((current) => (current - 1 + assets.length) % assets.length);
+  };
+
+  const showNext = () => {
+    if (!hasMultipleImages) return;
+    setActiveIndex((current) => (current + 1) % assets.length);
+  };
+
+  const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
+    touchStartX.current = event.touches[0]?.clientX ?? null;
+  };
+
+  const handleTouchEnd = (event: React.TouchEvent<HTMLDivElement>) => {
+    if (touchStartX.current === null) return;
+
+    const touchEndX = event.changedTouches[0]?.clientX ?? touchStartX.current;
+    const distance = touchStartX.current - touchEndX;
+
+    touchStartX.current = null;
+
+    if (Math.abs(distance) < 45) return;
+
+    if (distance > 0) {
+      showNext();
+    } else {
+      showPrevious();
+    }
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      showPrevious();
+    }
+
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      showNext();
+    }
+  };
 
   return (
     <div className="prototypeProductGallery actualProductGallery">
@@ -243,14 +288,67 @@ export function PrototypeProductGallery({ source }: { source: ProductVisualSourc
             className={`prototypeThumb actualImageThumb ${assetClass(asset)} ${activeIndex === index ? "active" : ""}`}
             onClick={() => setActiveIndex(index)}
             aria-label={`제품 이미지 ${index + 1}`}
+            aria-pressed={activeIndex === index}
           >
             <img src={asset.src} alt="" loading="lazy" />
           </button>
         ))}
       </div>
-      <div className={`prototypeMainVisual actualMainVisual ${assetClass(active)}`}>
-        <img src={active.src} alt={active.alt} />
-        <small>{activeIndex + 1}/{assets.length}</small>
+
+      <div
+        className={`prototypeMainVisual actualMainVisual ${assetClass(active)}`}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onKeyDown={handleKeyDown}
+        tabIndex={0}
+        role="region"
+        aria-label="제품 이미지 슬라이드"
+      >
+        <div
+          className="prototypeSliderTrack"
+          style={{ transform: `translate3d(-${activeIndex * 100}%, 0, 0)` }}
+        >
+          {assets.map((asset, index) => (
+            <div
+              key={asset.src}
+              className={`prototypeSlide ${assetClass(asset)}`}
+              aria-hidden={activeIndex !== index}
+            >
+              <img
+                src={asset.src}
+                alt={activeIndex === index ? asset.alt : ""}
+                loading={index === 0 ? "eager" : "lazy"}
+                draggable={false}
+              />
+            </div>
+          ))}
+        </div>
+
+        {hasMultipleImages ? (
+          <>
+            <button
+              type="button"
+              className="prototypeGalleryArrow prototypeGalleryPrev"
+              onClick={showPrevious}
+              aria-label="이전 제품 이미지"
+            >
+              ‹
+            </button>
+
+            <button
+              type="button"
+              className="prototypeGalleryArrow prototypeGalleryNext"
+              onClick={showNext}
+              aria-label="다음 제품 이미지"
+            >
+              ›
+            </button>
+          </>
+        ) : null}
+
+        <small aria-live="polite">
+          {activeIndex + 1}/{assets.length}
+        </small>
       </div>
     </div>
   );
