@@ -4,7 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const navItems = [
+type NavItem = {
+  href: string;
+  label: string;
+  anchor?: boolean;
+};
+
+const navItems: NavItem[] = [
   { href: "/", label: "Marketplace" },
   { href: "/#process", label: "Process", anchor: true },
   { href: "/products", label: "Products" },
@@ -12,7 +18,7 @@ const navItems = [
   { href: "/knowledge", label: "Knowledge" },
   { href: "/rfq", label: "RFQ" },
   { href: "/my-desk", label: "My Desk" },
-] as const;
+];
 
 export function Header() {
   const pathname = usePathname();
