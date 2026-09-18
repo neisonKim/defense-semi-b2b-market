@@ -164,74 +164,365 @@ export default function RFQForm() {
   }
 
   return (
-    <form onSubmit={submit}>
+    <form className="rfqExperience" onSubmit={submit}>
       <div className="publicSyncBanner compactSync">
         <span className={source === "database" || source === "cms" ? "live" : "demo"}>●</span>
-        <strong>{source === "database" ? "PostgreSQL Product 기반 RFQ" : source === "cms" ? "Published Product 기반 RFQ" : "Mock Product 기반 RFQ"}</strong>
-        <small>제품 상세에서 전달된 상품과 공급사 정보를 그대로 이어받습니다.</small>
+        <strong>
+          {source === "database"
+            ? "PostgreSQL Product 기반 RFQ"
+            : source === "cms"
+              ? "Published Product 기반 RFQ"
+              : "Mock Product 기반 RFQ"}
+        </strong>
+        <small>제품 상세에서 전달된 제품·공급사 정보를 이어받아 소싱 요청을 구성합니다.</small>
       </div>
 
-      <div className="steps"><Step n="1" t="제품 선택"/><Step n="2" t="사양 / 요구사항"/><Step n="3" t="회사정보 / 제출"/></div>
-      <div className="rfqGrid">
-        <section>
-          <div className="card formCard">
-            <h2>1. 제품 선택</h2>
-            <label>제품
-              <select value={selectedProduct.slug} onChange={(event) => setProductSlug(event.target.value)}>
-                {products.map((item) => <option value={item.slug} key={item.slug}>{item.name} · {item.process}</option>)}
+      <header className="rfqIntro">
+        <div>
+          <span className="rfqEyebrow">REQUEST FOR QUOTATION</span>
+          <h1>반도체 제품 소싱 요청</h1>
+          <p>
+            제품과 공급사 조건을 확인하고 수량, 납기, 기술 요구사항을 입력하면
+            관련 공급사 후보와 함께 RFQ를 구성합니다.
+          </p>
+        </div>
+
+        <div className="rfqIntroMeta">
+          <span>SELECTED PRODUCT</span>
+          <strong>{selectedProduct.name}</strong>
+          <small>{selectedProduct.process} · {selectedProduct.supplier}</small>
+        </div>
+      </header>
+
+      <div className="steps rfqSteps">
+        <Step n="01" t="Request Target" s="제품 / 공급사" />
+        <Step n="02" t="Requirements" s="수량 / 기술 사양" />
+        <Step n="03" t="Sourcing" s="납기 / 매칭" />
+        <Step n="04" t="Contact" s="회사 / 담당자" />
+      </div>
+
+      <div className="rfqGrid rfqExperienceGrid">
+        <section className="rfqFormColumn">
+          <div className="card formCard rfqSectionCard">
+            <SectionHeading
+              n="01"
+              eyebrow="REQUEST TARGET"
+              title="요청 대상"
+              description="견적을 요청할 제품과 우선 검토 공급사를 선택합니다."
+            />
+
+            <label className="rfqField">
+              <span>제품</span>
+              <select
+                value={selectedProduct.slug}
+                onChange={(event) => setProductSlug(event.target.value)}
+              >
+                {products.map((item) => (
+                  <option value={item.slug} key={item.slug}>
+                    {item.name} · {item.process}
+                  </option>
+                ))}
               </select>
             </label>
-            <div className="selectedProduct">
+
+            <div className="selectedProduct rfqSelectedTarget">
               <div className="chipIcon">▥</div>
-              <div><strong>{selectedProduct.name}</strong><span>{selectedProduct.category} · {selectedProduct.process} · {selectedProduct.supplier}</span></div>
+              <div>
+                <small>SELECTED PRODUCT</small>
+                <strong>{selectedProduct.name}</strong>
+                <span>
+                  {selectedProduct.category} · {selectedProduct.process} · {selectedProduct.supplier}
+                </span>
+              </div>
+            </div>
+
+            <label className="rfqField">
+              <span>우선 검토 공급사</span>
+              <select
+                value={preferredSupplierSlug}
+                onChange={(event) => setPreferredSupplierSlug(event.target.value)}
+              >
+                <option value="">제품 기본 공급사 / 자동 매칭</option>
+                {suppliers.map((item) => (
+                  <option value={item.slug} key={item.slug}>
+                    {item.name} · {item.region}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+
+          <div className="card formCard rfqSectionCard">
+            <SectionHeading
+              n="02"
+              eyebrow="TECHNICAL REQUIREMENTS"
+              title="기술 요구사항"
+              description="구매 수량과 제품의 적용 조건을 입력합니다."
+            />
+
+            <div className="formTwo rfqFieldGrid">
+              <label className="rfqField">
+                <span>요청 수량</span>
+                <input value={qty} onChange={(event) => setQty(event.target.value)} inputMode="numeric" required />
+              </label>
+
+              <label className="rfqField">
+                <span>단위</span>
+                <select value={unit} onChange={(event) => setUnit(event.target.value)}>
+                  <option>EA</option>
+                  <option>PCS</option>
+                  <option>SET</option>
+                  <option>LOT</option>
+                </select>
+              </label>
+
+              <label className="rfqField">
+                <span>적용 공정</span>
+                <input value={selectedProduct.process} readOnly />
+              </label>
+
+              <label className="rfqField">
+                <span>소재</span>
+                <input value={selectedProduct.material} readOnly />
+              </label>
+            </div>
+
+            <label className="rfqField">
+              <span>상세 기술 요구사항</span>
+              <textarea
+                value={requirement}
+                onChange={(event) => setRequirement(event.target.value)}
+                placeholder="치수, 사용 환경, 장비 모델, 인증 요건, 요구 사양 등 필요한 내용을 입력하세요."
+              />
+            </label>
+
+            <div className="rfqRequirementHint">
+              <strong>작성 Tip</strong>
+              <span>장비 모델 · 사용 위치 · 치수 · 순도 · 인증조건을 함께 적으면 공급사 검토가 쉬워집니다.</span>
             </div>
           </div>
 
-          <div className="card formCard">
-            <h2>2. 사양 / 요구사항</h2>
-            <div className="formTwo">
-              <label>요청 수량<input value={qty} onChange={(event) => setQty(event.target.value)} required /></label>
-              <label>단위<select value={unit} onChange={(event) => setUnit(event.target.value)}><option>EA</option><option>PCS</option><option>SET</option><option>LOT</option></select></label>
-              <label>목표 납기<input type="date" value={due} onChange={(event) => setDue(event.target.value)} required /></label>
-              <label>적용 공정<input value={selectedProduct.process} readOnly /></label>
+          <div className="card formCard rfqSectionCard">
+            <SectionHeading
+              n="03"
+              eyebrow="DELIVERY & SOURCING"
+              title="납기 및 공급사 매칭"
+              description="희망 납기를 지정하고 현재 조건에서 연결되는 공급사 후보를 확인합니다."
+            />
+
+            <div className="formTwo rfqFieldGrid">
+              <label className="rfqField">
+                <span>목표 납기</span>
+                <input
+                  type="date"
+                  value={due}
+                  onChange={(event) => setDue(event.target.value)}
+                  required
+                />
+              </label>
+
+              <div className="rfqMatchMetric">
+                <span>MATCH CANDIDATES</span>
+                <strong>{candidates.length}</strong>
+                <small>현재 제품·공정 기준</small>
+              </div>
             </div>
-            <label>기술 요구사항<textarea value={requirement} onChange={(event) => setRequirement(event.target.value)} placeholder="치수, 사용 환경, 장비 모델, 인증 요건 등 필요한 내용을 입력하세요." /></label>
+
+            <div className="rfqCandidatePanel">
+              <div className="rfqCandidateHead">
+                <div>
+                  <small>SUPPLIER MATCHING</small>
+                  <strong>예상 매칭 공급사</strong>
+                </div>
+                <span>{candidates.length} candidates</span>
+              </div>
+
+              <div className="rfqCandidates rfqCandidateList">
+                {candidates.length ? (
+                  candidates.map((item) => (
+                    <span key={item.slug}>
+                      {item.name}
+                      {item.verified ? " ✓" : ""}
+                    </span>
+                  ))
+                ) : (
+                  <span>조건에 맞는 공개 공급사를 추가 확인해야 합니다.</span>
+                )}
+              </div>
+
+              <p>
+                제품의 공급사 연결 정보와 적용 공정을 기준으로 후보를 구성하는 Demo 매칭입니다.
+              </p>
+            </div>
           </div>
 
-          <div className="card formCard">
-            <h2>3. 회사정보 / 첨부</h2>
-            <div className="formTwo">
-              <label>회사명<input value={company} onChange={(event) => setCompany(event.target.value)} required /></label>
-              <label>담당자<input value={contact} onChange={(event) => setContact(event.target.value)} required /></label>
-              <label>연락처<input value={phone} onChange={(event) => setPhone(event.target.value)} required /></label>
-              <label>이메일<input type="email" value={email} onChange={(event) => setEmail(event.target.value)} required /></label>
+          <div className="card formCard rfqSectionCard">
+            <SectionHeading
+              n="04"
+              eyebrow="CONTACT INFORMATION"
+              title="회사 및 담당자 정보"
+              description="RFQ 회신과 소싱 협의를 위한 기본 연락처입니다."
+            />
+
+            <div className="formTwo rfqFieldGrid">
+              <label className="rfqField">
+                <span>회사명</span>
+                <input value={company} onChange={(event) => setCompany(event.target.value)} required />
+              </label>
+
+              <label className="rfqField">
+                <span>담당자</span>
+                <input value={contact} onChange={(event) => setContact(event.target.value)} required />
+              </label>
+
+              <label className="rfqField">
+                <span>연락처</span>
+                <input value={phone} onChange={(event) => setPhone(event.target.value)} required />
+              </label>
+
+              <label className="rfqField">
+                <span>이메일</span>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  required
+                />
+              </label>
             </div>
-            <div className="upload">도면 / 사양서 / 구매요청서 업로드 영역 (Demo)</div>
+
+            <div className="upload rfqUpload">
+              <span className="rfqUploadIcon">＋</span>
+              <div>
+                <strong>도면 / 사양서 / 구매요청서</strong>
+                <small>포트폴리오 Demo에서는 실제 파일 전송 없이 UI만 제공합니다.</small>
+              </div>
+            </div>
           </div>
         </section>
 
-        <aside className="rfqSummary card">
-          <h2>요청 요약</h2>
-          <div className="selectedProduct"><div className="chipIcon">▥</div><div><strong>{selectedProduct.name}</strong><span>{qty || "-"} {unit} · {due || "납기 미정"}</span></div></div>
-          <dl className="rfqSummaryList">
-            <div><dt>Category</dt><dd>{selectedProduct.category}</dd></div>
+        <aside className="rfqSummary card rfqSummaryV2">
+          <div className="rfqSummaryHeader">
+            <div>
+              <span>RFQ SUMMARY</span>
+              <h2>요청 요약</h2>
+            </div>
+            <span className="rfqSummaryStatus">Draft</span>
+          </div>
+
+          <div className="selectedProduct rfqSummaryProduct">
+            <div className="chipIcon">▥</div>
+            <div>
+              <small>PRODUCT</small>
+              <strong>{selectedProduct.name}</strong>
+              <span>{selectedProduct.category}</span>
+            </div>
+          </div>
+
+          <dl className="rfqSummaryList rfqSummaryListV2">
+            <div><dt>Quantity</dt><dd>{qty || "-"} {unit}</dd></div>
+            <div><dt>Target Date</dt><dd>{due || "미정"}</dd></div>
             <div><dt>Process</dt><dd>{selectedProduct.process}</dd></div>
             <div><dt>Material</dt><dd>{selectedProduct.material}</dd></div>
-            <div><dt>Preferred Supplier</dt><dd>{preferredSupplierSlug ? suppliers.find((item) => item.slug === preferredSupplierSlug)?.name ?? selectedProduct.supplier : selectedProduct.supplier}</dd></div>
+            <div>
+              <dt>Supplier</dt>
+              <dd>
+                {preferredSupplierSlug
+                  ? suppliers.find((item) => item.slug === preferredSupplierSlug)?.name ?? selectedProduct.supplier
+                  : selectedProduct.supplier}
+              </dd>
+            </div>
           </dl>
-          <p>예상 매칭 공급사</p>
-          <strong className="bigNum">{candidates.length}</strong>
-          <div className="rfqCandidates">
-            {candidates.length ? candidates.map((item) => <span key={item.slug}>{item.name}{item.verified ? " ✓" : ""}</span>) : <span>조건에 맞는 공개 공급사를 추가 확인해야 합니다.</span>}
+
+          <div className="rfqSummaryMatch">
+            <span>SUPPLIER MATCH</span>
+            <div>
+              <strong>{candidates.length}</strong>
+              <small>candidate suppliers</small>
+            </div>
           </div>
-          <p>제품과 적용 공정을 기준으로 관련 공급사 후보를 보여주는 Demo 매칭입니다.</p>
+
+          <div className="rfqCandidates rfqSummaryCandidates">
+            {candidates.length ? (
+              candidates.map((item) => (
+                <span key={item.slug}>
+                  {item.name}
+                  {item.verified ? " ✓" : ""}
+                </span>
+              ))
+            ) : (
+              <span>추가 검토 필요</span>
+            )}
+          </div>
+
+          <div className="rfqSummaryNotice">
+            제출 후 My Desk에서 RFQ 상태와 요청 정보를 다시 확인할 수 있습니다.
+          </div>
+
           {submissionError && <p className="rfqError">{submissionError}</p>}
-          <button className="btn primary full" type="submit" disabled={submitting}>{submitting ? "저장 중..." : "RFQ 제출"}</button>
+
+          <button className="btn primary full rfqSubmitButton" type="submit" disabled={submitting}>
+            {submitting ? "저장 중..." : "RFQ 제출하기"}
+          </button>
+
+          <small className="rfqSummaryFootnote">
+            Demo 환경에서는 설정된 데이터 소스에 따라 PostgreSQL 또는 Local Storage에 저장됩니다.
+          </small>
         </aside>
       </div>
-      <div className="rfqMobileBar"><span>{selectedProduct.name} · {qty} {unit}</span><button type="submit" disabled={submitting}>{submitting ? "저장 중..." : "RFQ 제출"}</button></div>
+
+      <div className="rfqMobileBar rfqMobileBarV2">
+        <div>
+          <small>{selectedProduct.name}</small>
+          <strong>{qty || "-"} {unit}</strong>
+        </div>
+        <button type="submit" disabled={submitting}>
+          {submitting ? "저장 중..." : "RFQ 제출"}
+        </button>
+      </div>
     </form>
   );
 }
 
-function Step({n,t}:{n:string;t:string}){return <div className="stepCard"><span>{n}</span><strong>{t}</strong></div>}
+function Step({
+  n,
+  t,
+  s,
+}: {
+  n: string;
+  t: string;
+  s: string;
+}) {
+  return (
+    <div className="stepCard">
+      <span>{n}</span>
+      <div>
+        <strong>{t}</strong>
+        <small>{s}</small>
+      </div>
+    </div>
+  );
+}
+
+function SectionHeading({
+  n,
+  eyebrow,
+  title,
+  description,
+}: {
+  n: string;
+  eyebrow: string;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="rfqSectionHeading">
+      <span>{n}</span>
+      <div>
+        <small>{eyebrow}</small>
+        <h2>{title}</h2>
+        <p>{description}</p>
+      </div>
+    </div>
+  );
+}

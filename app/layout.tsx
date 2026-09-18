@@ -1,10 +1,14 @@
+import type { Metadata } from "next";
+
 import "./globals.css";
 
-import Header from "@/components/Header";
+import { Header } from "@/components/Header";
+import { MobileNav } from "@/components/MobileNav";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "DEFENSE SEMI B2B MARKET",
-  description: "Semiconductor Intelligence + Sourcing",
+  description:
+    "Semiconductor Intelligence + Sourcing Platform",
 };
 
 export default function RootLayout({
@@ -16,8 +20,8 @@ export default function RootLayout({
     <html lang="ko">
       <body>
         <Header />
-
         <main>{children}</main>
+        <MobileNav />
       </body>
     </html>
   );
