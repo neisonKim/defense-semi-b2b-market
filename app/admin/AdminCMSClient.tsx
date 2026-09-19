@@ -6,6 +6,8 @@ import { Badge, Stat } from "@/components/UI";
 
 type AdminStatus = "Draft" | "Review" | "Verified" | "Published" | "Needs Update";
 type Tab = "dashboard" | "products" | "suppliers" | "knowledge" | "verification";
+type StatusFilter = "All" | AdminStatus;
+type SortOrder = "updated-desc" | "updated-asc" | "name-asc";
 
 type AdminProduct = {
   id: string;
@@ -135,11 +137,59 @@ function statusKind(status: AdminStatus): "blue" | "green" | "amber" {
   return "blue";
 }
 
+function isFinalStatus(status: AdminStatus) {
+  return status === "Verified" || status === "Published";
+}
+
+function getStatusCounts<T extends { status: AdminStatus }>(items: T[]) {
+  return {
+    All: items.length,
+    Draft: items.filter((item) => item.status === "Draft").length,
+    Review: items.filter((item) => item.status === "Review").length,
+    Verified: items.filter((item) => item.status === "Verified").length,
+    Published: items.filter((item) => item.status === "Published").length,
+    "Needs Update": items.filter((item) => item.status === "Needs Update").length,
+  } satisfies Record<StatusFilter, number>;
+}
+
+function compareAdminRows(
+  a: { updatedAt: string },
+  b: { updatedAt: string },
+  aName: string,
+  bName: string,
+  sortOrder: SortOrder,
+) {
+  if (sortOrder === "name-asc") {
+    return aName.localeCompare(bName, "ko");
+  }
+
+  const aTime = new Date(a.updatedAt).getTime();
+  const bTime = new Date(b.updatedAt).getTime();
+
+  if (sortOrder === "updated-asc") {
+    return (Number.isNaN(aTime) ? 0 : aTime) - (Number.isNaN(bTime) ? 0 : bTime);
+  }
+
+  return (Number.isNaN(bTime) ? 0 : bTime) - (Number.isNaN(aTime) ? 0 : aTime);
+}
+
+function getMissingFields(
+  fields: Array<[label: string, value: string | boolean]>,
+) {
+  return fields
+    .filter(([, value]) =>
+      typeof value === "boolean" ? !value : !value.trim(),
+    )
+    .map(([label]) => label);
+}
+
 export default function AdminCMSClient() {
   const [tab, setTab] = useState<Tab>("dashboard");
   const [data, setData] = useState<AdminState>(seedState);
   const [hydrated, setHydrated] = useState(false);
   const [query, setQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("All");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("updated-desc");
   const [productForm, setProductForm] = useState<AdminProduct>(emptyProduct);
   const [supplierForm, setSupplierForm] = useState<AdminSupplier>(emptySupplier);
   const [knowledgeForm, setKnowledgeForm] = useState<AdminKnowledge>(emptyKnowledge);
@@ -190,25 +240,202 @@ export default function AdminCMSClient() {
   }, [data, hydrated]);
 
   const metrics = useMemo(() => {
-    const verificationQueue = [
-      ...data.products.filter((item) => ["Draft", "Review", "Needs Update"].includes(item.status)),
-      ...data.suppliers.filter((item) => ["Draft", "Review", "Needs Update"].includes(item.status)),
-      ...data.knowledge.filter((item) => ["Draft", "Review", "Needs Update"].includes(item.status)),
+    const allRecords = [
+      ...data.products,
+      ...data.suppliers,
+      ...data.knowledge,
     ];
+
+    const verificationQueue = allRecords.filter((item) =>
+      ["Draft", "Review", "Needs Update"].includes(item.status),
+    );
+
     return {
+      total: allRecords.length,
       products: data.products.length,
       suppliers: data.suppliers.length,
       knowledge: data.knowledge.length,
-      published: [...data.products, ...data.suppliers, ...data.knowledge].filter((item) => item.status === "Published").length,
+      published: allRecords.filter((item) => item.status === "Published").length,
+      draft: allRecords.filter((item) => item.status === "Draft").length,
+      review: allRecords.filter((item) => item.status === "Review").length,
+      verified: allRecords.filter((item) => item.status === "Verified").length,
+      needsUpdate: allRecords.filter((item) => item.status === "Needs Update").length,
       verification: verificationQueue.length,
       verifiedSuppliers: data.suppliers.filter((item) => item.verified).length,
     };
   }, [data]);
 
+  const recentItems = useMemo(() => {
+    const rows = [
+      ...data.products.map((item) => ({
+        id: `Product-${item.id}`,
+        kind: "Product" as const,
+        title: item.name,
+        status: item.status,
+        updatedAt: item.updatedAt,
+      })),
+      ...data.suppliers.map((item) => ({
+        id: `Supplier-${item.id}`,
+        kind: "Supplier" as const,
+        title: item.name,
+        status: item.status,
+        updatedAt: item.updatedAt,
+      })),
+      ...data.knowledge.map((item) => ({
+        id: `Knowledge-${item.id}`,
+        kind: "Knowledge" as const,
+        title: item.title,
+        status: item.status,
+        updatedAt: item.updatedAt,
+      })),
+    ];
+
+    return rows
+      .sort((a, b) => {
+        const aTime = new Date(a.updatedAt).getTime();
+        const bTime = new Date(b.updatedAt).getTime();
+
+        if (Number.isNaN(aTime) && Number.isNaN(bTime)) return 0;
+        if (Number.isNaN(aTime)) return 1;
+        if (Number.isNaN(bTime)) return -1;
+
+        return bTime - aTime;
+      })
+      .slice(0, 6);
+  }, [data]);
+
+  const publishRate =
+    metrics.total > 0
+      ? Math.round((metrics.published / metrics.total) * 100)
+      : 0;
+
+  const openCreateTab = (
+    target: "products" | "suppliers" | "knowledge",
+  ) => {
+    setQuery("");
+    setStatusFilter("All");
+    setSortOrder("updated-desc");
+
+    if (target === "products") {
+      setEditingProductId(null);
+      setProductForm(emptyProduct());
+    }
+
+    if (target === "suppliers") {
+      setEditingSupplierId(null);
+      setSupplierForm(emptySupplier());
+    }
+
+    if (target === "knowledge") {
+      setEditingKnowledgeId(null);
+      setKnowledgeForm(emptyKnowledge());
+    }
+
+    setTab(target);
+    window.requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  };
+
   const normalizedQuery = query.trim().toLowerCase();
-  const visibleProducts = data.products.filter((item) => !normalizedQuery || [item.name, item.category, item.process, item.supplier, item.material].join(" ").toLowerCase().includes(normalizedQuery));
-  const visibleSuppliers = data.suppliers.filter((item) => !normalizedQuery || [item.name, item.type, item.region, item.meta].join(" ").toLowerCase().includes(normalizedQuery));
-  const visibleKnowledge = data.knowledge.filter((item) => !normalizedQuery || [item.title, item.category, item.process, item.summary].join(" ").toLowerCase().includes(normalizedQuery));
+
+  const productStatusCounts = useMemo(
+    () => getStatusCounts(data.products),
+    [data.products],
+  );
+  const supplierStatusCounts = useMemo(
+    () => getStatusCounts(data.suppliers),
+    [data.suppliers],
+  );
+  const knowledgeStatusCounts = useMemo(
+    () => getStatusCounts(data.knowledge),
+    [data.knowledge],
+  );
+
+  const visibleProducts = useMemo(
+    () =>
+      data.products
+        .filter(
+          (item) =>
+            (!normalizedQuery ||
+              [item.name, item.category, item.process, item.supplier, item.material]
+                .join(" ")
+                .toLowerCase()
+                .includes(normalizedQuery)) &&
+            (statusFilter === "All" || item.status === statusFilter),
+        )
+        .sort((a, b) =>
+          compareAdminRows(a, b, a.name, b.name, sortOrder),
+        ),
+    [data.products, normalizedQuery, statusFilter, sortOrder],
+  );
+
+  const visibleSuppliers = useMemo(
+    () =>
+      data.suppliers
+        .filter(
+          (item) =>
+            (!normalizedQuery ||
+              [item.name, item.type, item.region, item.meta]
+                .join(" ")
+                .toLowerCase()
+                .includes(normalizedQuery)) &&
+            (statusFilter === "All" || item.status === statusFilter),
+        )
+        .sort((a, b) =>
+          compareAdminRows(a, b, a.name, b.name, sortOrder),
+        ),
+    [data.suppliers, normalizedQuery, statusFilter, sortOrder],
+  );
+
+  const visibleKnowledge = useMemo(
+    () =>
+      data.knowledge
+        .filter(
+          (item) =>
+            (!normalizedQuery ||
+              [item.title, item.category, item.process, item.summary]
+                .join(" ")
+                .toLowerCase()
+                .includes(normalizedQuery)) &&
+            (statusFilter === "All" || item.status === statusFilter),
+        )
+        .sort((a, b) =>
+          compareAdminRows(a, b, a.title, b.title, sortOrder),
+        ),
+    [data.knowledge, normalizedQuery, statusFilter, sortOrder],
+  );
+
+  const productMissing = getMissingFields([
+    ["제품명", productForm.name],
+    ["Category", productForm.category],
+    ["Process", productForm.process],
+    ["Supplier", productForm.supplier],
+    ["Material", productForm.material],
+  ]);
+
+  const supplierMissing = getMissingFields([
+    ["공급사명", supplierForm.name],
+    ["Supplier Type", supplierForm.type],
+    ["Region", supplierForm.region],
+    ["Capabilities", supplierForm.meta],
+  ]);
+
+  const knowledgeMissing = getMissingFields([
+    ["제목", knowledgeForm.title],
+    ["Category", knowledgeForm.category],
+    ["Related Process", knowledgeForm.process],
+    ["Summary", knowledgeForm.summary],
+  ]);
+
+  const selectedProductSupplierExists =
+    !productForm.supplier.trim() ||
+    data.suppliers.some(
+      (item) =>
+        item.name.trim().toLowerCase() ===
+        productForm.supplier.trim().toLowerCase(),
+    );
+
 
   const flash = (message: string) => {
     setNotice(message);
@@ -217,7 +444,23 @@ export default function AdminCMSClient() {
 
   const saveProduct = async (event: FormEvent) => {
     event.preventDefault();
-    if (!productForm.name.trim()) return;
+    if (busy) return;
+
+    if (!productForm.name.trim()) {
+      flash("제품명을 입력해 주세요.");
+      return;
+    }
+
+    if (isFinalStatus(productForm.status) && productMissing.length > 0) {
+      flash(`Verified / Published 전 필수 정보가 필요합니다: ${productMissing.join(", ")}`);
+      return;
+    }
+
+    if (isFinalStatus(productForm.status) && !selectedProductSupplierExists) {
+      flash("Verified / Published 제품은 등록된 Supplier와 연결해야 합니다.");
+      return;
+    }
+
     const resolvedSlug = productForm.slug || slugify(productForm.name);
     if (data.products.some((item) => item.slug === resolvedSlug && item.id !== editingProductId)) {
       flash("같은 Product Slug가 이미 존재합니다. Slug를 변경해 주세요.");
@@ -251,13 +494,30 @@ export default function AdminCMSClient() {
 
   const saveSupplier = async (event: FormEvent) => {
     event.preventDefault();
-    if (!supplierForm.name.trim()) return;
+    if (busy) return;
+
+    if (!supplierForm.name.trim()) {
+      flash("공급사명을 입력해 주세요.");
+      return;
+    }
+
+    if (isFinalStatus(supplierForm.status) && supplierMissing.length > 0) {
+      flash(`Verified / Published 전 필수 정보가 필요합니다: ${supplierMissing.join(", ")}`);
+      return;
+    }
+
     const resolvedSlug = supplierForm.slug || slugify(supplierForm.name);
     if (data.suppliers.some((item) => item.slug === resolvedSlug && item.id !== editingSupplierId)) {
       flash("같은 Supplier Slug가 이미 존재합니다. Slug를 변경해 주세요.");
       return;
     }
-    const record: AdminSupplier = { ...supplierForm, slug: resolvedSlug, updatedAt: today() };
+    const record: AdminSupplier = {
+      ...supplierForm,
+      slug: resolvedSlug,
+      verified:
+        isFinalStatus(supplierForm.status) || supplierForm.verified,
+      updatedAt: today(),
+    };
     if (databaseMode) {
       try {
         setBusy(true);
@@ -285,7 +545,18 @@ export default function AdminCMSClient() {
 
   const saveKnowledge = async (event: FormEvent) => {
     event.preventDefault();
-    if (!knowledgeForm.title.trim()) return;
+    if (busy) return;
+
+    if (!knowledgeForm.title.trim()) {
+      flash("Knowledge 제목을 입력해 주세요.");
+      return;
+    }
+
+    if (isFinalStatus(knowledgeForm.status) && knowledgeMissing.length > 0) {
+      flash(`Verified / Published 전 필수 정보가 필요합니다: ${knowledgeMissing.join(", ")}`);
+      return;
+    }
+
     const resolvedSlug = knowledgeForm.slug || slugify(knowledgeForm.title);
     if (data.knowledge.some((item) => item.slug === resolvedSlug && item.id !== editingKnowledgeId)) {
       flash("같은 Knowledge Slug가 이미 존재합니다. Slug를 변경해 주세요.");
@@ -407,118 +678,928 @@ export default function AdminCMSClient() {
       <div className="adminCmsShell">
         <aside className="adminCmsNav card">
           <strong>DEFENSE SEMI<br/>ADMIN CMS</strong>
-          <button className={tab === "dashboard" ? "active" : ""} onClick={() => { setTab("dashboard"); setQuery(""); }}>대시보드</button>
-          <button className={tab === "products" ? "active" : ""} onClick={() => { setTab("products"); setQuery(""); }}>제품 관리 <span>{data.products.length}</span></button>
-          <button className={tab === "suppliers" ? "active" : ""} onClick={() => { setTab("suppliers"); setQuery(""); }}>공급사 관리 <span>{data.suppliers.length}</span></button>
-          <button className={tab === "knowledge" ? "active" : ""} onClick={() => { setTab("knowledge"); setQuery(""); }}>Knowledge 관리 <span>{data.knowledge.length}</span></button>
-          <button className={tab === "verification" ? "active" : ""} onClick={() => { setTab("verification"); setQuery(""); }}>검증 큐 <span>{metrics.verification}</span></button>
-          <div className="adminCmsNavNote">Stage 11: PostgreSQL CRUD 이후 DB 관계와 RFQ 무결성을 최종 QA합니다.</div>
+          <button className={tab === "dashboard" ? "active" : ""} onClick={() => { setTab("dashboard"); setQuery(""); setStatusFilter("All"); setSortOrder("updated-desc"); }}>대시보드</button>
+          <button className={tab === "products" ? "active" : ""} onClick={() => { setTab("products"); setQuery(""); setStatusFilter("All"); setSortOrder("updated-desc"); }}>제품 관리 <span>{data.products.length}</span></button>
+          <button className={tab === "suppliers" ? "active" : ""} onClick={() => { setTab("suppliers"); setQuery(""); setStatusFilter("All"); setSortOrder("updated-desc"); }}>공급사 관리 <span>{data.suppliers.length}</span></button>
+          <button className={tab === "knowledge" ? "active" : ""} onClick={() => { setTab("knowledge"); setQuery(""); setStatusFilter("All"); setSortOrder("updated-desc"); }}>Knowledge 관리 <span>{data.knowledge.length}</span></button>
+          <button className={tab === "verification" ? "active" : ""} onClick={() => { setTab("verification"); setQuery(""); setStatusFilter("All"); setSortOrder("updated-desc"); }}>검증 큐 <span>{metrics.verification}</span></button>
+          <div className="adminCmsNavNote">Protected Admin · PostgreSQL CRUD · Published Public Sync 운영 화면입니다.</div>
         </aside>
 
         <section className="adminCmsMain">
           {tab === "dashboard" && (
             <>
               <div className="adminHeroV2">
-                <div>
-                  <span>Semiconductor Data Platform</span>
-                  <h2>데이터를 등록하고 검증하며<br/>하나의 공급망으로 연결합니다.</h2>
-                  <p>Stage 11에서는 PostgreSQL CRUD와 공개 데이터 관계, RFQ 저장 구조까지 최종 점검합니다.</p>
+                <div className="adminHeroCopyV3">
+                  <div className="adminHeroStatusRow">
+                    <span>SEMICONDUCTOR DATA OPERATIONS</span>
+                    <b>{databaseMode ? "DATABASE LIVE" : "LOCAL MODE"}</b>
+                  </div>
+
+                  <h2>
+                    데이터 운영 상태를 한 화면에서 확인하고
+                    <br />
+                    바로 관리 작업으로 이동합니다.
+                  </h2>
+
+                  <p>
+                    Product · Supplier · Knowledge의 등록, 검증, 발행 상태와
+                    공개 데이터 연결 상태를 관리합니다.
+                  </p>
+
+                  <div className="adminHeroActionsV3">
+                    <button
+                      type="button"
+                      className="btn primary"
+                      onClick={() => openCreateTab("products")}
+                    >
+                      + Product 등록
+                    </button>
+                    <button
+                      type="button"
+                      className="btn adminHeroGhostBtn"
+                      onClick={() => setTab("verification")}
+                    >
+                      검증 큐 {metrics.verification}
+                    </button>
+                  </div>
                 </div>
-                <div className="adminHeroGraph"><i/><i/><i/><i/><i/></div>
+
+                <div className="adminHeroMonitorV3">
+                  <div className="adminHeroMonitorHead">
+                    <span>Publishing Health</span>
+                    <strong>{publishRate}%</strong>
+                  </div>
+
+                  <div className="adminPublishMeter">
+                    <i style={{ width: `${publishRate}%` }} />
+                  </div>
+
+                  <div className="adminHeroMonitorGrid">
+                    <div>
+                      <span>Published</span>
+                      <strong>{metrics.published}</strong>
+                    </div>
+                    <div>
+                      <span>Pending</span>
+                      <strong>{metrics.verification}</strong>
+                    </div>
+                    <div>
+                      <span>Verified Supplier</span>
+                      <strong>{metrics.verifiedSuppliers}</strong>
+                    </div>
+                    <div>
+                      <span>Data Source</span>
+                      <strong>{databaseMode ? "DB" : "Local"}</strong>
+                    </div>
+                  </div>
+                </div>
               </div>
+
               <div className="adminKpi adminKpiV2">
-                <Stat value={String(metrics.products)} label="등록 제품" delta="Mock CRUD"/>
-                <Stat value={String(metrics.suppliers)} label="등록 공급사" delta={`${metrics.verifiedSuppliers} Verified`}/>
-                <Stat value={String(metrics.knowledge)} label="Knowledge" delta="Connected"/>
-                <Stat value={String(metrics.published)} label="Published" delta="공개 상태"/>
-                <Stat value={String(metrics.verification)} label="검증 대기" delta="Review Queue"/>
-                <Stat value={databaseMode ? "DB" : "Local"} label="저장 방식" delta={databaseMode ? "PostgreSQL" : "Browser"}/>
+                <Stat value={String(metrics.total)} label="전체 데이터" delta="CMS Records" />
+                <Stat value={String(metrics.products)} label="등록 제품" delta="Product" />
+                <Stat value={String(metrics.suppliers)} label="등록 공급사" delta={`${metrics.verifiedSuppliers} Verified`} />
+                <Stat value={String(metrics.knowledge)} label="Knowledge" delta="Technical Content" />
+                <Stat value={String(metrics.published)} label="Published" delta={`${publishRate}% 공개`} />
+                <Stat value={String(metrics.verification)} label="검증 대기" delta="Action Required" />
               </div>
-              <div className="twoGrid adminDashboardPanels">
-                <div className="card adminOpsCard">
-                  <div className="rowBetween"><div><h2>운영 데이터</h2><p>관리할 데이터 유형을 선택하세요.</p></div></div>
+
+              <div className="adminDashboardGridV3">
+                <section className="card adminOpsCard adminQuickOpsV3">
+                  <div className="adminPanelHeadV3">
+                    <div>
+                      <span>QUICK ACTIONS</span>
+                      <h2>빠른 등록</h2>
+                      <p>새 데이터를 바로 등록하거나 검증 업무로 이동합니다.</p>
+                    </div>
+                  </div>
+
                   <div className="adminQuickGrid">
-                    <button onClick={() => setTab("products")}><strong>Product</strong><span>{metrics.products}개 관리</span></button>
-                    <button onClick={() => setTab("suppliers")}><strong>Supplier</strong><span>{metrics.suppliers}개 관리</span></button>
-                    <button onClick={() => setTab("knowledge")}><strong>Knowledge</strong><span>{metrics.knowledge}개 관리</span></button>
-                    <button onClick={() => setTab("verification")}><strong>Verification</strong><span>{metrics.verification}개 검토</span></button>
-                    <a className="adminQaLink" href="/api/db/qa" target="_blank" rel="noreferrer"><strong>DB QA</strong><span>관계 / RFQ 점검</span></a>
+                    <button type="button" onClick={() => openCreateTab("products")}>
+                      <b>01</b>
+                      <strong>Product 등록</strong>
+                      <span>제품 · 공정 · 소재 · 공급사 연결</span>
+                    </button>
+
+                    <button type="button" onClick={() => openCreateTab("suppliers")}>
+                      <b>02</b>
+                      <strong>Supplier 등록</strong>
+                      <span>기업 · 지역 · Capability 관리</span>
+                    </button>
+
+                    <button type="button" onClick={() => openCreateTab("knowledge")}>
+                      <b>03</b>
+                      <strong>Knowledge 등록</strong>
+                      <span>기술 콘텐츠와 Process 연결</span>
+                    </button>
+
+                    <button type="button" onClick={() => setTab("verification")}>
+                      <b>04</b>
+                      <strong>Verification Queue</strong>
+                      <span>{metrics.verification}개 검토 필요</span>
+                    </button>
                   </div>
-                </div>
-                <div className="card adminOpsCard">
-                  <h2>콘텐츠 발행 워크플로우</h2>
-                  <div className="adminWorkflowV2">
-                    {['Draft','Review','Technical Review','Verified','Published','Needs Update'].map((item, index) => <div key={item}><span>{String(index + 1).padStart(2,'0')}</span><strong>{item}</strong></div>)}
+                </section>
+
+                <section className="card adminOpsCard adminVerificationHealthV3">
+                  <div className="adminPanelHeadV3">
+                    <div>
+                      <span>VERIFICATION HEALTH</span>
+                      <h2>발행 상태</h2>
+                      <p>검증 단계별 데이터 분포를 확인합니다.</p>
+                    </div>
+                    <Badge kind={metrics.verification ? "amber" : "green"}>
+                      {metrics.verification ? `${metrics.verification} Pending` : "Healthy"}
+                    </Badge>
                   </div>
-                </div>
+
+                  <div className="adminStatusBreakdownV3">
+                    <StatusMetric label="Draft" value={metrics.draft} total={metrics.total} />
+                    <StatusMetric label="Review" value={metrics.review} total={metrics.total} />
+                    <StatusMetric label="Verified" value={metrics.verified} total={metrics.total} />
+                    <StatusMetric label="Published" value={metrics.published} total={metrics.total} emphasis />
+                    <StatusMetric label="Needs Update" value={metrics.needsUpdate} total={metrics.total} warning />
+                  </div>
+                </section>
+
+                <section className="card adminOpsCard adminRecentV3">
+                  <div className="adminPanelHeadV3">
+                    <div>
+                      <span>RECENT DATA</span>
+                      <h2>최근 업데이트</h2>
+                      <p>최근 수정된 CMS 데이터 6건입니다.</p>
+                    </div>
+                  </div>
+
+                  <div className="adminRecentListV3">
+                    {recentItems.length === 0 ? (
+                      <div className="adminRecentEmptyV3">업데이트된 데이터가 없습니다.</div>
+                    ) : (
+                      recentItems.map((item) => (
+                        <div className="adminRecentRowV3" key={item.id}>
+                          <span className="adminRecentTypeV3">{item.kind}</span>
+                          <div>
+                            <strong>{item.title}</strong>
+                            <small>{item.updatedAt}</small>
+                          </div>
+                          <Badge kind={statusKind(item.status)}>{item.status}</Badge>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </section>
+
+                <section className="card adminOpsCard adminSystemV3">
+                  <div className="adminPanelHeadV3">
+                    <div>
+                      <span>SYSTEM STATUS</span>
+                      <h2>운영 상태</h2>
+                      <p>현재 관리자 CMS의 주요 연결 상태입니다.</p>
+                    </div>
+                  </div>
+
+                  <div className="adminSystemListV3">
+                    <SystemStatusRow
+                      label="Admin Access"
+                      value="Protected Session"
+                      state="ok"
+                    />
+                    <SystemStatusRow
+                      label="Data Storage"
+                      value={databaseMode ? "PostgreSQL + Prisma" : "Local Storage"}
+                      state={databaseMode ? "ok" : "warn"}
+                    />
+                    <SystemStatusRow
+                      label="Published Sync"
+                      value="Public Data Connected"
+                      state="ok"
+                    />
+                    <SystemStatusRow
+                      label="Verification"
+                      value={metrics.verification ? `${metrics.verification} Pending` : "No Pending Items"}
+                      state={metrics.verification ? "warn" : "ok"}
+                    />
+                  </div>
+
+                  <a
+                    className="adminQaLinkV3"
+                    href="/api/db/qa"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    DB / Relation QA 열기
+                    <span>↗</span>
+                  </a>
+                </section>
               </div>
+
               <div className="card adminDataModelV2">
-                <div className="rowBetween"><div><h2>관계형 데이터 구조</h2><p>Product · Supplier · Knowledge · RFQ와 Admin CRUD가 동일한 PostgreSQL 관계형 데이터 모델을 사용합니다.</p></div><Badge>Architecture Ready</Badge></div>
+                <div className="rowBetween">
+                  <div>
+                    <h2>관계형 데이터 구조</h2>
+                    <p>
+                      Process · Material · Product · Supplier · Knowledge · RFQ가
+                      하나의 sourcing data flow로 연결됩니다.
+                    </p>
+                  </div>
+                  <Badge>Architecture Ready</Badge>
+                </div>
+
                 <div className="adminEntityFlow">
-                  {['Process','Technology','Material','Product','SupplierProduct','Supplier','Knowledge','RFQ'].map((item) => <div key={item}>{item}</div>)}
+                  {[
+                    "Process",
+                    "Technology",
+                    "Material",
+                    "Product",
+                    "SupplierProduct",
+                    "Supplier",
+                    "Knowledge",
+                    "RFQ",
+                  ].map((item) => (
+                    <div key={item}>{item}</div>
+                  ))}
                 </div>
               </div>
             </>
           )}
 
           {tab === "products" && (
-            <AdminSection title="제품 관리" description="제품을 추가·수정·삭제하고 발행 상태를 관리합니다." query={query} setQuery={setQuery} count={visibleProducts.length}>
+            <AdminSection
+              title="제품 관리"
+              description="제품을 추가·수정·삭제하고 발행 상태를 관리합니다."
+              query={query}
+              setQuery={setQuery}
+              count={visibleProducts.length}
+              statusFilter={statusFilter}
+              setStatusFilter={setStatusFilter}
+              sortOrder={sortOrder}
+              setSortOrder={setSortOrder}
+              statusCounts={productStatusCounts}
+            >
               <form className="card adminCrudForm" onSubmit={saveProduct}>
-                <div className="adminFormHeader"><div><strong>{editingProductId ? "제품 수정" : "새 제품 등록"}</strong><span>필수 정보부터 입력합니다.</span></div>{editingProductId && <button type="button" className="btn" onClick={() => { setEditingProductId(null); setProductForm(emptyProduct()); }}>수정 취소</button>}</div>
-                <div className="adminFormGrid">
-                  <Field label="제품명 *"><input value={productForm.name} onChange={(e) => setProductForm({...productForm, name:e.target.value, slug: editingProductId ? productForm.slug : slugify(e.target.value)})} required /></Field>
-                  <Field label="Slug"><input value={productForm.slug} onChange={(e) => setProductForm({...productForm, slug:e.target.value})} /></Field>
-                  <Field label="Category"><input value={productForm.category} onChange={(e) => setProductForm({...productForm, category:e.target.value})} placeholder="Chamber Parts" /></Field>
-                  <Field label="Process"><input value={productForm.process} onChange={(e) => setProductForm({...productForm, process:e.target.value})} placeholder="Dry Etching" /></Field>
-                  <Field label="Supplier"><input value={productForm.supplier} onChange={(e) => setProductForm({...productForm, supplier:e.target.value})} placeholder="TCK" /></Field>
-                  <Field label="Material"><input value={productForm.material} onChange={(e) => setProductForm({...productForm, material:e.target.value})} placeholder="SiC" /></Field>
-                  <Field label="Status"><StatusSelect value={productForm.status} onChange={(value) => setProductForm({...productForm, status:value})} /></Field>
+                <div className="adminFormHeader">
+                  <div>
+                    <strong>{editingProductId ? "제품 수정" : "새 제품 등록"}</strong>
+                    <span>
+                      Draft는 최소 정보로 저장할 수 있고, Verified / Published는 필수 정보와 Supplier 연결을 확인합니다.
+                    </span>
+                  </div>
+
+                  {editingProductId ? (
+                    <button
+                      type="button"
+                      className="btn"
+                      disabled={busy}
+                      onClick={() => {
+                        setEditingProductId(null);
+                        setProductForm(emptyProduct());
+                      }}
+                    >
+                      수정 취소
+                    </button>
+                  ) : null}
                 </div>
-                <button className="btn primary" type="submit">{editingProductId ? "제품 수정 저장" : "제품 등록"}</button>
+
+                <FormReadiness
+                  status={productForm.status}
+                  missing={productMissing}
+                  extraWarning={
+                    productForm.supplier.trim() && !selectedProductSupplierExists
+                      ? "등록되지 않은 Supplier 이름입니다."
+                      : ""
+                  }
+                />
+
+                <div className="adminFormGrid">
+                  <Field label="제품명 *">
+                    <input
+                      value={productForm.name}
+                      onChange={(e) =>
+                        setProductForm({
+                          ...productForm,
+                          name: e.target.value,
+                          slug: editingProductId
+                            ? productForm.slug
+                            : slugify(e.target.value),
+                        })
+                      }
+                      required
+                    />
+                  </Field>
+
+                  <Field label="Slug">
+                    <input
+                      value={productForm.slug}
+                      onChange={(e) =>
+                        setProductForm({
+                          ...productForm,
+                          slug: slugify(e.target.value),
+                        })
+                      }
+                    />
+                  </Field>
+
+                  <Field label="Category *">
+                    <input
+                      value={productForm.category}
+                      onChange={(e) =>
+                        setProductForm({
+                          ...productForm,
+                          category: e.target.value,
+                        })
+                      }
+                      placeholder="Chamber Parts"
+                    />
+                  </Field>
+
+                  <Field label="Process *">
+                    <input
+                      value={productForm.process}
+                      onChange={(e) =>
+                        setProductForm({
+                          ...productForm,
+                          process: e.target.value,
+                        })
+                      }
+                      placeholder="Dry Etching"
+                    />
+                  </Field>
+
+                  <Field label="Supplier *">
+                    <select
+                      value={productForm.supplier}
+                      onChange={(e) =>
+                        setProductForm({
+                          ...productForm,
+                          supplier: e.target.value,
+                        })
+                      }
+                    >
+                      <option value="">등록된 Supplier 선택</option>
+                      {productForm.supplier &&
+                      !data.suppliers.some(
+                        (item) =>
+                          item.name.trim().toLowerCase() ===
+                          productForm.supplier.trim().toLowerCase(),
+                      ) ? (
+                        <option value={productForm.supplier}>
+                          {productForm.supplier} (기존 값)
+                        </option>
+                      ) : null}
+                      {[...data.suppliers]
+                        .sort((a, b) => a.name.localeCompare(b.name, "ko"))
+                        .map((supplier) => (
+                          <option key={supplier.id} value={supplier.name}>
+                            {supplier.name}
+                          </option>
+                        ))}
+                    </select>
+                  </Field>
+
+                  <Field label="Material *">
+                    <input
+                      value={productForm.material}
+                      onChange={(e) =>
+                        setProductForm({
+                          ...productForm,
+                          material: e.target.value,
+                        })
+                      }
+                      placeholder="SiC"
+                    />
+                  </Field>
+
+                  <Field label="Status">
+                    <StatusSelect
+                      value={productForm.status}
+                      onChange={(value) =>
+                        setProductForm({
+                          ...productForm,
+                          status: value,
+                        })
+                      }
+                    />
+                  </Field>
+                </div>
+
+                <div className="adminFormActionsV4">
+                  <button
+                    className="btn primary"
+                    type="submit"
+                    disabled={busy}
+                  >
+                    {busy
+                      ? "처리 중..."
+                      : editingProductId
+                        ? "제품 수정 저장"
+                        : "제품 등록"}
+                  </button>
+                  <button
+                    className="btn"
+                    type="button"
+                    disabled={busy}
+                    onClick={() => {
+                      setEditingProductId(null);
+                      setProductForm(emptyProduct());
+                    }}
+                  >
+                    입력 초기화
+                  </button>
+                </div>
               </form>
-              <CrudTable headers={["제품명","Category / Process","Supplier","Status","Updated","관리"]}>
-                {visibleProducts.map((item) => <tr key={item.id}><td><strong>{item.name}</strong><small>{item.slug}</small></td><td>{item.category}<small>{item.process}</small></td><td>{item.supplier}<small>{item.material}</small></td><td><Badge kind={statusKind(item.status)}>{item.status}</Badge></td><td>{item.updatedAt}</td><td><div className="adminRowActions"><button onClick={() => { setEditingProductId(item.id); setProductForm(item); window.scrollTo({top:0,behavior:'smooth'}); }}>수정</button><button className="danger" onClick={() => removeProduct(item.id)}>삭제</button></div></td></tr>)}
+
+              <CrudTable headers={["제품명", "Category / Process", "Supplier", "Status", "Updated", "관리"]}>
+                {visibleProducts.length > 0 ? (
+                  visibleProducts.map((item) => (
+                    <tr key={item.id}>
+                      <td>
+                        <strong>{item.name}</strong>
+                        <small>{item.slug}</small>
+                      </td>
+                      <td>
+                        {item.category || "—"}
+                        <small>{item.process || "Process 미지정"}</small>
+                      </td>
+                      <td>
+                        {item.supplier || "—"}
+                        <small>{item.material || "Material 미지정"}</small>
+                      </td>
+                      <td>
+                        <Badge kind={statusKind(item.status)}>{item.status}</Badge>
+                      </td>
+                      <td>{item.updatedAt}</td>
+                      <td>
+                        <div className="adminRowActions">
+                          <button
+                            disabled={busy}
+                            onClick={() => {
+                              setEditingProductId(item.id);
+                              setProductForm(item);
+                              window.scrollTo({ top: 0, behavior: "smooth" });
+                            }}
+                          >
+                            수정
+                          </button>
+                          {item.status === "Published" ? (
+                            <a
+                              href={`/products/${item.slug}`}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              공개보기
+                            </a>
+                          ) : null}
+                          <button
+                            className="danger"
+                            disabled={busy}
+                            onClick={() => removeProduct(item.id)}
+                          >
+                            삭제
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <EmptyTableRow
+                    colSpan={6}
+                    message="검색 또는 상태 조건에 맞는 Product가 없습니다."
+                  />
+                )}
               </CrudTable>
             </AdminSection>
           )}
 
           {tab === "suppliers" && (
-            <AdminSection title="공급사 관리" description="공급사 유형, 지역, 검증 상태와 발행 상태를 관리합니다." query={query} setQuery={setQuery} count={visibleSuppliers.length}>
+            <AdminSection
+              title="공급사 관리"
+              description="공급사 유형, 지역, 검증 상태와 발행 상태를 관리합니다."
+              query={query}
+              setQuery={setQuery}
+              count={visibleSuppliers.length}
+              statusFilter={statusFilter}
+              setStatusFilter={setStatusFilter}
+              sortOrder={sortOrder}
+              setSortOrder={setSortOrder}
+              statusCounts={supplierStatusCounts}
+            >
               <form className="card adminCrudForm" onSubmit={saveSupplier}>
-                <div className="adminFormHeader"><div><strong>{editingSupplierId ? "공급사 수정" : "새 공급사 등록"}</strong><span>기업 검증 상태와 메타 정보를 관리합니다.</span></div>{editingSupplierId && <button type="button" className="btn" onClick={() => { setEditingSupplierId(null); setSupplierForm(emptySupplier()); }}>수정 취소</button>}</div>
-                <div className="adminFormGrid">
-                  <Field label="공급사명 *"><input value={supplierForm.name} onChange={(e) => setSupplierForm({...supplierForm, name:e.target.value, slug: editingSupplierId ? supplierForm.slug : slugify(e.target.value)})} required /></Field>
-                  <Field label="Slug"><input value={supplierForm.slug} onChange={(e) => setSupplierForm({...supplierForm, slug:e.target.value})} /></Field>
-                  <Field label="Supplier Type"><input value={supplierForm.type} onChange={(e) => setSupplierForm({...supplierForm, type:e.target.value})} /></Field>
-                  <Field label="Region"><input value={supplierForm.region} onChange={(e) => setSupplierForm({...supplierForm, region:e.target.value})} /></Field>
-                  <Field label="Capabilities"><input value={supplierForm.meta} onChange={(e) => setSupplierForm({...supplierForm, meta:e.target.value})} placeholder="SiC · Chamber Parts" /></Field>
-                  <Field label="Status"><StatusSelect value={supplierForm.status} onChange={(value) => setSupplierForm({...supplierForm, status:value})} /></Field>
-                  <label className="adminVerifyCheck"><input type="checkbox" checked={supplierForm.verified} onChange={(e) => setSupplierForm({...supplierForm, verified:e.target.checked})}/><span>Company Verified</span></label>
+                <div className="adminFormHeader">
+                  <div>
+                    <strong>{editingSupplierId ? "공급사 수정" : "새 공급사 등록"}</strong>
+                    <span>
+                      Verified / Published로 저장하면 Company Verified도 함께 활성화됩니다.
+                    </span>
+                  </div>
+
+                  {editingSupplierId ? (
+                    <button
+                      type="button"
+                      className="btn"
+                      disabled={busy}
+                      onClick={() => {
+                        setEditingSupplierId(null);
+                        setSupplierForm(emptySupplier());
+                      }}
+                    >
+                      수정 취소
+                    </button>
+                  ) : null}
                 </div>
-                <button className="btn primary" type="submit">{editingSupplierId ? "공급사 수정 저장" : "공급사 등록"}</button>
+
+                <FormReadiness
+                  status={supplierForm.status}
+                  missing={supplierMissing}
+                  extraWarning=""
+                />
+
+                <div className="adminFormGrid">
+                  <Field label="공급사명 *">
+                    <input
+                      value={supplierForm.name}
+                      onChange={(e) =>
+                        setSupplierForm({
+                          ...supplierForm,
+                          name: e.target.value,
+                          slug: editingSupplierId
+                            ? supplierForm.slug
+                            : slugify(e.target.value),
+                        })
+                      }
+                      required
+                    />
+                  </Field>
+
+                  <Field label="Slug">
+                    <input
+                      value={supplierForm.slug}
+                      onChange={(e) =>
+                        setSupplierForm({
+                          ...supplierForm,
+                          slug: slugify(e.target.value),
+                        })
+                      }
+                    />
+                  </Field>
+
+                  <Field label="Supplier Type *">
+                    <input
+                      value={supplierForm.type}
+                      onChange={(e) =>
+                        setSupplierForm({
+                          ...supplierForm,
+                          type: e.target.value,
+                        })
+                      }
+                      placeholder="Manufacturer"
+                    />
+                  </Field>
+
+                  <Field label="Region *">
+                    <input
+                      value={supplierForm.region}
+                      onChange={(e) =>
+                        setSupplierForm({
+                          ...supplierForm,
+                          region: e.target.value,
+                        })
+                      }
+                      placeholder="Korea"
+                    />
+                  </Field>
+
+                  <Field label="Capabilities *">
+                    <input
+                      value={supplierForm.meta}
+                      onChange={(e) =>
+                        setSupplierForm({
+                          ...supplierForm,
+                          meta: e.target.value,
+                        })
+                      }
+                      placeholder="SiC · Chamber Parts"
+                    />
+                  </Field>
+
+                  <Field label="Status">
+                    <StatusSelect
+                      value={supplierForm.status}
+                      onChange={(value) =>
+                        setSupplierForm({
+                          ...supplierForm,
+                          status: value,
+                          verified:
+                            isFinalStatus(value) || supplierForm.verified,
+                        })
+                      }
+                    />
+                  </Field>
+
+                  <label className="adminVerifyCheck">
+                    <input
+                      type="checkbox"
+                      checked={supplierForm.verified}
+                      onChange={(e) =>
+                        setSupplierForm({
+                          ...supplierForm,
+                          verified: e.target.checked,
+                        })
+                      }
+                    />
+                    <span>Company Verified</span>
+                  </label>
+                </div>
+
+                <div className="adminFormActionsV4">
+                  <button
+                    className="btn primary"
+                    type="submit"
+                    disabled={busy}
+                  >
+                    {busy
+                      ? "처리 중..."
+                      : editingSupplierId
+                        ? "공급사 수정 저장"
+                        : "공급사 등록"}
+                  </button>
+                  <button
+                    className="btn"
+                    type="button"
+                    disabled={busy}
+                    onClick={() => {
+                      setEditingSupplierId(null);
+                      setSupplierForm(emptySupplier());
+                    }}
+                  >
+                    입력 초기화
+                  </button>
+                </div>
               </form>
-              <CrudTable headers={["공급사","Type","Region","Verification","Status","관리"]}>
-                {visibleSuppliers.map((item) => <tr key={item.id}><td><strong>{item.name}</strong><small>{item.meta}</small></td><td>{item.type}</td><td>{item.region}</td><td><Badge kind={item.verified?"green":"amber"}>{item.verified?"Verified":"Not Verified"}</Badge></td><td><Badge kind={statusKind(item.status)}>{item.status}</Badge></td><td><div className="adminRowActions"><button onClick={() => { setEditingSupplierId(item.id); setSupplierForm(item); window.scrollTo({top:0,behavior:'smooth'}); }}>수정</button><button className="danger" onClick={() => removeSupplier(item.id)}>삭제</button></div></td></tr>)}
+
+              <CrudTable headers={["공급사", "Type", "Region", "Verification", "Status", "관리"]}>
+                {visibleSuppliers.length > 0 ? (
+                  visibleSuppliers.map((item) => (
+                    <tr key={item.id}>
+                      <td>
+                        <strong>{item.name}</strong>
+                        <small>{item.meta || "Capabilities 미지정"}</small>
+                      </td>
+                      <td>{item.type || "—"}</td>
+                      <td>{item.region || "—"}</td>
+                      <td>
+                        <Badge kind={item.verified ? "green" : "amber"}>
+                          {item.verified ? "Verified" : "Not Verified"}
+                        </Badge>
+                      </td>
+                      <td>
+                        <Badge kind={statusKind(item.status)}>{item.status}</Badge>
+                      </td>
+                      <td>
+                        <div className="adminRowActions">
+                          <button
+                            disabled={busy}
+                            onClick={() => {
+                              setEditingSupplierId(item.id);
+                              setSupplierForm(item);
+                              window.scrollTo({ top: 0, behavior: "smooth" });
+                            }}
+                          >
+                            수정
+                          </button>
+                          {item.status === "Published" ? (
+                            <a
+                              href={`/suppliers/${item.slug}`}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              공개보기
+                            </a>
+                          ) : null}
+                          <button
+                            className="danger"
+                            disabled={busy}
+                            onClick={() => removeSupplier(item.id)}
+                          >
+                            삭제
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <EmptyTableRow
+                    colSpan={6}
+                    message="검색 또는 상태 조건에 맞는 Supplier가 없습니다."
+                  />
+                )}
               </CrudTable>
             </AdminSection>
           )}
 
           {tab === "knowledge" && (
-            <AdminSection title="Knowledge 관리" description="기술 콘텐츠를 공정·카테고리와 함께 관리합니다." query={query} setQuery={setQuery} count={visibleKnowledge.length}>
+            <AdminSection
+              title="Knowledge 관리"
+              description="기술 콘텐츠를 공정·카테고리와 함께 관리합니다."
+              query={query}
+              setQuery={setQuery}
+              count={visibleKnowledge.length}
+              statusFilter={statusFilter}
+              setStatusFilter={setStatusFilter}
+              sortOrder={sortOrder}
+              setSortOrder={setSortOrder}
+              statusCounts={knowledgeStatusCounts}
+            >
               <form className="card adminCrudForm" onSubmit={saveKnowledge}>
-                <div className="adminFormHeader"><div><strong>{editingKnowledgeId ? "Knowledge 수정" : "새 Knowledge 등록"}</strong><span>공정과 제품으로 연결될 콘텐츠의 기본 정보를 입력합니다.</span></div>{editingKnowledgeId && <button type="button" className="btn" onClick={() => { setEditingKnowledgeId(null); setKnowledgeForm(emptyKnowledge()); }}>수정 취소</button>}</div>
-                <div className="adminFormGrid">
-                  <Field label="제목 *"><input value={knowledgeForm.title} onChange={(e) => setKnowledgeForm({...knowledgeForm, title:e.target.value, slug: editingKnowledgeId ? knowledgeForm.slug : slugify(e.target.value)})} required /></Field>
-                  <Field label="Slug"><input value={knowledgeForm.slug} onChange={(e) => setKnowledgeForm({...knowledgeForm, slug:e.target.value})} /></Field>
-                  <Field label="Category"><input value={knowledgeForm.category} onChange={(e) => setKnowledgeForm({...knowledgeForm, category:e.target.value})} placeholder="CAE / CFD" /></Field>
-                  <Field label="Related Process"><input value={knowledgeForm.process} onChange={(e) => setKnowledgeForm({...knowledgeForm, process:e.target.value})} placeholder="Thermal Management" /></Field>
-                  <Field label="Status"><StatusSelect value={knowledgeForm.status} onChange={(value) => setKnowledgeForm({...knowledgeForm, status:value})} /></Field>
-                  <Field label="Summary" wide><textarea value={knowledgeForm.summary} onChange={(e) => setKnowledgeForm({...knowledgeForm, summary:e.target.value})} rows={3}/></Field>
+                <div className="adminFormHeader">
+                  <div>
+                    <strong>{editingKnowledgeId ? "Knowledge 수정" : "새 Knowledge 등록"}</strong>
+                    <span>
+                      Published 전 Category · Process · Summary까지 채워 공개 콘텐츠 품질을 확인합니다.
+                    </span>
+                  </div>
+
+                  {editingKnowledgeId ? (
+                    <button
+                      type="button"
+                      className="btn"
+                      disabled={busy}
+                      onClick={() => {
+                        setEditingKnowledgeId(null);
+                        setKnowledgeForm(emptyKnowledge());
+                      }}
+                    >
+                      수정 취소
+                    </button>
+                  ) : null}
                 </div>
-                <button className="btn primary" type="submit">{editingKnowledgeId ? "Knowledge 수정 저장" : "Knowledge 등록"}</button>
+
+                <FormReadiness
+                  status={knowledgeForm.status}
+                  missing={knowledgeMissing}
+                  extraWarning=""
+                />
+
+                <div className="adminFormGrid">
+                  <Field label="제목 *">
+                    <input
+                      value={knowledgeForm.title}
+                      onChange={(e) =>
+                        setKnowledgeForm({
+                          ...knowledgeForm,
+                          title: e.target.value,
+                          slug: editingKnowledgeId
+                            ? knowledgeForm.slug
+                            : slugify(e.target.value),
+                        })
+                      }
+                      required
+                    />
+                  </Field>
+
+                  <Field label="Slug">
+                    <input
+                      value={knowledgeForm.slug}
+                      onChange={(e) =>
+                        setKnowledgeForm({
+                          ...knowledgeForm,
+                          slug: slugify(e.target.value),
+                        })
+                      }
+                    />
+                  </Field>
+
+                  <Field label="Category *">
+                    <input
+                      value={knowledgeForm.category}
+                      onChange={(e) =>
+                        setKnowledgeForm({
+                          ...knowledgeForm,
+                          category: e.target.value,
+                        })
+                      }
+                      placeholder="CAE / CFD"
+                    />
+                  </Field>
+
+                  <Field label="Related Process *">
+                    <input
+                      value={knowledgeForm.process}
+                      onChange={(e) =>
+                        setKnowledgeForm({
+                          ...knowledgeForm,
+                          process: e.target.value,
+                        })
+                      }
+                      placeholder="Thermal Management"
+                    />
+                  </Field>
+
+                  <Field label="Status">
+                    <StatusSelect
+                      value={knowledgeForm.status}
+                      onChange={(value) =>
+                        setKnowledgeForm({
+                          ...knowledgeForm,
+                          status: value,
+                        })
+                      }
+                    />
+                  </Field>
+
+                  <Field label="Summary *" wide>
+                    <textarea
+                      value={knowledgeForm.summary}
+                      onChange={(e) =>
+                        setKnowledgeForm({
+                          ...knowledgeForm,
+                          summary: e.target.value,
+                        })
+                      }
+                      rows={4}
+                      placeholder="검색 결과와 상세페이지에서 보여줄 핵심 요약을 입력하세요."
+                    />
+                  </Field>
+                </div>
+
+                <div className="adminFormActionsV4">
+                  <button
+                    className="btn primary"
+                    type="submit"
+                    disabled={busy}
+                  >
+                    {busy
+                      ? "처리 중..."
+                      : editingKnowledgeId
+                        ? "Knowledge 수정 저장"
+                        : "Knowledge 등록"}
+                  </button>
+                  <button
+                    className="btn"
+                    type="button"
+                    disabled={busy}
+                    onClick={() => {
+                      setEditingKnowledgeId(null);
+                      setKnowledgeForm(emptyKnowledge());
+                    }}
+                  >
+                    입력 초기화
+                  </button>
+                </div>
               </form>
-              <CrudTable headers={["제목","Category","Related Process","Status","Updated","관리"]}>
-                {visibleKnowledge.map((item) => <tr key={item.id}><td><strong>{item.title}</strong><small>{item.slug}</small></td><td>{item.category}</td><td>{item.process}</td><td><Badge kind={statusKind(item.status)}>{item.status}</Badge></td><td>{item.updatedAt}</td><td><div className="adminRowActions"><button onClick={() => { setEditingKnowledgeId(item.id); setKnowledgeForm(item); window.scrollTo({top:0,behavior:'smooth'}); }}>수정</button><button className="danger" onClick={() => removeKnowledge(item.id)}>삭제</button></div></td></tr>)}
+
+              <CrudTable headers={["제목", "Category", "Related Process", "Status", "Updated", "관리"]}>
+                {visibleKnowledge.length > 0 ? (
+                  visibleKnowledge.map((item) => (
+                    <tr key={item.id}>
+                      <td>
+                        <strong>{item.title}</strong>
+                        <small>{item.slug}</small>
+                      </td>
+                      <td>{item.category || "—"}</td>
+                      <td>{item.process || "—"}</td>
+                      <td>
+                        <Badge kind={statusKind(item.status)}>{item.status}</Badge>
+                      </td>
+                      <td>{item.updatedAt}</td>
+                      <td>
+                        <div className="adminRowActions">
+                          <button
+                            disabled={busy}
+                            onClick={() => {
+                              setEditingKnowledgeId(item.id);
+                              setKnowledgeForm(item);
+                              window.scrollTo({ top: 0, behavior: "smooth" });
+                            }}
+                          >
+                            수정
+                          </button>
+                          {item.status === "Published" ? (
+                            <a
+                              href={`/knowledge/${item.slug}`}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              공개보기
+                            </a>
+                          ) : null}
+                          <button
+                            className="danger"
+                            disabled={busy}
+                            onClick={() => removeKnowledge(item.id)}
+                          >
+                            삭제
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <EmptyTableRow
+                    colSpan={6}
+                    message="검색 또는 상태 조건에 맞는 Knowledge가 없습니다."
+                  />
+                )}
               </CrudTable>
             </AdminSection>
           )}
@@ -530,20 +1611,277 @@ export default function AdminCMSClient() {
   );
 }
 
-function Field({ label, children, wide=false }: { label:string; children:React.ReactNode; wide?:boolean }) {
-  return <label className={`adminField ${wide ? "wide" : ""}`}><span>{label}</span>{children}</label>;
+function StatusMetric({
+  label,
+  value,
+  total,
+  emphasis = false,
+  warning = false,
+}: {
+  label: string;
+  value: number;
+  total: number;
+  emphasis?: boolean;
+  warning?: boolean;
+}) {
+  const ratio = total > 0 ? Math.round((value / total) * 100) : 0;
+
+  return (
+    <div
+      className={`adminStatusMetricV3 ${emphasis ? "emphasis" : ""} ${
+        warning ? "warning" : ""
+      }`}
+    >
+      <div>
+        <span>{label}</span>
+        <strong>{value}</strong>
+      </div>
+      <div className="adminStatusTrackV3">
+        <i style={{ width: `${ratio}%` }} />
+      </div>
+      <small>{ratio}% of records</small>
+    </div>
+  );
 }
 
-function StatusSelect({ value, onChange }: { value:AdminStatus; onChange:(value:AdminStatus)=>void }) {
-  return <select value={value} onChange={(event) => onChange(event.target.value as AdminStatus)}>{["Draft","Review","Verified","Published","Needs Update"].map((item) => <option key={item}>{item}</option>)}</select>;
+function SystemStatusRow({
+  label,
+  value,
+  state,
+}: {
+  label: string;
+  value: string;
+  state: "ok" | "warn";
+}) {
+  return (
+    <div className="adminSystemRowV3">
+      <span className={`adminSystemDotV3 ${state}`} />
+      <div>
+        <strong>{label}</strong>
+        <small>{value}</small>
+      </div>
+    </div>
+  );
 }
 
-function AdminSection({title,description,query,setQuery,count,children}:{title:string;description:string;query:string;setQuery:(value:string)=>void;count:number;children:React.ReactNode}) {
-  return <div className="adminCrudSection"><div className="adminSectionHead"><div><h2>{title}</h2><p>{description}</p></div><div className="adminSearch"><input value={query} onChange={(e)=>setQuery(e.target.value)} placeholder="검색"/><strong>{count}개</strong></div></div>{children}</div>;
+function Field({
+  label,
+  children,
+  wide = false,
+}: {
+  label: string;
+  children: React.ReactNode;
+  wide?: boolean;
+}) {
+  return (
+    <label className={`adminField ${wide ? "wide" : ""}`}>
+      <span>{label}</span>
+      {children}
+    </label>
+  );
 }
 
-function CrudTable({headers,children}:{headers:string[];children:React.ReactNode}) {
-  return <div className="card adminTableWrap"><table className="adminCrudTable"><thead><tr>{headers.map((header)=><th key={header}>{header}</th>)}</tr></thead><tbody>{children}</tbody></table></div>;
+function StatusSelect({
+  value,
+  onChange,
+}: {
+  value: AdminStatus;
+  onChange: (value: AdminStatus) => void;
+}) {
+  return (
+    <select
+      value={value}
+      onChange={(event) =>
+        onChange(event.target.value as AdminStatus)
+      }
+    >
+      {["Draft", "Review", "Verified", "Published", "Needs Update"].map(
+        (item) => (
+          <option key={item}>{item}</option>
+        ),
+      )}
+    </select>
+  );
+}
+
+function FormReadiness({
+  status,
+  missing,
+  extraWarning,
+}: {
+  status: AdminStatus;
+  missing: string[];
+  extraWarning: string;
+}) {
+  const finalStatus = isFinalStatus(status);
+  const ready = missing.length === 0 && !extraWarning;
+
+  return (
+    <div
+      className={`adminReadinessV4 ${
+        finalStatus ? (ready ? "ready" : "warning") : "draft"
+      }`}
+    >
+      <div>
+        <strong>
+          {finalStatus
+            ? ready
+              ? "Publish Ready"
+              : "발행 전 확인 필요"
+            : "Draft / Review 저장 가능"}
+        </strong>
+        <span>
+          {finalStatus
+            ? ready
+              ? "Verified / Published에 필요한 기본 정보가 준비되었습니다."
+              : "Verified / Published 상태에서는 아래 항목을 먼저 보완하세요."
+            : "초기 입력 단계에서는 일부 필드가 비어 있어도 저장할 수 있습니다."}
+        </span>
+      </div>
+
+      {finalStatus && !ready ? (
+        <div className="adminReadinessIssuesV4">
+          {missing.map((item) => (
+            <span key={item}>{item}</span>
+          ))}
+          {extraWarning ? <span>{extraWarning}</span> : null}
+        </div>
+      ) : (
+        <Badge kind={ready ? "green" : "blue"}>
+          {finalStatus ? "READY" : status.toUpperCase()}
+        </Badge>
+      )}
+    </div>
+  );
+}
+
+function AdminSection({
+  title,
+  description,
+  query,
+  setQuery,
+  count,
+  statusFilter,
+  setStatusFilter,
+  sortOrder,
+  setSortOrder,
+  statusCounts,
+  children,
+}: {
+  title: string;
+  description: string;
+  query: string;
+  setQuery: (value: string) => void;
+  count: number;
+  statusFilter: StatusFilter;
+  setStatusFilter: (value: StatusFilter) => void;
+  sortOrder: SortOrder;
+  setSortOrder: (value: SortOrder) => void;
+  statusCounts: Record<StatusFilter, number>;
+  children: React.ReactNode;
+}) {
+  const statuses: StatusFilter[] = [
+    "All",
+    "Draft",
+    "Review",
+    "Verified",
+    "Published",
+    "Needs Update",
+  ];
+
+  return (
+    <div className="adminCrudSection">
+      <div className="adminSectionHead">
+        <div>
+          <h2>{title}</h2>
+          <p>{description}</p>
+        </div>
+
+        <div className="adminSearch">
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="이름 · 공정 · 소재 · 지역 검색"
+          />
+          <strong>{count}개</strong>
+        </div>
+      </div>
+
+      <div className="adminCrudToolbarV4">
+        <div className="adminStatusFiltersV4">
+          {statuses.map((status) => (
+            <button
+              key={status}
+              type="button"
+              className={statusFilter === status ? "active" : ""}
+              onClick={() => setStatusFilter(status)}
+            >
+              {status}
+              <span>{statusCounts[status]}</span>
+            </button>
+          ))}
+        </div>
+
+        <label className="adminSortV4">
+          <span>정렬</span>
+          <select
+            value={sortOrder}
+            onChange={(event) =>
+              setSortOrder(event.target.value as SortOrder)
+            }
+          >
+            <option value="updated-desc">최근 수정순</option>
+            <option value="updated-asc">오래된 수정순</option>
+            <option value="name-asc">이름순</option>
+          </select>
+        </label>
+      </div>
+
+      {children}
+    </div>
+  );
+}
+
+function CrudTable({
+  headers,
+  children,
+}: {
+  headers: string[];
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="card adminTableWrap">
+      <table className="adminCrudTable">
+        <thead>
+          <tr>
+            {headers.map((header) => (
+              <th key={header}>{header}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>{children}</tbody>
+      </table>
+    </div>
+  );
+}
+
+function EmptyTableRow({
+  colSpan,
+  message,
+}: {
+  colSpan: number;
+  message: string;
+}) {
+  return (
+    <tr>
+      <td colSpan={colSpan}>
+        <div className="adminEmptyTableV4">
+          <strong>결과가 없습니다.</strong>
+          <span>{message}</span>
+        </div>
+      </td>
+    </tr>
+  );
 }
 
 function VerificationQueue({data,onStatusChange,busy}:{data:AdminState;onStatusChange:(entity:"Product"|"Supplier"|"Knowledge",id:string,status:AdminStatus)=>void|Promise<void>;busy:boolean}) {

@@ -1,5 +1,11 @@
 import AdminCMSClient from "./AdminCMSClient";
+import AdminLogoutButton from "@/components/AdminLogoutButton";
 
 export default function AdminPage() {
-  return <AdminCMSClient />;
+  return (
+    <>
+      <AdminLogoutButton />
+      <AdminCMSClient />
+    </>
+  );
 }
