@@ -5,6 +5,7 @@ import "./globals.css";
 import { Header } from "@/components/Header";
 import { MobileNav } from "@/components/MobileNav";
 import { InitialLoader } from "@/components/InitialLoader";
+import { ScrollReveal } from "@/components/ScrollReveal";
 
 export const metadata: Metadata = {
   title: "DEFENSE SEMI B2B MARKET",
@@ -21,6 +22,7 @@ export default function RootLayout({
     <html lang="ko">
       <body>
         <InitialLoader />
+        <ScrollReveal />
         <Header />
         <main>{children}</main>
         <MobileNav />
