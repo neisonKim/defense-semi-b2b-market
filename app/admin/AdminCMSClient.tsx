@@ -5,7 +5,7 @@ import { knowledgeArticles, products, suppliers } from "@/data/mock";
 import { Badge, Stat } from "@/components/UI";
 
 type AdminStatus = "Draft" | "Review" | "Verified" | "Published" | "Needs Update";
-type Tab = "dashboard" | "products" | "suppliers" | "knowledge" | "verification" | "sync";
+type Tab = "dashboard" | "products" | "suppliers" | "knowledge" | "rfqs" | "verification" | "sync";
 type StatusFilter = "All" | AdminStatus;
 type SortOrder = "updated-desc" | "updated-asc" | "name-asc";
 
@@ -48,6 +48,56 @@ type AdminState = {
   products: AdminProduct[];
   suppliers: AdminSupplier[];
   knowledge: AdminKnowledge[];
+};
+
+type RfqStatus =
+  | "DRAFT"
+  | "SUBMITTED"
+  | "MATCHING"
+  | "SENT"
+  | "QUOTED"
+  | "CLOSED"
+  | "CANCELLED";
+
+type AdminRfqItem = {
+  id: string;
+  productId: string | null;
+  productName: string;
+  quantity: number;
+  unit: string;
+};
+
+type AdminRfqMatch = {
+  id: string;
+  supplierId: string;
+  score: number | null;
+  status: string;
+  supplier: {
+    id: string;
+    slug: string;
+    name: string;
+    companyVerified: boolean;
+  };
+};
+
+type AdminRfq = {
+  id: string;
+  referenceNo: string;
+  status: RfqStatus;
+  companyName: string;
+  contactName: string;
+  email: string;
+  phone: string | null;
+  targetDate: string | null;
+  application: string | null;
+  requirements: string | null;
+  certification: string | null;
+  shippingCountry: string | null;
+  ndaRequired: boolean;
+  items: AdminRfqItem[];
+  matches: AdminRfqMatch[];
+  createdAt: string;
+  updatedAt: string;
 };
 
 const STORAGE_KEY = "defense-semi-admin-cms-v1";
@@ -141,6 +191,54 @@ function isFinalStatus(status: AdminStatus) {
   return status === "Verified" || status === "Published";
 }
 
+const RFQ_STATUSES: RfqStatus[] = [
+  "DRAFT",
+  "SUBMITTED",
+  "MATCHING",
+  "SENT",
+  "QUOTED",
+  "CLOSED",
+  "CANCELLED",
+];
+
+const RFQ_STATUS_LABELS: Record<RfqStatus, string> = {
+  DRAFT: "Draft",
+  SUBMITTED: "접수",
+  MATCHING: "매칭 중",
+  SENT: "공급사 발송",
+  QUOTED: "견적 수신",
+  CLOSED: "완료",
+  CANCELLED: "취소",
+};
+
+function rfqStatusKind(
+  status: RfqStatus,
+): "blue" | "green" | "amber" {
+  if (status === "CLOSED" || status === "QUOTED") return "green";
+  if (
+    status === "SUBMITTED" ||
+    status === "MATCHING" ||
+    status === "SENT"
+  ) {
+    return "amber";
+  }
+  return "blue";
+}
+
+function formatRfqDate(value: string | null) {
+  if (!value) return "—";
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) return "—";
+
+  return new Intl.DateTimeFormat("ko-KR", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
+}
+
 function getStatusCounts<T extends { status: AdminStatus }>(items: T[]) {
   return {
     All: items.length,
@@ -198,12 +296,48 @@ export default function AdminCMSClient() {
   const [editingKnowledgeId, setEditingKnowledgeId] = useState<string | null>(null);
   const [notice, setNotice] = useState("");
   const [busy, setBusy] = useState(false);
+  const [rfqs, setRfqs] = useState<AdminRfq[]>([]);
+  const [rfqLoading, setRfqLoading] = useState(false);
+  const [rfqQuery, setRfqQuery] = useState("");
+  const [rfqStatusFilter, setRfqStatusFilter] =
+    useState<"All" | RfqStatus>("All");
 
   const loadDatabaseData = async () => {
     const response = await fetch("/api/admin/data", { cache: "no-store" });
     const payload = await response.json() as { ok: boolean; data?: AdminState; message?: string };
     if (!response.ok || !payload.ok || !payload.data) throw new Error(payload.message || "관리자 DB 데이터를 불러오지 못했습니다.");
     setData(payload.data);
+  };
+
+  const loadRfqs = async () => {
+    if (!databaseMode) {
+      setRfqs([]);
+      return;
+    }
+
+    setRfqLoading(true);
+
+    try {
+      const response = await fetch("/api/admin/rfqs", {
+        cache: "no-store",
+      });
+
+      const payload = (await response.json()) as {
+        ok?: boolean;
+        data?: AdminRfq[];
+        message?: string;
+      };
+
+      if (!response.ok || !payload.ok || !Array.isArray(payload.data)) {
+        throw new Error(
+          payload.message || "RFQ 데이터를 불러오지 못했습니다.",
+        );
+      }
+
+      setRfqs(payload.data);
+    } finally {
+      setRfqLoading(false);
+    }
   };
 
   const apiRequest = async (url: string, options: RequestInit) => {
@@ -217,7 +351,10 @@ export default function AdminCMSClient() {
     const bootstrap = async () => {
       try {
         if (databaseMode) {
-          await loadDatabaseData();
+          await Promise.all([
+            loadDatabaseData(),
+            loadRfqs(),
+          ]);
         } else {
           const saved = window.localStorage.getItem(STORAGE_KEY);
           if (saved) setData(JSON.parse(saved) as AdminState);
@@ -264,6 +401,34 @@ export default function AdminCMSClient() {
       verifiedSuppliers: data.suppliers.filter((item) => item.verified).length,
     };
   }, [data]);
+
+  const rfqMetrics = useMemo(() => {
+    const active = rfqs.filter(
+      (item) =>
+        item.status !== "CLOSED" &&
+        item.status !== "CANCELLED",
+    );
+
+    return {
+      total: rfqs.length,
+      active: active.length,
+      submitted: rfqs.filter(
+        (item) => item.status === "SUBMITTED",
+      ).length,
+      matching: rfqs.filter(
+        (item) => item.status === "MATCHING",
+      ).length,
+      sent: rfqs.filter(
+        (item) => item.status === "SENT",
+      ).length,
+      quoted: rfqs.filter(
+        (item) => item.status === "QUOTED",
+      ).length,
+      closed: rfqs.filter(
+        (item) => item.status === "CLOSED",
+      ).length,
+    };
+  }, [rfqs]);
 
   const recentItems = useMemo(() => {
     const rows = [
@@ -749,6 +914,37 @@ export default function AdminCMSClient() {
     }));
   };
 
+
+  const changeRfqStatus = async (
+    id: string,
+    status: RfqStatus,
+  ) => {
+    if (!databaseMode || busy) return;
+
+    try {
+      setBusy(true);
+
+      await apiRequest(`/api/admin/rfqs/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ status }),
+      });
+
+      await loadRfqs();
+
+      flash(
+        `RFQ 상태를 ${RFQ_STATUS_LABELS[status]}(으)로 변경했습니다.`,
+      );
+    } catch (error) {
+      flash(
+        error instanceof Error
+          ? error.message
+          : "RFQ 상태 변경에 실패했습니다.",
+      );
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const resetDemo = () => {
     if (databaseMode) { flash("Database Mode에서는 데모 초기화를 사용하지 않습니다. 필요하면 npm.cmd run db:seed를 실행하세요."); return; }
     if (!window.confirm("관리자 CMS 데모 데이터를 최초 상태로 되돌릴까요?")) return;
@@ -772,7 +968,7 @@ export default function AdminCMSClient() {
         <div>
           <p className="adminEyebrow">SEMICONDUCTOR DATA OPERATIONS</p>
           <h1>관리자 CMS</h1>
-          <p>Product · Supplier · Knowledge를 등록·수정·검증하고 Published 상태를 공개 페이지와 동기화합니다.</p>
+          <p>Product · Supplier · Knowledge를 운영하고 RFQ 접수·매칭·견적 진행 상태까지 관리합니다.</p>
         </div>
         <div className="adminTopActions">
           <span className="adminStorageState">● {databaseMode ? "PostgreSQL + Prisma" : "Local Storage + Public Sync"}</span>
@@ -787,9 +983,10 @@ export default function AdminCMSClient() {
           <button className={tab === "products" ? "active" : ""} onClick={() => { setTab("products"); setQuery(""); setStatusFilter("All"); setSortOrder("updated-desc"); }}>제품 관리 <span>{data.products.length}</span></button>
           <button className={tab === "suppliers" ? "active" : ""} onClick={() => { setTab("suppliers"); setQuery(""); setStatusFilter("All"); setSortOrder("updated-desc"); }}>공급사 관리 <span>{data.suppliers.length}</span></button>
           <button className={tab === "knowledge" ? "active" : ""} onClick={() => { setTab("knowledge"); setQuery(""); setStatusFilter("All"); setSortOrder("updated-desc"); }}>Knowledge 관리 <span>{data.knowledge.length}</span></button>
+          <button className={tab === "rfqs" ? "active" : ""} onClick={() => { setTab("rfqs"); setRfqQuery(""); setRfqStatusFilter("All"); if (databaseMode) void loadRfqs(); }}>RFQ 관리 <span>{rfqMetrics.active}</span></button>
           <button className={tab === "verification" ? "active" : ""} onClick={() => { setTab("verification"); setQuery(""); setStatusFilter("All"); setSortOrder("updated-desc"); }}>검증 큐 <span>{metrics.verification}</span></button>
           <button className={tab === "sync" ? "active" : ""} onClick={() => { setTab("sync"); setQuery(""); setStatusFilter("All"); setSortOrder("updated-desc"); }}>Public Sync <span>{metrics.published}</span></button>
-          <div className="adminCmsNavNote">Protected Admin · PostgreSQL CRUD · Published Public Sync 운영 화면입니다.</div>
+          <div className="adminCmsNavNote">Protected Admin · PostgreSQL CRUD · RFQ Operations · Public Sync 운영 화면입니다.</div>
         </aside>
 
         <section className="adminCmsMain">
@@ -900,14 +1097,20 @@ export default function AdminCMSClient() {
                       <span>기술 콘텐츠와 Process 연결</span>
                     </button>
 
-                    <button type="button" onClick={() => setTab("verification")}>
+                    <button type="button" onClick={() => { setTab("rfqs"); if (databaseMode) void loadRfqs(); }}>
                       <b>04</b>
+                      <strong>RFQ Operations</strong>
+                      <span>{rfqMetrics.active}개 진행 중</span>
+                    </button>
+
+                    <button type="button" onClick={() => setTab("verification")}>
+                      <b>05</b>
                       <strong>Verification Queue</strong>
                       <span>{metrics.verification}개 검토 필요</span>
                     </button>
 
                     <button type="button" onClick={() => setTab("sync")}>
-                      <b>05</b>
+                      <b>06</b>
                       <strong>Public Sync QA</strong>
                       <span>{metrics.published}개 Published 공개 상태 확인</span>
                     </button>
@@ -991,6 +1194,11 @@ export default function AdminCMSClient() {
                       label="Verification"
                       value={metrics.verification ? `${metrics.verification} Pending` : "No Pending Items"}
                       state={metrics.verification ? "warn" : "ok"}
+                    />
+                    <SystemStatusRow
+                      label="RFQ Operations"
+                      value={databaseMode ? `${rfqMetrics.active} Active / ${rfqMetrics.total} Total` : "Database Mode Required"}
+                      state={databaseMode && rfqMetrics.active === 0 ? "ok" : "warn"}
                     />
                   </div>
 
@@ -1714,6 +1922,21 @@ export default function AdminCMSClient() {
                 )}
               </CrudTable>
             </AdminSection>
+          )}
+
+          {tab === "rfqs" && (
+            <RFQManagement
+              rfqs={rfqs}
+              loading={rfqLoading}
+              databaseMode={databaseMode}
+              query={rfqQuery}
+              setQuery={setRfqQuery}
+              statusFilter={rfqStatusFilter}
+              setStatusFilter={setRfqStatusFilter}
+              onRefresh={loadRfqs}
+              onStatusChange={changeRfqStatus}
+              busy={busy}
+            />
           )}
 
           {tab === "verification" && (
@@ -2484,6 +2707,505 @@ type PublicSyncSnapshot = {
   source: string;
   checkedAt: string;
 };
+
+
+function RFQManagement({
+  rfqs,
+  loading,
+  databaseMode,
+  query,
+  setQuery,
+  statusFilter,
+  setStatusFilter,
+  onRefresh,
+  onStatusChange,
+  busy,
+}: {
+  rfqs: AdminRfq[];
+  loading: boolean;
+  databaseMode: boolean;
+  query: string;
+  setQuery: (value: string) => void;
+  statusFilter: "All" | RfqStatus;
+  setStatusFilter: (value: "All" | RfqStatus) => void;
+  onRefresh: () => Promise<void>;
+  onStatusChange: (
+    id: string,
+    status: RfqStatus,
+  ) => Promise<void>;
+  busy: boolean;
+}) {
+  const normalizedQuery = query.trim().toLowerCase();
+
+  const visibleRfqs = useMemo(() => {
+    return rfqs.filter((rfq) => {
+      const matchesStatus =
+        statusFilter === "All" ||
+        rfq.status === statusFilter;
+
+      const searchable = [
+        rfq.referenceNo,
+        rfq.companyName,
+        rfq.contactName,
+        rfq.email,
+        rfq.phone || "",
+        rfq.application || "",
+        ...rfq.items.map((item) => item.productName),
+        ...rfq.matches.map((match) => match.supplier.name),
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      const matchesQuery =
+        !normalizedQuery ||
+        searchable.includes(normalizedQuery);
+
+      return matchesStatus && matchesQuery;
+    });
+  }, [
+    rfqs,
+    statusFilter,
+    normalizedQuery,
+  ]);
+
+  const counts = useMemo(
+    () => ({
+      total: rfqs.length,
+      submitted: rfqs.filter(
+        (item) => item.status === "SUBMITTED",
+      ).length,
+      matching: rfqs.filter(
+        (item) => item.status === "MATCHING",
+      ).length,
+      sent: rfqs.filter(
+        (item) => item.status === "SENT",
+      ).length,
+      quoted: rfqs.filter(
+        (item) => item.status === "QUOTED",
+      ).length,
+      closed: rfqs.filter(
+        (item) => item.status === "CLOSED",
+      ).length,
+    }),
+    [rfqs],
+  );
+
+  if (!databaseMode) {
+    return (
+      <div className="adminCrudSection adminRfqOpsV7">
+        <div className="adminSectionHead">
+          <div>
+            <p className="adminEyebrow">RFQ OPERATIONS</p>
+            <h2>RFQ 관리</h2>
+            <p>
+              RFQ 운영 화면은 PostgreSQL Database Mode에서 사용합니다.
+            </p>
+          </div>
+        </div>
+
+        <div className="card adminEmptyQueue">
+          <strong>Database Mode가 필요합니다.</strong>
+          <span>
+            NEXT_PUBLIC_DATA_SOURCE=&quot;database&quot;로 설정하면
+            PostgreSQL의 RFQ를 관리할 수 있습니다.
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="adminCrudSection adminRfqOpsV7">
+      <div className="adminSectionHead adminRfqHeadV7">
+        <div>
+          <p className="adminEyebrow">RFQ OPERATIONS</p>
+          <h2>RFQ 관리</h2>
+          <p>
+            고객 RFQ 접수부터 Supplier Matching, 발송, 견적 수신,
+            완료까지 PostgreSQL 상태를 관리합니다.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          className="btn"
+          disabled={loading || busy}
+          onClick={() => void onRefresh()}
+        >
+          {loading ? "불러오는 중..." : "RFQ 새로고침"}
+        </button>
+      </div>
+
+      <div className="adminRfqSummaryV7">
+        <div className="card">
+          <span>TOTAL</span>
+          <strong>{counts.total}</strong>
+          <small>전체 RFQ</small>
+        </div>
+        <div className="card new">
+          <span>SUBMITTED</span>
+          <strong>{counts.submitted}</strong>
+          <small>신규 접수</small>
+        </div>
+        <div className="card">
+          <span>MATCHING</span>
+          <strong>{counts.matching}</strong>
+          <small>공급사 매칭</small>
+        </div>
+        <div className="card">
+          <span>SENT</span>
+          <strong>{counts.sent}</strong>
+          <small>공급사 전달</small>
+        </div>
+        <div className="card quoted">
+          <span>QUOTED</span>
+          <strong>{counts.quoted}</strong>
+          <small>견적 수신</small>
+        </div>
+        <div className="card closed">
+          <span>CLOSED</span>
+          <strong>{counts.closed}</strong>
+          <small>완료</small>
+        </div>
+      </div>
+
+      <div className="card adminRfqToolbarV7">
+        <label>
+          <span>RFQ SEARCH</span>
+          <input
+            value={query}
+            onChange={(event) =>
+              setQuery(event.target.value)
+            }
+            placeholder="RFQ 번호, 회사, 담당자, 제품, 공급사 검색"
+          />
+        </label>
+
+        <div className="adminRfqFilterV7">
+          <span>STATUS</span>
+          <div>
+            <button
+              type="button"
+              className={
+                statusFilter === "All"
+                  ? "active"
+                  : ""
+              }
+              onClick={() => setStatusFilter("All")}
+            >
+              All {rfqs.length}
+            </button>
+
+            {RFQ_STATUSES.map((status) => {
+              const count = rfqs.filter(
+                (item) => item.status === status,
+              ).length;
+
+              return (
+                <button
+                  type="button"
+                  className={
+                    statusFilter === status
+                      ? "active"
+                      : ""
+                  }
+                  key={status}
+                  onClick={() =>
+                    setStatusFilter(status)
+                  }
+                >
+                  {RFQ_STATUS_LABELS[status]} {count}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="adminRfqToolbarResultV7">
+          <span>RESULT</span>
+          <strong>{visibleRfqs.length}</strong>
+        </div>
+      </div>
+
+      {loading && rfqs.length === 0 ? (
+        <div className="card adminEmptyQueue">
+          <strong>RFQ 데이터를 불러오는 중입니다.</strong>
+          <span>PostgreSQL RFQ 테이블을 확인하고 있습니다.</span>
+        </div>
+      ) : visibleRfqs.length === 0 ? (
+        <div className="card adminEmptyQueue">
+          <strong>조건에 맞는 RFQ가 없습니다.</strong>
+          <span>
+            검색어나 Status 필터를 변경해 주세요.
+          </span>
+        </div>
+      ) : (
+        <div className="adminRfqListV7">
+          {visibleRfqs.map((rfq) => {
+            const mainItem = rfq.items[0];
+            const nextStatus:
+              | RfqStatus
+              | null =
+              rfq.status === "SUBMITTED"
+                ? "MATCHING"
+                : rfq.status === "MATCHING"
+                  ? "SENT"
+                  : rfq.status === "SENT"
+                    ? "QUOTED"
+                    : rfq.status === "QUOTED"
+                      ? "CLOSED"
+                      : null;
+
+            return (
+              <article
+                className="card adminRfqCardV7"
+                key={rfq.id}
+              >
+                <div className="adminRfqCardTopV7">
+                  <div className="adminRfqIdentityV7">
+                    <span>REFERENCE</span>
+                    <strong>{rfq.referenceNo}</strong>
+                    <small>
+                      {formatRfqDate(rfq.createdAt)}
+                    </small>
+                  </div>
+
+                  <div className="adminRfqCustomerV7">
+                    <span>CUSTOMER</span>
+                    <strong>{rfq.companyName}</strong>
+                    <small>
+                      {rfq.contactName} · {rfq.email}
+                    </small>
+                  </div>
+
+                  <div className="adminRfqProductV7">
+                    <span>REQUEST</span>
+                    <strong>
+                      {mainItem?.productName ||
+                        "제품 정보 없음"}
+                    </strong>
+                    <small>
+                      {mainItem
+                        ? `${mainItem.quantity} ${mainItem.unit}`
+                        : "—"}
+                      {rfq.targetDate
+                        ? ` · 납기 ${formatRfqDate(
+                            rfq.targetDate,
+                          )}`
+                        : ""}
+                    </small>
+                  </div>
+
+                  <div className="adminRfqStatusV7">
+                    <span>STATUS</span>
+                    <Badge
+                      kind={rfqStatusKind(rfq.status)}
+                    >
+                      {RFQ_STATUS_LABELS[rfq.status]}
+                    </Badge>
+                  </div>
+                </div>
+
+                <div className="adminRfqPipelineV7">
+                  {[
+                    "SUBMITTED",
+                    "MATCHING",
+                    "SENT",
+                    "QUOTED",
+                    "CLOSED",
+                  ].map((status, index, array) => {
+                    const currentIndex =
+                      array.indexOf(rfq.status);
+
+                    const active =
+                      currentIndex >= index &&
+                      currentIndex !== -1;
+
+                    return (
+                      <div
+                        className={
+                          active ? "active" : ""
+                        }
+                        key={status}
+                      >
+                        <i />
+                        <span>
+                          {
+                            RFQ_STATUS_LABELS[
+                              status as RfqStatus
+                            ]
+                          }
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <details className="adminRfqDetailsV7">
+                  <summary>RFQ 상세 정보 및 Supplier 후보</summary>
+
+                  <div className="adminRfqDetailGridV7">
+                    <div>
+                      <span>Application</span>
+                      <strong>
+                        {rfq.application || "—"}
+                      </strong>
+                    </div>
+                    <div>
+                      <span>Phone</span>
+                      <strong>
+                        {rfq.phone || "—"}
+                      </strong>
+                    </div>
+                    <div>
+                      <span>NDA</span>
+                      <strong>
+                        {rfq.ndaRequired
+                          ? "Required"
+                          : "Not Required"}
+                      </strong>
+                    </div>
+                    <div>
+                      <span>Updated</span>
+                      <strong>
+                        {formatRfqDate(rfq.updatedAt)}
+                      </strong>
+                    </div>
+                  </div>
+
+                  <div className="adminRfqRequirementV7">
+                    <span>REQUIREMENTS</span>
+                    <p>
+                      {rfq.requirements ||
+                        "별도 요구사항이 없습니다."}
+                    </p>
+                  </div>
+
+                  <div className="adminRfqMatchAreaV7">
+                    <div>
+                      <span>SUPPLIER CANDIDATES</span>
+                      <strong>
+                        {rfq.matches.length}개 후보
+                      </strong>
+                    </div>
+
+                    {rfq.matches.length > 0 ? (
+                      <div className="adminRfqMatchListV7">
+                        {rfq.matches.map((match) => (
+                          <div key={match.id}>
+                            <div>
+                              <strong>
+                                {match.supplier.name}
+                              </strong>
+                              <small>
+                                {match.supplier
+                                  .companyVerified
+                                  ? "Verified Supplier"
+                                  : "Verification Review"}
+                              </small>
+                            </div>
+                            <span>
+                              Score{" "}
+                              {match.score !== null
+                                ? Math.round(match.score)
+                                : "—"}
+                            </span>
+                            <Badge
+                              kind={
+                                match.status ===
+                                  "RESPONDED" ||
+                                match.status ===
+                                  "SELECTED"
+                                  ? "green"
+                                  : "blue"
+                              }
+                            >
+                              {match.status}
+                            </Badge>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="adminRfqNoMatchV7">
+                        Supplier 후보가 아직 없습니다.
+                      </div>
+                    )}
+                  </div>
+                </details>
+
+                <div className="adminRfqActionsV7">
+                  <label>
+                    <span>상태 변경</span>
+                    <select
+                      value={rfq.status}
+                      disabled={busy}
+                      onChange={(event) =>
+                        void onStatusChange(
+                          rfq.id,
+                          event.target
+                            .value as RfqStatus,
+                        )
+                      }
+                    >
+                      {RFQ_STATUSES.map((status) => (
+                        <option
+                          value={status}
+                          key={status}
+                        >
+                          {RFQ_STATUS_LABELS[status]}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+
+                  {nextStatus ? (
+                    <button
+                      type="button"
+                      className="btn primary"
+                      disabled={busy}
+                      onClick={() =>
+                        void onStatusChange(
+                          rfq.id,
+                          nextStatus,
+                        )
+                      }
+                    >
+                      다음 단계:{" "}
+                      {RFQ_STATUS_LABELS[nextStatus]}
+                    </button>
+                  ) : null}
+
+                  {rfq.status !== "CANCELLED" &&
+                  rfq.status !== "CLOSED" ? (
+                    <button
+                      type="button"
+                      className="btn adminRfqCancelV7"
+                      disabled={busy}
+                      onClick={() => {
+                        if (
+                          window.confirm(
+                            `${rfq.referenceNo} RFQ를 취소 상태로 변경할까요?`,
+                          )
+                        ) {
+                          void onStatusChange(
+                            rfq.id,
+                            "CANCELLED",
+                          );
+                        }
+                      }}
+                    >
+                      취소
+                    </button>
+                  ) : null}
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function PublicSyncQA({
   data,
