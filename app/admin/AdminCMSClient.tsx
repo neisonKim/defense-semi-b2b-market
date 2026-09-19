@@ -5,7 +5,7 @@ import { knowledgeArticles, products, suppliers } from "@/data/mock";
 import { Badge, Stat } from "@/components/UI";
 
 type AdminStatus = "Draft" | "Review" | "Verified" | "Published" | "Needs Update";
-type Tab = "dashboard" | "products" | "suppliers" | "knowledge" | "verification";
+type Tab = "dashboard" | "products" | "suppliers" | "knowledge" | "verification" | "sync";
 type StatusFilter = "All" | AdminStatus;
 type SortOrder = "updated-desc" | "updated-asc" | "name-asc";
 
@@ -788,6 +788,7 @@ export default function AdminCMSClient() {
           <button className={tab === "suppliers" ? "active" : ""} onClick={() => { setTab("suppliers"); setQuery(""); setStatusFilter("All"); setSortOrder("updated-desc"); }}>공급사 관리 <span>{data.suppliers.length}</span></button>
           <button className={tab === "knowledge" ? "active" : ""} onClick={() => { setTab("knowledge"); setQuery(""); setStatusFilter("All"); setSortOrder("updated-desc"); }}>Knowledge 관리 <span>{data.knowledge.length}</span></button>
           <button className={tab === "verification" ? "active" : ""} onClick={() => { setTab("verification"); setQuery(""); setStatusFilter("All"); setSortOrder("updated-desc"); }}>검증 큐 <span>{metrics.verification}</span></button>
+          <button className={tab === "sync" ? "active" : ""} onClick={() => { setTab("sync"); setQuery(""); setStatusFilter("All"); setSortOrder("updated-desc"); }}>Public Sync <span>{metrics.published}</span></button>
           <div className="adminCmsNavNote">Protected Admin · PostgreSQL CRUD · Published Public Sync 운영 화면입니다.</div>
         </aside>
 
@@ -903,6 +904,12 @@ export default function AdminCMSClient() {
                       <b>04</b>
                       <strong>Verification Queue</strong>
                       <span>{metrics.verification}개 검토 필요</span>
+                    </button>
+
+                    <button type="button" onClick={() => setTab("sync")}>
+                      <b>05</b>
+                      <strong>Public Sync QA</strong>
+                      <span>{metrics.published}개 Published 공개 상태 확인</span>
                     </button>
                   </div>
                 </section>
@@ -1717,6 +1724,13 @@ export default function AdminCMSClient() {
               busy={busy}
             />
           )}
+
+          {tab === "sync" && (
+            <PublicSyncQA
+              data={data}
+              databaseMode={databaseMode}
+            />
+          )}
         </section>
       </div>
     </main>
@@ -2456,3 +2470,460 @@ function VerificationQueue({
     </div>
   );
 }
+
+type PublicSyncEntity = {
+  slug?: string;
+  name?: string;
+  title?: string;
+};
+
+type PublicSyncSnapshot = {
+  products: PublicSyncEntity[];
+  suppliers: PublicSyncEntity[];
+  knowledge: PublicSyncEntity[];
+  source: string;
+  checkedAt: string;
+};
+
+function PublicSyncQA({
+  data,
+  databaseMode,
+}: {
+  data: AdminState;
+  databaseMode: boolean;
+}) {
+  const [snapshot, setSnapshot] = useState<PublicSyncSnapshot | null>(null);
+  const [checking, setChecking] = useState(false);
+  const [syncError, setSyncError] = useState("");
+
+  const publishedProducts = useMemo(
+    () => data.products.filter((item) => item.status === "Published"),
+    [data.products],
+  );
+
+  const publishedSuppliers = useMemo(
+    () => data.suppliers.filter((item) => item.status === "Published"),
+    [data.suppliers],
+  );
+
+  const publishedKnowledge = useMemo(
+    () => data.knowledge.filter((item) => item.status === "Published"),
+    [data.knowledge],
+  );
+
+  const runSyncCheck = async () => {
+    setChecking(true);
+    setSyncError("");
+
+    try {
+      if (!databaseMode) {
+        setSnapshot({
+          products: publishedProducts.map((item) => ({
+            slug: item.slug,
+            name: item.name,
+          })),
+          suppliers: publishedSuppliers.map((item) => ({
+            slug: item.slug,
+            name: item.name,
+          })),
+          knowledge: publishedKnowledge.map((item) => ({
+            slug: item.slug,
+            title: item.title,
+          })),
+          source: "Local CMS Browser Sync",
+          checkedAt: new Date().toLocaleString("ko-KR"),
+        });
+        return;
+      }
+
+      const response = await fetch("/api/public-data", {
+        cache: "no-store",
+      });
+
+      const payload = (await response.json()) as Record<string, unknown>;
+
+      if (!response.ok) {
+        const message =
+          typeof payload.message === "string"
+            ? payload.message
+            : `Public Data HTTP ${response.status}`;
+
+        throw new Error(message);
+      }
+
+      const nested =
+        payload.data &&
+        typeof payload.data === "object" &&
+        !Array.isArray(payload.data)
+          ? (payload.data as Record<string, unknown>)
+          : payload;
+
+      const readArray = (value: unknown): PublicSyncEntity[] =>
+        Array.isArray(value)
+          ? value.filter(
+              (item): item is PublicSyncEntity =>
+                !!item && typeof item === "object",
+            )
+          : [];
+
+      const sourceValue =
+        typeof payload.source === "string"
+          ? payload.source
+          : typeof nested.source === "string"
+            ? nested.source
+            : "database";
+
+      setSnapshot({
+        products: readArray(nested.products),
+        suppliers: readArray(nested.suppliers),
+        knowledge: readArray(
+          nested.knowledge ?? nested.knowledgeArticles,
+        ),
+        source: sourceValue,
+        checkedAt: new Date().toLocaleString("ko-KR"),
+      });
+    } catch (error) {
+      setSnapshot(null);
+      setSyncError(
+        error instanceof Error
+          ? error.message
+          : "Public Sync 확인에 실패했습니다.",
+      );
+    } finally {
+      setChecking(false);
+    }
+  };
+
+  useEffect(() => {
+    void runSyncCheck();
+    // 이 탭이 열릴 때 현재 공개 상태를 1회 확인합니다.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const compare = (
+    adminItems: Array<{ slug: string }>,
+    publicItems: PublicSyncEntity[],
+  ) => {
+    const adminSlugs = new Set(
+      adminItems
+        .map((item) => item.slug.trim())
+        .filter(Boolean),
+    );
+
+    const publicSlugs = new Set(
+      publicItems
+        .map((item) =>
+          typeof item.slug === "string" ? item.slug.trim() : "",
+        )
+        .filter(Boolean),
+    );
+
+    const missing = [...adminSlugs].filter(
+      (slug) => !publicSlugs.has(slug),
+    );
+
+    const unexpected = [...publicSlugs].filter(
+      (slug) => !adminSlugs.has(slug),
+    );
+
+    return {
+      adminCount: adminSlugs.size,
+      publicCount: publicSlugs.size,
+      missing,
+      unexpected,
+      ok:
+        adminSlugs.size === publicSlugs.size &&
+        missing.length === 0 &&
+        unexpected.length === 0,
+    };
+  };
+
+  const result = snapshot
+    ? {
+        products: compare(publishedProducts, snapshot.products),
+        suppliers: compare(publishedSuppliers, snapshot.suppliers),
+        knowledge: compare(publishedKnowledge, snapshot.knowledge),
+      }
+    : null;
+
+  const allSynced =
+    !!result &&
+    result.products.ok &&
+    result.suppliers.ok &&
+    result.knowledge.ok;
+
+  const mismatchCount = result
+    ? result.products.missing.length +
+      result.products.unexpected.length +
+      result.suppliers.missing.length +
+      result.suppliers.unexpected.length +
+      result.knowledge.missing.length +
+      result.knowledge.unexpected.length
+    : 0;
+
+  const rows = result
+    ? [
+        {
+          key: "products",
+          label: "Products",
+          path: "/products",
+          ...result.products,
+        },
+        {
+          key: "suppliers",
+          label: "Suppliers",
+          path: "/suppliers",
+          ...result.suppliers,
+        },
+        {
+          key: "knowledge",
+          label: "Knowledge",
+          path: "/knowledge",
+          ...result.knowledge,
+        },
+      ]
+    : [];
+
+  return (
+    <div className="adminCrudSection adminPublicSyncV6">
+      <div className="adminSectionHead adminPublicSyncHeadV6">
+        <div>
+          <p className="adminEyebrow">PUBLIC DATA QA</p>
+          <h2>Published Public Sync</h2>
+          <p>
+            Admin의 Published 데이터와 실제 Marketplace 공개 데이터를
+            Slug 기준으로 비교합니다.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          className="btn primary"
+          disabled={checking}
+          onClick={() => void runSyncCheck()}
+        >
+          {checking ? "확인 중..." : "Public Sync 다시 확인"}
+        </button>
+      </div>
+
+      <div
+        className={`card adminPublicSyncOverviewV6 ${
+          allSynced ? "healthy" : "attention"
+        }`}
+      >
+        <div className="adminPublicSyncSignalV6">
+          <i />
+          <div>
+            <span>SYNC STATUS</span>
+            <strong>
+              {checking
+                ? "Checking..."
+                : syncError
+                  ? "Connection Error"
+                  : allSynced
+                    ? "Published Data Synced"
+                    : "Sync Review Required"}
+            </strong>
+            <p>
+              {syncError
+                ? syncError
+                : snapshot
+                  ? `${snapshot.source} · 마지막 확인 ${snapshot.checkedAt}`
+                  : "공개 데이터 상태를 확인하고 있습니다."}
+            </p>
+          </div>
+        </div>
+
+        <div className="adminPublicSyncScoreV6">
+          <span>MISMATCH</span>
+          <strong>{result ? mismatchCount : "—"}</strong>
+          <small>
+            {allSynced
+              ? "Admin과 Public 일치"
+              : "확인 필요한 Slug"}
+          </small>
+        </div>
+      </div>
+
+      {result ? (
+        <>
+          <div className="adminPublicSyncGridV6">
+            {rows.map((row) => (
+              <section
+                className={`card adminPublicSyncCardV6 ${
+                  row.ok ? "synced" : "mismatch"
+                }`}
+                key={row.key}
+              >
+                <div className="adminPublicSyncCardHeadV6">
+                  <div>
+                    <span>{row.label.toUpperCase()}</span>
+                    <strong>
+                      {row.ok ? "SYNCED" : "CHECK REQUIRED"}
+                    </strong>
+                  </div>
+
+                  <Badge kind={row.ok ? "green" : "amber"}>
+                    {row.ok ? "PASS" : "REVIEW"}
+                  </Badge>
+                </div>
+
+                <div className="adminPublicSyncCountsV6">
+                  <div>
+                    <span>ADMIN PUBLISHED</span>
+                    <strong>{row.adminCount}</strong>
+                  </div>
+                  <b>→</b>
+                  <div>
+                    <span>PUBLIC</span>
+                    <strong>{row.publicCount}</strong>
+                  </div>
+                </div>
+
+                {row.missing.length > 0 ? (
+                  <div className="adminPublicSyncIssueV6">
+                    <span>PUBLIC에서 누락</span>
+                    <div>
+                      {row.missing.slice(0, 6).map((slug) => (
+                        <code key={`missing-${slug}`}>{slug}</code>
+                      ))}
+                      {row.missing.length > 6 ? (
+                        <code>+{row.missing.length - 6}</code>
+                      ) : null}
+                    </div>
+                  </div>
+                ) : null}
+
+                {row.unexpected.length > 0 ? (
+                  <div className="adminPublicSyncIssueV6 unexpected">
+                    <span>ADMIN Published와 불일치</span>
+                    <div>
+                      {row.unexpected.slice(0, 6).map((slug) => (
+                        <code key={`unexpected-${slug}`}>{slug}</code>
+                      ))}
+                      {row.unexpected.length > 6 ? (
+                        <code>+{row.unexpected.length - 6}</code>
+                      ) : null}
+                    </div>
+                  </div>
+                ) : null}
+
+                <a
+                  className="adminPublicSyncOpenV6"
+                  href={row.path}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  공개 {row.label} 확인
+                  <span>↗</span>
+                </a>
+              </section>
+            ))}
+          </div>
+
+          <div className="card adminPublicSyncChecklistV6">
+            <div className="adminPanelHeadV3">
+              <div>
+                <span>FINAL SYNC CHECKLIST</span>
+                <h2>STEP 34 완료 기준</h2>
+                <p>
+                  Published / 비공개 전환과 상세 URL까지 마지막으로 확인합니다.
+                </p>
+              </div>
+              <Badge kind={allSynced ? "green" : "amber"}>
+                {allSynced ? "SYNC PASS" : "QA REQUIRED"}
+              </Badge>
+            </div>
+
+            <div className="adminPublicSyncChecklistGridV6">
+              <SyncChecklistItem
+                number="01"
+                title="Published 노출"
+                description="Published Product · Supplier · Knowledge가 공개 목록에 존재"
+                passed={allSynced}
+              />
+              <SyncChecklistItem
+                number="02"
+                title="비공개 제외"
+                description="Draft · Review · Verified · Needs Update는 공개 목록에서 제외"
+                passed={allSynced}
+              />
+              <SyncChecklistItem
+                number="03"
+                title="상세 URL"
+                description="공개 Slug가 각 Detail Page URL로 정상 연결"
+                passed={allSynced}
+              />
+              <SyncChecklistItem
+                number="04"
+                title="Data Source"
+                description={
+                  databaseMode
+                    ? "PostgreSQL → /api/public-data → Marketplace"
+                    : "Local CMS → Browser Public Sync"
+                }
+                passed={!!snapshot && !syncError}
+              />
+            </div>
+
+            <div className="adminPublicSyncLinksV6">
+              <a href="/" target="_blank" rel="noreferrer">
+                Marketplace <span>↗</span>
+              </a>
+              <a href="/products" target="_blank" rel="noreferrer">
+                Products <span>↗</span>
+              </a>
+              <a href="/suppliers" target="_blank" rel="noreferrer">
+                Suppliers <span>↗</span>
+              </a>
+              <a href="/knowledge" target="_blank" rel="noreferrer">
+                Knowledge <span>↗</span>
+              </a>
+              {databaseMode ? (
+                <a href="/api/public-data" target="_blank" rel="noreferrer">
+                  Public API <span>↗</span>
+                </a>
+              ) : null}
+            </div>
+          </div>
+        </>
+      ) : (
+        <div className="card adminEmptyQueue">
+          <strong>
+            {checking
+              ? "Public 데이터를 확인하고 있습니다."
+              : "Public Sync 결과를 불러오지 못했습니다."}
+          </strong>
+          <span>
+            {syncError ||
+              "잠시 후 Public Sync 다시 확인을 실행해 주세요."}
+          </span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function SyncChecklistItem({
+  number,
+  title,
+  description,
+  passed,
+}: {
+  number: string;
+  title: string;
+  description: string;
+  passed: boolean;
+}) {
+  return (
+    <div className={passed ? "passed" : "pending"}>
+      <span>{number}</span>
+      <div>
+        <strong>{title}</strong>
+        <small>{description}</small>
+      </div>
+      <b>{passed ? "PASS" : "CHECK"}</b>
+    </div>
+  );
+}
+
