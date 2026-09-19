@@ -158,6 +158,13 @@ export default function Home() {
               >
                 RFQ 요청
               </Link>
+
+              <Link
+                className="btn marketHomeGhostBtn"
+                href="/admin"
+              >
+                Admin CMS
+              </Link>
             </div>
           </div>
 

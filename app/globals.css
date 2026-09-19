@@ -169,6 +169,8 @@ textarea {
   font-size: 46px;
   line-height: 1.12;
   letter-spacing: -0.035em;
+  word-break: keep-all;
+  overflow-wrap: normal;
 }
 
 .marketHomeHero h1 em {
@@ -697,7 +699,7 @@ textarea {
 
   .marketHomeHero h1 {
     margin-top: 11px;
-    font-size: 34px;
+    font-size: 29px;
   }
 
   .marketHomeLead {
@@ -11755,10 +11757,9 @@ p,
 
 .adminVerificationToolsV5 {
   display: grid;
-  grid-template-columns: minmax(220px, 1.2fr) minmax(0, 1fr) minmax(
-      0,
-      1.2fr
-    ) 80px;
+  grid-template-columns:
+    minmax(220px, 1.2fr) minmax(0, 1fr) minmax(0, 1.2fr)
+    80px;
   gap: 14px;
   align-items: end;
   padding: 16px;
