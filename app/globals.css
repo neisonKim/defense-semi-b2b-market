@@ -10874,3 +10874,207 @@ p,
     font-size: 10px;
   }
 }
+
+/* =====================================
+   STEP 33.5
+   INITIAL LOADER + PAGE MOTION
+===================================== */
+
+.initialLoader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 50% 42%,
+      rgba(19, 95, 178, 0.26),
+      transparent 34%
+    ),
+    linear-gradient(145deg, #071426 0%, #0b1e36 48%, #071321 100%);
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 300ms ease,
+    visibility 300ms ease;
+}
+
+.initialLoader::before {
+  content: "";
+  position: absolute;
+  width: min(620px, 82vw);
+  aspect-ratio: 1;
+  border: 1px solid rgba(95, 196, 255, 0.09);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 80px rgba(78, 180, 255, 0.025),
+    0 0 0 160px rgba(78, 180, 255, 0.018);
+  pointer-events: none;
+}
+
+.initialLoader.isClosing {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.initialLoaderInner {
+  position: relative;
+  z-index: 1;
+  width: min(520px, 88vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.initialLoaderMark {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  place-items: center;
+  margin-bottom: 20px;
+  border: 1px solid rgba(114, 211, 255, 0.36);
+  border-radius: 16px;
+  background: linear-gradient(
+    145deg,
+    rgba(26, 111, 235, 0.98),
+    rgba(5, 82, 177, 0.98)
+  );
+  box-shadow:
+    0 18px 42px rgba(0, 84, 190, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.initialLoaderBrand {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+  color: #ffffff;
+}
+
+.initialLoaderBrand strong,
+.initialLoaderBrand span {
+  font-size: clamp(24px, 4vw, 38px);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.045em;
+}
+
+.initialLoaderBrand span {
+  color: #54cbff;
+}
+
+.initialLoaderInner p {
+  margin: 14px 0 0;
+  color: #8ba6c1;
+  font-size: 11.25px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+.initialLoaderProgress {
+  width: min(310px, 72vw);
+  height: 2px;
+  margin-top: 28px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(137, 184, 224, 0.16);
+}
+
+.initialLoaderProgress span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(65, 190, 255, 0.3), #55d5ff, #1680f0);
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: initialLoaderProgress 850ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.pageTransitionShell {
+  min-height: 100%;
+  animation: pageEnter 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes initialLoaderProgress {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 767px) {
+  .initialLoader {
+    padding: calc(24px + env(safe-area-inset-top)) 20px
+      calc(24px + env(safe-area-inset-bottom));
+  }
+
+  .initialLoaderMark {
+    width: 52px;
+    height: 52px;
+    margin-bottom: 17px;
+    border-radius: 14px;
+    font-size: 18px;
+  }
+
+  .initialLoaderBrand {
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .initialLoaderBrand strong,
+  .initialLoaderBrand span {
+    font-size: 27.5px;
+  }
+
+  .initialLoaderInner p {
+    max-width: 320px;
+    margin-top: 13px;
+    font-size: 10px;
+    line-height: 1.7;
+    letter-spacing: 0.13em;
+  }
+
+  .initialLoaderProgress {
+    width: min(270px, 70vw);
+    margin-top: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .initialLoader,
+  .pageTransitionShell {
+    transition: none;
+    animation: none;
+  }
+
+  .initialLoaderProgress span {
+    animation: none;
+    transform: scaleX(1);
+  }
+}
