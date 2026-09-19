@@ -337,6 +337,98 @@ export default function AdminCMSClient() {
     });
   };
 
+
+  const openEditFromVerification = (
+    entity: "Product" | "Supplier" | "Knowledge",
+    id: string,
+  ) => {
+    setQuery("");
+    setStatusFilter("All");
+    setSortOrder("updated-desc");
+
+    if (entity === "Product") {
+      const target = data.products.find((item) => item.id === id);
+      if (!target) return;
+      setEditingProductId(target.id);
+      setProductForm(target);
+      setTab("products");
+    }
+
+    if (entity === "Supplier") {
+      const target = data.suppliers.find((item) => item.id === id);
+      if (!target) return;
+      setEditingSupplierId(target.id);
+      setSupplierForm(target);
+      setTab("suppliers");
+    }
+
+    if (entity === "Knowledge") {
+      const target = data.knowledge.find((item) => item.id === id);
+      if (!target) return;
+      setEditingKnowledgeId(target.id);
+      setKnowledgeForm(target);
+      setTab("knowledge");
+    }
+
+    window.requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  };
+
+  const getStatusChangeIssues = (
+    entity: "Product" | "Supplier" | "Knowledge",
+    id: string,
+  ) => {
+    if (entity === "Product") {
+      const target = data.products.find((item) => item.id === id);
+      if (!target) return ["Product를 찾을 수 없습니다."];
+
+      const missing = getMissingFields([
+        ["제품명", target.name],
+        ["Category", target.category],
+        ["Process", target.process],
+        ["Supplier", target.supplier],
+        ["Material", target.material],
+      ]);
+
+      const supplierExists =
+        !!target.supplier.trim() &&
+        data.suppliers.some(
+          (supplier) =>
+            supplier.name.trim().toLowerCase() ===
+            target.supplier.trim().toLowerCase(),
+        );
+
+      if (target.supplier.trim() && !supplierExists) {
+        missing.push("등록된 Supplier 연결");
+      }
+
+      return missing;
+    }
+
+    if (entity === "Supplier") {
+      const target = data.suppliers.find((item) => item.id === id);
+      if (!target) return ["Supplier를 찾을 수 없습니다."];
+
+      return getMissingFields([
+        ["공급사명", target.name],
+        ["Supplier Type", target.type],
+        ["Region", target.region],
+        ["Capabilities", target.meta],
+      ]);
+    }
+
+    const target = data.knowledge.find((item) => item.id === id);
+    if (!target) return ["Knowledge를 찾을 수 없습니다."];
+
+    return getMissingFields([
+      ["제목", target.title],
+      ["Category", target.category],
+      ["Related Process", target.process],
+      ["Summary", target.summary],
+    ]);
+  };
+
   const normalizedQuery = query.trim().toLowerCase();
 
   const productStatusCounts = useMemo(
@@ -626,6 +718,19 @@ export default function AdminCMSClient() {
   };
 
   const changeStatus = async (entity: "Product" | "Supplier" | "Knowledge", id: string, status: AdminStatus) => {
+    if (busy) return;
+
+    if (isFinalStatus(status)) {
+      const issues = getStatusChangeIssues(entity, id);
+
+      if (issues.length > 0) {
+        flash(
+          `${status} 전 필수 정보가 필요합니다: ${issues.join(", ")}`,
+        );
+        return;
+      }
+    }
+
     if (databaseMode) {
       try {
         setBusy(true);
@@ -1604,7 +1709,14 @@ export default function AdminCMSClient() {
             </AdminSection>
           )}
 
-          {tab === "verification" && <VerificationQueue data={data} onStatusChange={changeStatus} busy={busy} />}
+          {tab === "verification" && (
+            <VerificationQueue
+              data={data}
+              onStatusChange={changeStatus}
+              onEditItem={openEditFromVerification}
+              busy={busy}
+            />
+          )}
         </section>
       </div>
     </main>
@@ -1884,11 +1996,463 @@ function EmptyTableRow({
   );
 }
 
-function VerificationQueue({data,onStatusChange,busy}:{data:AdminState;onStatusChange:(entity:"Product"|"Supplier"|"Knowledge",id:string,status:AdminStatus)=>void|Promise<void>;busy:boolean}) {
-  const rows = [
-    ...data.products.filter((item)=>["Draft","Review","Needs Update"].includes(item.status)).map((item)=>({kind:"Product" as const,id:item.id,title:item.name,status:item.status})),
-    ...data.suppliers.filter((item)=>["Draft","Review","Needs Update"].includes(item.status)).map((item)=>({kind:"Supplier" as const,id:item.id,title:item.name,status:item.status})),
-    ...data.knowledge.filter((item)=>["Draft","Review","Needs Update"].includes(item.status)).map((item)=>({kind:"Knowledge" as const,id:item.id,title:item.title,status:item.status})),
+function VerificationQueue({
+  data,
+  onStatusChange,
+  onEditItem,
+  busy,
+}: {
+  data: AdminState;
+  onStatusChange: (
+    entity: "Product" | "Supplier" | "Knowledge",
+    id: string,
+    status: AdminStatus,
+  ) => void | Promise<void>;
+  onEditItem: (
+    entity: "Product" | "Supplier" | "Knowledge",
+    id: string,
+  ) => void;
+  busy: boolean;
+}) {
+  type QueueKind = "All" | "Product" | "Supplier" | "Knowledge";
+  type QueueStatus = "All" | "Draft" | "Review" | "Needs Update";
+
+  const [kindFilter, setKindFilter] = useState<QueueKind>("All");
+  const [queueStatus, setQueueStatus] = useState<QueueStatus>("All");
+  const [queueQuery, setQueueQuery] = useState("");
+
+  const rows = useMemo(() => {
+    const productRows = data.products
+      .filter((item) =>
+        ["Draft", "Review", "Needs Update"].includes(item.status),
+      )
+      .map((item) => {
+        const issues = getMissingFields([
+          ["제품명", item.name],
+          ["Category", item.category],
+          ["Process", item.process],
+          ["Supplier", item.supplier],
+          ["Material", item.material],
+        ]);
+
+        const supplierExists =
+          !!item.supplier.trim() &&
+          data.suppliers.some(
+            (supplier) =>
+              supplier.name.trim().toLowerCase() ===
+              item.supplier.trim().toLowerCase(),
+          );
+
+        if (item.supplier.trim() && !supplierExists) {
+          issues.push("등록된 Supplier 연결");
+        }
+
+        return {
+          kind: "Product" as const,
+          id: item.id,
+          title: item.name,
+          subtitle: [item.category, item.process, item.supplier]
+            .filter(Boolean)
+            .join(" · "),
+          status: item.status,
+          updatedAt: item.updatedAt,
+          issues,
+        };
+      });
+
+    const supplierRows = data.suppliers
+      .filter((item) =>
+        ["Draft", "Review", "Needs Update"].includes(item.status),
+      )
+      .map((item) => ({
+        kind: "Supplier" as const,
+        id: item.id,
+        title: item.name,
+        subtitle: [item.type, item.region, item.meta]
+          .filter(Boolean)
+          .join(" · "),
+        status: item.status,
+        updatedAt: item.updatedAt,
+        issues: getMissingFields([
+          ["공급사명", item.name],
+          ["Supplier Type", item.type],
+          ["Region", item.region],
+          ["Capabilities", item.meta],
+        ]),
+      }));
+
+    const knowledgeRows = data.knowledge
+      .filter((item) =>
+        ["Draft", "Review", "Needs Update"].includes(item.status),
+      )
+      .map((item) => ({
+        kind: "Knowledge" as const,
+        id: item.id,
+        title: item.title,
+        subtitle: [item.category, item.process]
+          .filter(Boolean)
+          .join(" · "),
+        status: item.status,
+        updatedAt: item.updatedAt,
+        issues: getMissingFields([
+          ["제목", item.title],
+          ["Category", item.category],
+          ["Related Process", item.process],
+          ["Summary", item.summary],
+        ]),
+      }));
+
+    const priority: Record<"Draft" | "Review" | "Needs Update", number> = {
+      "Needs Update": 0,
+      Review: 1,
+      Draft: 2,
+    };
+
+    return [...productRows, ...supplierRows, ...knowledgeRows].sort(
+      (a, b) => {
+        const statusDiff =
+          priority[a.status as keyof typeof priority] -
+          priority[b.status as keyof typeof priority];
+
+        if (statusDiff !== 0) return statusDiff;
+
+        const aTime = new Date(a.updatedAt).getTime();
+        const bTime = new Date(b.updatedAt).getTime();
+
+        return (
+          (Number.isNaN(bTime) ? 0 : bTime) -
+          (Number.isNaN(aTime) ? 0 : aTime)
+        );
+      },
+    );
+  }, [data]);
+
+  const counts = useMemo(
+    () => ({
+      all: rows.length,
+      draft: rows.filter((item) => item.status === "Draft").length,
+      review: rows.filter((item) => item.status === "Review").length,
+      needsUpdate: rows.filter((item) => item.status === "Needs Update")
+        .length,
+      ready: rows.filter((item) => item.issues.length === 0).length,
+      blocked: rows.filter((item) => item.issues.length > 0).length,
+    }),
+    [rows],
+  );
+
+  const visibleRows = useMemo(() => {
+    const normalized = queueQuery.trim().toLowerCase();
+
+    return rows.filter((row) => {
+      const matchesKind =
+        kindFilter === "All" || row.kind === kindFilter;
+
+      const matchesStatus =
+        queueStatus === "All" || row.status === queueStatus;
+
+      const matchesQuery =
+        !normalized ||
+        [row.title, row.subtitle, row.kind, row.status]
+          .join(" ")
+          .toLowerCase()
+          .includes(normalized);
+
+      return matchesKind && matchesStatus && matchesQuery;
+    });
+  }, [rows, kindFilter, queueStatus, queueQuery]);
+
+  const kindOptions: QueueKind[] = [
+    "All",
+    "Product",
+    "Supplier",
+    "Knowledge",
   ];
-  return <div className="adminCrudSection"><div className="adminSectionHead"><div><h2>검증 큐</h2><p>Draft · Review · Needs Update 항목을 검토하고 Verified 또는 Published 상태로 변경합니다.</p></div><Badge kind={rows.length?"amber":"green"}>{rows.length} Pending</Badge></div>{rows.length===0?<div className="card adminEmptyQueue"><strong>검증 대기 항목이 없습니다.</strong><span>새 Draft 또는 Review 콘텐츠가 등록되면 이곳에 표시됩니다.</span></div>:<div className="card adminTableWrap"><table className="adminCrudTable"><thead><tr><th>Type</th><th>Title</th><th>Status</th><th>Action</th></tr></thead><tbody>{rows.map((row)=><tr key={`${row.kind}-${row.id}`}><td>{row.kind}</td><td><strong>{row.title}</strong></td><td><Badge kind="amber">{row.status}</Badge></td><td><div className="adminRowActions"><button disabled={busy} onClick={()=>onStatusChange(row.kind,row.id,"Verified")}>Verified</button><button disabled={busy} className="publish" onClick={()=>onStatusChange(row.kind,row.id,"Published")}>Published</button></div></td></tr>)}</tbody></table></div>}</div>;
+
+  const statusOptions: QueueStatus[] = [
+    "All",
+    "Draft",
+    "Review",
+    "Needs Update",
+  ];
+
+  return (
+    <div className="adminCrudSection adminVerificationV5">
+      <div className="adminSectionHead adminVerificationHeadV5">
+        <div>
+          <p className="adminEyebrow">VERIFICATION OPERATIONS</p>
+          <h2>검증 큐</h2>
+          <p>
+            Draft · Review · Needs Update 항목을 확인하고
+            Verified / Published 상태로 전환합니다.
+          </p>
+        </div>
+
+        <Badge kind={rows.length ? "amber" : "green"}>
+          {rows.length} Pending
+        </Badge>
+      </div>
+
+      <div className="adminVerificationSummaryV5">
+        <div className="card">
+          <span>검증 대기</span>
+          <strong>{counts.all}</strong>
+          <small>전체 Queue</small>
+        </div>
+
+        <div className="card">
+          <span>Review</span>
+          <strong>{counts.review}</strong>
+          <small>검토 진행</small>
+        </div>
+
+        <div className="card warning">
+          <span>Needs Update</span>
+          <strong>{counts.needsUpdate}</strong>
+          <small>우선 보완</small>
+        </div>
+
+        <div className="card ready">
+          <span>Publish Ready</span>
+          <strong>{counts.ready}</strong>
+          <small>필수정보 충족</small>
+        </div>
+
+        <div className="card blocked">
+          <span>Blocked</span>
+          <strong>{counts.blocked}</strong>
+          <small>정보 보완 필요</small>
+        </div>
+      </div>
+
+      <div className="card adminVerificationToolsV5">
+        <div className="adminVerificationSearchV5">
+          <span>SEARCH</span>
+          <input
+            value={queueQuery}
+            onChange={(event) => setQueueQuery(event.target.value)}
+            placeholder="검증 대상 검색"
+          />
+        </div>
+
+        <div className="adminVerificationFilterGroupV5">
+          <span>TYPE</span>
+          <div>
+            {kindOptions.map((kind) => (
+              <button
+                key={kind}
+                type="button"
+                className={kindFilter === kind ? "active" : ""}
+                onClick={() => setKindFilter(kind)}
+              >
+                {kind}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="adminVerificationFilterGroupV5">
+          <span>STATUS</span>
+          <div>
+            {statusOptions.map((status) => (
+              <button
+                key={status}
+                type="button"
+                className={queueStatus === status ? "active" : ""}
+                onClick={() => setQueueStatus(status)}
+              >
+                {status}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="adminVerificationToolResultV5">
+          <span>RESULT</span>
+          <strong>{visibleRows.length}</strong>
+        </div>
+      </div>
+
+      {rows.length === 0 ? (
+        <div className="card adminEmptyQueue">
+          <strong>검증 대기 항목이 없습니다.</strong>
+          <span>
+            새 Draft · Review · Needs Update 데이터가 등록되면
+            이곳에 표시됩니다.
+          </span>
+        </div>
+      ) : visibleRows.length === 0 ? (
+        <div className="card adminEmptyQueue">
+          <strong>조건에 맞는 검증 항목이 없습니다.</strong>
+          <span>검색어나 Type / Status 필터를 변경해 주세요.</span>
+        </div>
+      ) : (
+        <div className="adminVerificationListV5">
+          {visibleRows.map((row) => {
+            const ready = row.issues.length === 0;
+
+            return (
+              <article
+                className={`card adminVerificationCardV5 ${
+                  row.status === "Needs Update" ? "needsUpdate" : ""
+                }`}
+                key={`${row.kind}-${row.id}`}
+              >
+                <div className="adminVerificationCardMainV5">
+                  <div className="adminVerificationTypeV5">
+                    <span>{row.kind}</span>
+                    <Badge kind={statusKind(row.status)}>
+                      {row.status}
+                    </Badge>
+                  </div>
+
+                  <div className="adminVerificationTitleV5">
+                    <strong>{row.title || "제목 없음"}</strong>
+                    <span>{row.subtitle || "메타 정보 없음"}</span>
+                  </div>
+
+                  <div className="adminVerificationReadinessV5">
+                    <div>
+                      <span>READINESS</span>
+                      <strong className={ready ? "ready" : "blocked"}>
+                        {ready ? "Publish Ready" : "Needs Data"}
+                      </strong>
+                    </div>
+
+                    {ready ? (
+                      <Badge kind="green">READY</Badge>
+                    ) : (
+                      <div className="adminVerificationIssuesV5">
+                        {row.issues.slice(0, 3).map((issue) => (
+                          <span key={issue}>{issue}</span>
+                        ))}
+                        {row.issues.length > 3 ? (
+                          <span>+{row.issues.length - 3}</span>
+                        ) : null}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="adminVerificationUpdatedV5">
+                    <span>UPDATED</span>
+                    <strong>{row.updatedAt || "—"}</strong>
+                  </div>
+                </div>
+
+                <div className="adminVerificationActionsV5">
+                  <button
+                    type="button"
+                    disabled={busy}
+                    onClick={() => onEditItem(row.kind, row.id)}
+                  >
+                    수정
+                  </button>
+
+                  {row.status === "Draft" ? (
+                    <button
+                      type="button"
+                      disabled={busy}
+                      onClick={() =>
+                        onStatusChange(row.kind, row.id, "Review")
+                      }
+                    >
+                      Review로 이동
+                    </button>
+                  ) : null}
+
+                  {row.status === "Needs Update" ? (
+                    <button
+                      type="button"
+                      disabled={busy}
+                      onClick={() =>
+                        onStatusChange(row.kind, row.id, "Review")
+                      }
+                    >
+                      재검토
+                    </button>
+                  ) : null}
+
+                  <button
+                    type="button"
+                    disabled={busy || !ready}
+                    className="verify"
+                    title={
+                      ready
+                        ? "Verified 상태로 변경"
+                        : "필수 정보를 먼저 보완하세요."
+                    }
+                    onClick={() =>
+                      onStatusChange(row.kind, row.id, "Verified")
+                    }
+                  >
+                    Verified
+                  </button>
+
+                  <button
+                    type="button"
+                    disabled={busy || !ready}
+                    className="publish"
+                    title={
+                      ready
+                        ? "Published 상태로 변경"
+                        : "필수 정보를 먼저 보완하세요."
+                    }
+                    onClick={() =>
+                      onStatusChange(row.kind, row.id, "Published")
+                    }
+                  >
+                    Published
+                  </button>
+
+                  {row.status !== "Needs Update" ? (
+                    <button
+                      type="button"
+                      disabled={busy}
+                      className="needsUpdate"
+                      onClick={() =>
+                        onStatusChange(row.kind, row.id, "Needs Update")
+                      }
+                    >
+                      Needs Update
+                    </button>
+                  ) : null}
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      )}
+
+      <div className="card adminVerificationGuideV5">
+        <div>
+          <span>01</span>
+          <strong>Draft</strong>
+          <small>초기 데이터 입력</small>
+        </div>
+        <b>→</b>
+        <div>
+          <span>02</span>
+          <strong>Review</strong>
+          <small>내용·관계 검토</small>
+        </div>
+        <b>→</b>
+        <div>
+          <span>03</span>
+          <strong>Verified</strong>
+          <small>정보 검증 완료</small>
+        </div>
+        <b>→</b>
+        <div>
+          <span>04</span>
+          <strong>Published</strong>
+          <small>공개 페이지 노출</small>
+        </div>
+        <b>↺</b>
+        <div className="warning">
+          <span>05</span>
+          <strong>Needs Update</strong>
+          <small>재검토 필요</small>
+        </div>
+      </div>
+    </div>
+  );
 }
