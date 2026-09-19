@@ -10,21 +10,15 @@ type LoginBody = {
 export async function POST(request: NextRequest) {
   const adminEmail = process.env.ADMIN_EMAIL;
   const adminPassword = process.env.ADMIN_PASSWORD;
-  const sessionSecret =
-    process.env.ADMIN_SESSION_SECRET;
+  const sessionSecret = process.env.ADMIN_SESSION_SECRET;
 
-  if (
-    !adminEmail ||
-    !adminPassword ||
-    !sessionSecret
-  ) {
+  if (!adminEmail || !adminPassword || !sessionSecret) {
     return NextResponse.json(
       {
         ok: false,
-        error:
-          "Admin environment variables are not configured.",
+        error: "Admin environment variables are not configured.",
       },
-      { status: 503 },
+      { status: 503 }
     );
   }
 
@@ -38,7 +32,7 @@ export async function POST(request: NextRequest) {
         ok: false,
         error: "잘못된 요청입니다.",
       },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -47,6 +41,7 @@ export async function POST(request: NextRequest) {
 
   const emailMatched =
     email === adminEmail.trim().toLowerCase();
+
   const passwordMatched =
     password === adminPassword;
 
@@ -54,10 +49,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         ok: false,
-        error:
-          "이메일 또는 비밀번호가 올바르지 않습니다.",
+        error: "이메일 또는 비밀번호가 올바르지 않습니다.",
       },
-      { status: 401 },
+      { status: 401 }
     );
   }
 
