@@ -631,6 +631,8 @@ textarea {
   color: #ffffff;
   font-size: 30px;
   line-height: 1.3;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .marketHomeFinalCta p {
@@ -7016,6 +7018,8 @@ body {
   line-height: 1.32;
   letter-spacing: -0.01em;
   font-weight: 850;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 .processCard p,
 .marketProductCard p,
@@ -7023,6 +7027,8 @@ body {
 .knowledgeListCard p {
   font-size: var(--type-body);
   line-height: 1.58;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 .processGrid,
 .productGrid,
